@@ -69,10 +69,9 @@
         </div>
       </div>
       
-      <!-- other type: !<div class="container" ">MENU</div> -->
-      
     </div>
 
+    <!--GMAPS DIVS-->
     <div id="box"></div>
     <div id="map">
     </div>
@@ -100,10 +99,13 @@
       document.body.style.backgroundColor = "white";
       console.log("closed nav");
     }
-
+    
+    //Called when .getCurrentPosition allowed, position contains list of location info, position.coords gives lat, long
     const successfulLookup = position => {
       console.log(position.coords);
       const { latitude, longitude } = position.coords;
+
+      //This fetch is to this opencagedata api which can process lat long info and give back address info. (2500 daily requests allowed)
       fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=e1d4f9db4e7e4841aba6168910b6d11b`)
         .then(response => response.json())
         .then(function(data) {
@@ -114,14 +116,10 @@
         
     }
 
+    //IF BROWSER ALLOWS HTML GEOLOCATION, RUN .getCurrentPosition. Call successfulLookup on being allowed.
     if (window.navigator.geolocation) {
-      window.navigator.geolocation.getCurrentPosition(successfulLookup, console.log);
-      //console.log(results[0].formatted);
+      window.navigator.geolocation.getCurrentPosition(successfulLookup, console.log("NOT ALLOWED"));
     }
-
-    
-    
-
 
   </script>
 </html>
