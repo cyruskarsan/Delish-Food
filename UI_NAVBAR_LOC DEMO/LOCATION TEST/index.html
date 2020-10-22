@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Accessing Arguments in UI Events</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link rel="stylesheet" href="style.css">
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBliB0DVBbxnXcA-RBoYjpJxSaXYegoM9c&callback=initMap"
+      defer
+    ></script>
+    <style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script>
+      function initMap() {
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 4,
+          center: { lat: -25.363882, lng: 131.044922 },
+        });
+        map.addListener("click", (e) => {
+          placeMarkerAndPanTo(e.latLng, map);
+        });
+      }
+
+      function placeMarkerAndPanTo(latLng, map) {
+        new google.maps.Marker({
+          position: latLng,
+          map: map,
+        });
+        map.panTo(latLng);
+      }
+    </script>
+  </head>
+  <body>
+
+    <!--SIDE NAV BAR DIVS-->
+    <div id="main">
+      <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">Menu Option 1</a>
+        <a href="#">Menu Option 2</a>
+        <a href="#">Menu Option 3</a>
+        <a href="#">Menu Option 4</a>
+      </div>
+
+      <!-- ELEMENT TO OPEN SIDENAVBAR DIV -->
+      <div class="container" onclick="openNav()">
+        <div class="navigation-wrap">
+            <div class="left-side">
+                <div class="navigation-link-wrap active-nav-link">
+                    MENU
+                </div>
+                <div class="navigation-link-wrap active-nav-link" id="city">
+                  CITY
+              </div>
+            </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <!--GMAPS DIVS-->
+    <div id="box"></div>
+    <div id="map">
+    </div>
+  
+
+  </body>
+
+  <script>
+    /* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+      document.getElementById("box").style.marginLeft = "250px";
+      document.getElementById("map").style.marginLeft = "250px";
+      document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+      console.log("opened nav");
+    }
+
+    /* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the background color of body to white */
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+      document.getElementById("main").style.marginLeft = "0";
+      document.getElementById("box").style.marginLeft = "0";
+      document.getElementById("map").style.marginLeft = "0";
+      document.body.style.backgroundColor = "white";
+      console.log("closed nav");
+    }
+    
+    //Called when .getCurrentPosition allowed, position contains list of location info, position.coords gives lat, long
+    const successfulLookup = position => {
+      console.log(position.coords);
+      const { latitude, longitude } = position.coords;
+
+      //This fetch is to this opencagedata api which can process lat long info and give back address info. (2500 daily requests allowed)
+      fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=e1d4f9db4e7e4841aba6168910b6d11b`)
+        .then(response => response.json())
+        .then(function(data) {
+          let locationData = data.results[0].formatted;
+          console.log(locationData);
+          document.getElementById('city').innerHTML = locationData;
+        })
+        
+    }
+
+    //IF BROWSER ALLOWS HTML GEOLOCATION, RUN .getCurrentPosition. Call successfulLookup on being allowed.
+    if (window.navigator.geolocation) {
+      window.navigator.geolocation.getCurrentPosition(successfulLookup, console.log("NOT ALLOWED"));
+    }
+
+  </script>
+</html>
