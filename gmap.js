@@ -2,7 +2,7 @@ require('dotenv').config();
 const places_api_key = process.env.API_KEY;
 // Create the script tag, set the appropriate attributes
 
-console.log(process.env);
+//console.log(process.env); just a check to see if env variable was added
 
 var script = document.createElement('script');
 script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBliB0DVBbxnXcA-RBoYjpJxSaXYegoM9c&callback=initMap';
