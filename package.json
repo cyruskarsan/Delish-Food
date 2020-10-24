@@ -1,0 +1,23 @@
+{
+  "name": "delish-food",
+  "version": "1.0.0",
+  "description": "A service to help you find the best ethnic food in your area",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyruskarsan/Delish-Food.git"
+  },
+  "author": "William Mai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cyruskarsan/Delish-Food/issues"
+  },
+  "homepage": "https://github.com/cyruskarsan/Delish-Food#readme"
+}
