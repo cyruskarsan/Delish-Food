@@ -14,16 +14,32 @@
 
 /* The navigation menu links */
 .sidenav a {
+  font-family: "Lato", sans-serif;
+  cursor: pointer;
+  /*padding-bottom: 5px;*/
   padding: 8px 8px 8px 32px;
   text-decoration: none;
+  text-align: left;
   font-size: 25px;
   color: #818181;
   display: block;
   transition: 0.3s;
 }
 
+.sidenav .sidenav-header {
+  font-family: "Lato", sans-serif;
+  cursor: default;
+  padding: 30px 8px 8px 20px;
+  text-decoration: none;
+  font-size: 25px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+}
+
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
+  cursor: pointer;
   color: #f1f1f1;
 }
 
@@ -45,6 +61,8 @@
 /* NAV BAR/MENU BUTTON STYLES */
 
 .navigation-wrap {
+  font-weight: bold;
+  font-size:20px;
   display: flex;
   justify-content: space-between;
   padding: 10px;
@@ -82,17 +100,23 @@
 }
 
 .active-nav-link {
-  border-bottom: 1px solid black;
+  cursor: pointer;
+  
 }
 
-.active-nav-link a {
+.active-nav-link a:hover {
+  cursor: pointer;
+  border-bottom: 1px solid black;
   color: black !important;
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #main {
+  height:6%;
   transition: margin-left .5s;
-  background-color: rgb(218, 219, 219);
+  background-image: linear-gradient(white, rgb(214, 236, 243));
+  background-color: white/*rgb(218, 219, 219)*/;
+  border-bottom: 3px solid black;
 }
 
 #box {
