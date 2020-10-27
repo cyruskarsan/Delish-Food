@@ -73,6 +73,21 @@
   display: flex;
 }
 
+.nav-bar-title {
+  position: absolute;
+  margin-left: 48%;
+  font-size: 25px;
+  height: 22px;
+  font-family: "Lato", sans-serif;
+  align-items: center;
+  justify-content: center;
+  padding-top: 6px;
+  text-emphasis: outline;
+  color: rgb(16, 20, 73);
+  font-weight:bold;
+
+}
+
 .navigation-wrap>.left-side>div {
   margin-right: 20px;
   font-size: 0.9em;
@@ -109,6 +124,7 @@
   border-bottom: 1px solid black;
   color: black !important;
 }
+
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #main {
