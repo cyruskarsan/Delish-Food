@@ -44,6 +44,7 @@ function initMap() {
         map,
         position: place.geometry.location,
     });
+    console.log(place.name);
     google.maps.event.addListener(marker, "click", () => {
         infowindow.setContent(place.name);
         infowindow.open(map);
