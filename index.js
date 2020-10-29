@@ -22,7 +22,9 @@ function initMap() {
   const locationButton = document.createElement("button");
   locationButton.textContent = "Pan to Current Location";
   locationButton.classList.add("custom-map-control-button");
+  
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+  
   locationButton.addEventListener("click", () => {
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
@@ -46,6 +48,15 @@ function initMap() {
       handleLocationError(false, infoWindow, map.getCenter());
     }
   });
+}
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(
+    browserHasGeolocation
+      ? "Error: The Geolocation service failed.\nPlease enable your location"
+      : "Error: Your browser doesn't support geolocation."
+  );
+
   infoWindow.open(map);
 }
       
