@@ -4,69 +4,80 @@ var infowindow;
 
 
 function initMap() {
-    var sc = new google.maps.LatLng(36.9723111,-122.0383785,14);
-    
-    infowindow = new google.maps.InfoWindow();
+  //SC coords
+  var sc = new google.maps.LatLng(36.9723111, -122.0383785, 14);
+
+  // shwo popup when click on marker
+  infowindow = new google.maps.InfoWindow();
+
+  //create the map
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: sc,
+    zoom: 14,
+  });
+
+  //text request search
+  var request = {
+    location: sc,
+    radius: "5",
+    query: "Taqueria",
+  };
+
+  //hit the gmaps places API and do a text search
+  var service = new google.maps.places.PlacesService(map);
+  service.textSearch(request, callback);
 
 
-     map = new google.maps.Map(document.getElementById("map"), {
-      center: sc,
-      zoom: 14,
-      });
-  
-      var request = {
-          location: sc,
-          radius: "5",
-          query: "Taqueria",
-      };
-  
-      var service = new google.maps.places.PlacesService(map);
-      service.textSearch(request, callback);
-  
-      // service.findPlaceFromQuery(request, function(results, status) {
-      // if (status === google.maps.places.PlacesServiceStatus.OK) {
-      //   for (var i = 0; i < results.length; i++) {
-      //     createMarker(results[i]);
-      //   }
-      //   map.setCenter(results[0].geometry.location);
-      // }
-      // });
-      function callback(results, status) {
-          if (status == google.maps.places.PlacesServiceStatus.OK) {
-              for (var i = 0; i < results.length; i++) {
-                  var place = results[i];
-                  createMarker(results[i]);
-              }
-          }
+  //parse returned info from places
+  function callback(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        var place = results[i];
+        createMarker(results[i]);
       }
-  
-      function createMarker(place) {
-      const marker = new google.maps.Marker({
-          map,
-          position: place.geometry.location,
-      });
-      console.log(place.name);
-      google.maps.event.addListener(marker, "click", () => {
-          infowindow.setContent(place.name);
-          infowindow.open(map);
-      });
     }
-  
+  }
 
-  
+  //create marker with icon and attributes
+  function createMarker(place) {
+    console.log(place)
+    const image = {
+      url: place.icon,
+      size: new google.maps.Size(71, 71),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(17, 34),
+      scaledSize: new google.maps.Size(25, 25),
+    };
+
+    const marker = new google.maps.Marker({
+      map,
+      icon: image,
+      title: place.name,
+      position: place.geometry.location,
+    });
+
+    google.maps.event.addListener(marker, "click", () => {
+      infowindow.setContent(place.name);
+      infowindow.open(map);
+    });
+  }
+
+
+
   var mapStyle = [ // sets up getting rid of equator and international date line
     {
       featureType: "administrative",
       elementType: "geometry",
       stylers: [
-        { visibility: "off" } 
+        { visibility: "off" }
       ]
     }
-    ];
+  ];
+  
   var styledMap = new google.maps.StyledMapType(mapStyle);
   map.mapTypes.set('myCustomMap', styledMap);
   map.setMapTypeId('myCustomMap');
-  
+
   infoWindow = new google.maps.InfoWindow();
   const locationButton = document.createElement("button");
   locationButton.textContent = "Pan to Current Location";
@@ -97,6 +108,7 @@ function initMap() {
   });
 }
 
+
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setPosition(pos);
   infoWindow.setContent(
@@ -107,6 +119,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
   infoWindow.open(map);
 }
+
 
 // DIV ELEMENT MOVEMENT SCRIPTS
 /* Set the width of the side navigation to 250px and the left margin of the page content to 250px
