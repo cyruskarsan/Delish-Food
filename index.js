@@ -11,7 +11,8 @@
 // // Append the 'script' element to 'head'
 // document.head.appendChild(script);
 
-let map;
+
+let map, infoWindow;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -19,7 +20,7 @@ function initMap() {
     zoom: 12,
     disableDefaultUI: true,
   });
-
+  
   var mapStyle = [ // sets up getting rid of equator and international date line
     {
       featureType: "administrative",
@@ -29,9 +30,49 @@ function initMap() {
       ]
     }
     ];
-    var styledMap = new google.maps.StyledMapType(mapStyle);
-    map.mapTypes.set('myCustomMap', styledMap);
-    map.setMapTypeId('myCustomMap');
+  var styledMap = new google.maps.StyledMapType(mapStyle);
+  map.mapTypes.set('myCustomMap', styledMap);
+  map.setMapTypeId('myCustomMap');
+  
+  infoWindow = new google.maps.InfoWindow();
+  const locationButton = document.createElement("button");
+  locationButton.textContent = "Pan to Current Location";
+  locationButton.classList.add("custom-map-control-button");
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+  locationButton.addEventListener("click", () => {
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          infoWindow.setPosition(pos);
+          infoWindow.setContent("Location found.");
+          infoWindow.open(map);
+          map.setCenter(pos);
+        },
+        () => {
+          handleLocationError(true, infoWindow, map.getCenter());
+        }
+      );
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+    }
+  });
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(
+    browserHasGeolocation
+      ? "Error: The Geolocation service failed. Please enable your location."
+      : "Error: Your browser doesn't support geolocation."
+  );
+
+  infoWindow.open(map);
 }
 
 // DIV ELEMENT MOVEMENT SCRIPTS
