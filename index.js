@@ -56,6 +56,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       ? "Error: The Geolocation service failed. Please enable your location."
       : "Error: Your browser doesn't support geolocation."
   );
+
   infoWindow.open(map);
 }
       
