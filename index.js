@@ -1,22 +1,43 @@
-// // Create the script tag, set the appropriate attributes
-// var script = document.createElement('script');
-// script.src = 'https://maps.googleapis.com/maps/api/js?key=YAIzaSyBliB0DVBbxnXcA-RBoYjpJxSaXYegoM9c&callback=initMap';
-// script.defer = true;
+var map;
+var service;
+var infowindow;
 
-// // Attach your callback function to the `window` object
-// window.initMap = function() {
-//   // JS API is loaded and available
-// };
-
-// // Append the 'script' element to 'head'
-// document.head.appendChild(script);
-
-let map;
 
 function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 36.988407, lng: -122.058281 },
-    zoom: 12,
-  });
+    var sc = new google.maps.LatLng(36.9723111,-122.0383785,14)
+    
+    infowindow = new google.maps.InfoWindow();
+
+    map = new google.maps.Map(document.getElementById("map"), {
+    center: sc,
+    zoom: 14,
+    });
+
+    var request = {
+        query: "Taqueria",
+        fields: ["name", "geometry"]
+    };
+
+    var service = new google.maps.places.PlacesService(map);
+
+    service.findPlaceFromQuery(request, function(results, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        createMarker(results[i]);
+      }
+      map.setCenter(results[0].geometry.location);
+    }
+    });
+
+    function createMarker(place) {
+    const marker = new google.maps.Marker({
+        map,
+        position: place.geometry.location,
+    });
+    google.maps.event.addListener(marker, "click", () => {
+        infowindow.setContent(place.name);
+        infowindow.open(map);
+    });
+  }
 }
       
