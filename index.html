@@ -1,13 +1,45 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple Map</title>
+    <title>Delish</title>
+    <link rel="icon" type="image/png" href="./Icons/favicon-32x32.png" sizes="32x32" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script type="text/javascript" src="gmap.js"></script>
     <link rel="stylesheet" type="text/css" href="./style.css" />
     <script src="./index.js"></script>
   </head>
   <body>
+    <div class="nav-bar-title">DELISH</div>
+    <!--SIDE NAV BAR DIVS-->
+    <div id="main">
+      <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div id="menuDescription" class="sidenav-header">
+          <b>
+            <u>CUISINE TYPE</u>
+            </b>
+        </div>
+        <a href="#">Mexican</a>
+        <a href="#">Vietnamese</a>
+        <a href="#">Indian</a>
+        <a href="#">American</a>
+      </div>
+      
+      <!-- ELEMENT TO OPEN SIDENAVBAR DIV -->
+      <div class="container" onclick="openNav()">
+        <div class="navigation-wrap">
+            <div class="left-side">
+                <div class="navigation-link-wrap active-nav-link">
+                    MENU
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!--GMAPS DIVS-->
+    <div id="box"></div>
     <div id="map"></div>
+
   </body>
 </html>
