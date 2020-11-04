@@ -4,13 +4,15 @@
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
     <title>Delish Food Map</title>
+    <link rel="icon" type="image/png" href="./Icons/favicon-32x32.png" sizes="32x32" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script type="text/javascript" src="gmap.js"></script>
     <link rel="stylesheet" type="text/css" href="./style.css" />
-    <script src="./index.js"></script>
   </head>
   <body>
+    <!--HEADER DIV-->
     <div class="nav-bar-title">DELISH</div>
+    
     <!--SIDE NAV BAR DIVS-->
     <div id="main">
       <div id="mySidenav" class="sidenav">
@@ -20,10 +22,10 @@
             <u>CUISINE TYPE</u>
             </b>
         </div>
-        <a href="#">Mexican</a>
-        <a href="#">Vietnamese</a>
-        <a href="#">Indian</a>
-        <a href="#">American</a>
+        <a href="#" id="mexican" class="cuisine-type">Mexican</a>
+        <a href="#" id="vietnamese" class="cuisine-type">Vietnamese</a>
+        <a href="#" id="indian" class="cuisine-type">Indian</a>
+        <a href="#" id="american" class="cuisine-type">American</a>
       </div>
       
       <!-- ELEMENT TO OPEN SIDENAVBAR DIV -->
@@ -33,6 +35,7 @@
                 <div class="navigation-link-wrap active-nav-link">
                     MENU
                 </div>
+                <div class="navigation-link-wrap active-nav-link" id="demo">CUISINE TYPE</div>
             </div>
         </div>
       </div>
@@ -42,5 +45,8 @@
     <div id="box"></div>
     <div id="map"></div>
 
+    <!--JS Scripts-->
+    <script src="./index.js"></script>
+    <script src="./cuisineSearch.js"></script>
   </body>
 </html>
