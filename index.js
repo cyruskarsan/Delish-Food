@@ -6,15 +6,18 @@ var markers = [];
 
 function initMap() {
   //SC coords
-  var sc = new google.maps.LatLng(36.9723111, -122.0383785, 14);
+  //var sc = new google.maps.LatLng(36.9723111, -122.0383785, 14);
+
+  //center of earth coords
+  var startCenter = new google.maps.LatLng(0, 0, 0);
 
   // show popup when click on marker
   infowindow = new google.maps.InfoWindow();
 
   //create the map
   map = new google.maps.Map(document.getElementById("map"), {
-    center: sc,
-    zoom: 13,
+    center: startCenter,
+    zoom: 3,
   });
 
   var mapStyle = [ // sets up getting rid of equator and international date line
@@ -48,6 +51,7 @@ function initMap() {
         //infoWindow.setPosition(pos);
         //infoWindow.setContent("Location found.");
         //infoWindow.open(map);
+        map.setZoom(13);
         map.setCenter(pos);
         mapcenterpos = pos;
         cuisineTypeListener();
