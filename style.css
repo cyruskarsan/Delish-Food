@@ -1,13 +1,158 @@
-/* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-#map {
-  height: 100%;
-}
-
 /* Optional: Makes the sample page fill the window. */
 html,
 body {
-  height: 100%;
+  height: 98%;
   margin: 0;
   padding: 0;
+}
+
+/* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: absolute; /* absolute, fixed would make it placed fixed */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+  font-family: "Lato", sans-serif;
+  cursor: pointer;
+  /*padding-bottom: 5px;*/
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  text-align: left;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav .sidenav-header {
+  font-family: "Lato", sans-serif;
+  cursor: default;
+  padding: 30px 8px 8px 20px;
+  text-decoration: none;
+  font-size: 25px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  cursor: pointer;
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.container {
+  display: flex;
+  font-family: "Lato", sans-serif;
+  color: black;
+}
+
+/* NAV BAR/MENU BUTTON STYLES */
+
+.navigation-wrap {
+  font-weight: bold;
+  font-size:20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.left-side {
+  display: flex;
+}
+
+.nav-bar-title {
+  position: absolute;
+  margin-left: 48%;
+  font-size: 25px;
+  height: 22px;
+  font-family: "Lato", sans-serif;
+  align-items: center;
+  justify-content: center;
+  padding-top: 6px;
+  text-emphasis: outline;
+  color: rgb(16, 20, 73);
+  font-weight:bold;
+
+}
+
+.navigation-wrap>.left-side>div {
+  margin-right: 20px;
+  font-size: 0.9em;
+  text-transform: uppercase;
+}
+
+.navigation-link-wrap {
+  height: 22px;
+  border-bottom: 1px solid transparent;
+  transition: border-bottom 0.5s;
+}
+
+.navigation-link-wrap a {
+  color: #8a8a8a;
+  text-decoration: none;
+  transition: color 0.5s;
+}
+
+.navigation-link-wrap:hover {
+  border-bottom: 1px solid black;
+}
+
+.navigation-link-wrap a:hover {
+  color: black;
+}
+
+.active-nav-link {
+  cursor: pointer;
+}
+
+.active-nav-link a:hover {
+  cursor: pointer;
+  border-bottom: 1px solid black;
+  color: black !important;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  height:6%;
+  transition: margin-left .5s;
+  background-image: linear-gradient(white, rgb(214, 236, 243));
+  background-color: white/*rgb(218, 219, 219)*/;
+  border-bottom: 3px solid black;
+}
+
+#box {
+  transition: margin-left .5s;
+}
+
+/* Always set the map height explicitly to define the size of the div
+* element that contains the map. */
+#map {
+  height: 100%;
+  transition: margin-left .5s;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
 }
