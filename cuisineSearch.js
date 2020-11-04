@@ -66,7 +66,7 @@ function cuisineTypeListener() {
       let cuisine = cuisines[i]; // select individual cuisine type
       cuisine.onclick = function() {
           clearMarkers();
-          document.getElementById("demo").innerText = cuisine.innerHTML;
+          document.getElementById("demo").innerText = "CUISINE TYPE: ".concat(`${cuisine.innerHTML}`);
           let request = {
               location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
               radius: "5",
