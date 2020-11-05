@@ -5,9 +5,6 @@ var mapcenterpos;
 var markers = [];
 
 function initMap() {
-  //SC coords
-  //var sc = new google.maps.LatLng(36.9723111, -122.0383785, 14);
-
   //center of earth coords
   var startCenter = new google.maps.LatLng(0, 0, 0);
 
@@ -35,10 +32,6 @@ function initMap() {
   map.setMapTypeId('myCustomMap');
 
   infoWindow = new google.maps.InfoWindow();
-  /*const locationButton = document.createElement("button");
-  locationButton.textContent = "Pan to Current Location";
-  locationButton.classList.add("custom-map-control-button");
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);*/
   
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
@@ -48,9 +41,6 @@ function initMap() {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
-        //infoWindow.setPosition(pos);
-        //infoWindow.setContent("Location found.");
-        //infoWindow.open(map);
         map.setZoom(13);
         map.setCenter(pos);
         mapcenterpos = pos;
