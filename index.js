@@ -12,8 +12,14 @@ function initMap() {
 
   //create the map
   map = new google.maps.Map(document.getElementById("map"), {
+<<<<<<< HEAD
+    center: { lat: 36.988407, lng: -122.058281 },
+    zoom: 12,
+    // disableDefaultUI: true,
+=======
     center: sc,
     zoom: 14,
+>>>>>>> c3f2208090a46095f7a8628e11e5ba49eefac5af
   });
 
   //text request search
@@ -109,8 +115,6 @@ function initMap() {
     }
   });
 }
-
-
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setPosition(pos);
   infoWindow.setContent(
