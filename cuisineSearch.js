@@ -58,7 +58,7 @@ function cuisineTypeListener() {
   /*onclick event listener for cuisine type options*/
   let mysidenav = document.getElementById("mySidenav");
   let cuisines = mysidenav.querySelectorAll('a.cuisine-type');
-
+  console.log(cuisines);
   for (let i = 0; i < cuisines.length; i++) {
       let cuisine = cuisines[i]; // select individual cuisine type
       cuisine.onclick = function() {
