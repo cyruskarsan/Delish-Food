@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="./Icons/favicon-32x32.png" sizes="32x32" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script type="text/javascript" src="gmap.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;1,200;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./style.css" />
   </head>
   <body>
@@ -36,16 +37,11 @@
       </div>
       
       <!-- ELEMENT TO OPEN SIDENAVBAR DIV -->
-      <div class="container" onclick="openNav()">
-        <div class="navigation-wrap">
-            <div class="left-side">
-                <div class="navigation-link-wrap active-nav-link">
-                    Menu
-                </div>
-                <div class="navigation-link-wrap active-nav-link" id="demo"></div>
-            </div>
-        </div>
+      <div class="navigation-link-wrap active-nav-link" id = "menu" onclick="openNav()">
+          Menu
+          <div class="navigation-link-wrap active-nav-demo" id="demo"></div>
       </div>
+      <!--<div class="navigation-link-wrap active-nav-link" id="demo"></div>-->
     </div>
 
     <!--GMAPS DIVS-->

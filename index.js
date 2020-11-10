@@ -15,6 +15,11 @@ function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: startCenter,
     zoom: 3,
+    mapTypeControl: true,
+    mapTypeControlOptions: {
+      style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+      position: google.maps.ControlPosition.TOP_RIGHT
+    }
   });
 
   var mapStyle = [ // sets up getting rid of equator and international date line
@@ -72,7 +77,8 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   and add a black background color to body */
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
-  document.getElementById("main").style.marginLeft = "250px";
+  document.getElementById("menu").style.marginLeft = "250px";
+  document.getElementById("demo").style.marginLeft = "250px";
   document.getElementById("box").style.marginLeft = "250px";
   document.getElementById("map").style.marginLeft = "250px";
   document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
@@ -83,7 +89,8 @@ function openNav() {
 background color of body to white */
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("main").style.marginLeft = "0";
+  document.getElementById("menu").style.marginLeft = "0";
+  document.getElementById("demo").style.marginLeft = "0";
   document.getElementById("box").style.marginLeft = "0";
   document.getElementById("map").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";

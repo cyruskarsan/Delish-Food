@@ -1,7 +1,7 @@
 /* Optional: Makes the sample page fill the window. */
 html,
 body {
-  height: 98%;
+  height: 100%;
   margin: 0;
   padding: 0;
 }
@@ -61,7 +61,6 @@ body {
 }
 
 .container {
-  display: flex;
   font-family: "Lato", sans-serif;
   color: black;
 }
@@ -71,13 +70,11 @@ body {
 .navigation-wrap {
   font-weight: bold;
   font-size:20px;
-  display: flex;
-  justify-content: space-between;
-  padding: 00px;
+  display: absolute;
 }
 
 .left-side {
-  display: flex;
+  display:flex;
 }
 
 .nav-bar-title {
@@ -104,15 +101,25 @@ body {
 }
 
 .navigation-link-wrap {
+  position: absolute;
+  margin-left: 0%;
+  font-size: 36px;
   height: 22px;
+  font-family: Brush Script MT, cursive;
+  align-items: left;
+  justify-content: left;
+  padding-top: 5px;
+  text-emphasis: outline;
+  color: rgb(16, 20, 73);
+  font-weight:bold;
+  z-index: 1;
   border-bottom: 1px solid transparent;
   transition: border-bottom 0.5s;
+  transition: 0.5s;
 }
 
-.navigation-link-wrap a {
-  color: #8a8a8a;
-  text-decoration: none;
-  transition: color 0.5s;
+.active-nav-demo {
+  font-family: 'Montserrat', sans-serif;  
 }
 
 .navigation-link-wrap:hover {
