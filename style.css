@@ -35,7 +35,7 @@ body {
 }
 
 .sidenav .sidenav-header {
-  font-family: Courier, monospace
+  font-family: Courier, monospace;
   cursor: default;
   padding: 30px 8px 8px 20px;
   text-decoration: underline;
