@@ -44,8 +44,7 @@ function initMap() {
     if (description == null) return
     description.classList.add('active')
     overlay.classList.add('active')
-    // overlay.style.display = ''
-    overlay.parentNode.removeChild(overlay);
+    overlay.parentNode.removeChild(overlay)
     geoLocation()
 
 
