@@ -12,9 +12,14 @@
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "googleapis": "^39.2.0",
+    "googleplaces": "^0.6.1",
     "jade": "^1.11.0",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.11",
     "node-fetch": "^2.6.1",
-    "pug": "^3.0.0"
+    "pug": "^3.0.0",
+    "realm": "^10.0.0-rc.2"
   },
   "devDependencies": {},
   "scripts": {
