@@ -16,6 +16,8 @@ function cuisineTypeSearch(request) {
               createMarker(place);
 
           }
+          console.log(place);
+          clusters();
       }
   }
 
@@ -30,7 +32,6 @@ function cuisineTypeSearch(request) {
           scaledSize: new google.maps.Size(25, 25),
       };
       arguments
-
       const marker = new google.maps.Marker({
           map,
           icon: image,
@@ -44,14 +45,22 @@ function cuisineTypeSearch(request) {
           infowindow.setContent(place.name);
           infowindow.open(map);
       });
-  }
+    }
 }
+function clusters(){
+    new MarkerClusterer( map, markers, {
+        imagePath:
+          "https://unpkg.com/@googlemaps/markerclustererplus@1.0.3/images/m",
+      });
+}
+    
 
 // Clear markers from previous search query
 function clearMarkers() {
   for (let i = 0; i < markers.length; i++) {
       markers[i].setMap(null);
   }
+  clusters();
 }
 
 function cuisineTypeListener() {

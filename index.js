@@ -11,11 +11,13 @@ function initMap() {
   // show popup when click on marker
   infowindow = new google.maps.InfoWindow();
 
+  console.log("beforeMapinit");
   //create the map
   map = new google.maps.Map(document.getElementById("map"), {
     center: startCenter,
     zoom: 3,
   });
+  console.log("AfterMapinit");
 
   var mapStyle = [ // sets up getting rid of equator and international date line
     {
