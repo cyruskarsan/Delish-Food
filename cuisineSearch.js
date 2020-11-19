@@ -37,22 +37,24 @@ function cuisineTypeSearch(request) {
           icon: image,
           title: place.name,
           position: place.geometry.location,
-      }).addListener('click', function() {     
-          infowindow.setContent(
-          "<div><strong>" +
-            place.name +
-            "</strong><br>" +
-            "Place ID: " +
-            place.place_id +
-            "<br>" +
-            place.formatted_address +
-            "</div>"
-        );
-        infowindow.open(map, this);
       });
-      };
-      markers.push(marker);
-  }
+      
+        google.maps.event.addListener(marker, "click", function () {
+            infowindow.setContent(
+            "<div><strong>" +
+                place.name +
+                "</strong><br>" +
+                "Place ID: " +
+                place.place_id +
+                "<br>" +
+                place.formatted_address +
+                "</div>"
+            );
+            infowindow.open(map, this);
+        });
+        markers.push(marker);
+      }
+}
 
 // Clear markers from previous search query
 function clearMarkers() {
