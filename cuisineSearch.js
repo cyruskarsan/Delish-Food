@@ -1,3 +1,5 @@
+var markerClusterer = null; // Marker Clusterer object
+
 //Run requests from cuisine type clicks
 function cuisineTypeSearch(request) {
 
@@ -47,31 +49,31 @@ function cuisineTypeSearch(request) {
       });
     }
 }
-function clusters(){
-    new MarkerClusterer( map, markers, {
+
+// Cluster markers for given markers on map
+function clusters(){ 
+    console.log("in clusters func, markers: \n".concat(`${markers}`));
+    markerClusterer = new MarkerClusterer( map, markers, {
         imagePath:
           "https://unpkg.com/@googlemaps/markerclustererplus@1.0.3/images/m",
       });
 }
-    
 
-// Clear markers from previous search query
-function clearMarkers() {
-  for (let i = 0; i < markers.length; i++) {
-      markers[i].setMap(null);
-  }
-  clusters();
-}
-
+ /*Add onclick event listener for cuisine type options*/
 function cuisineTypeListener() {
-  /*onclick event listener for cuisine type options*/
   let mysidenav = document.getElementById("mySidenav");
   let cuisines = mysidenav.querySelectorAll('a.cuisine-type');
   console.log(cuisines);
+
   for (let i = 0; i < cuisines.length; i++) {
       let cuisine = cuisines[i]; // select individual cuisine type
       cuisine.onclick = function() {
-          clearMarkers();
+          //clear markers in clusters and markers array
+          if(markerClusterer) {
+            markerClusterer.clearMarkers();
+          }
+          markers = []
+
           document.getElementById("demo").innerText = "CUISINE TYPE: ".concat(`${cuisine.innerHTML}`);
           let request = {
               location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),

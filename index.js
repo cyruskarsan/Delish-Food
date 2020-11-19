@@ -5,6 +5,8 @@ var mapcenterpos;
 var markers = [];
 
 function initMap() {
+  console.log("haha2");
+
   //center of earth coords
   var startCenter = new google.maps.LatLng(0, 0, 0);
 
