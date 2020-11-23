@@ -3,127 +3,105 @@
 //console.log(process.env); // ignore 
 
 const express = require('express'); // "imports" express framework
+const mongoose = require('mongoose');
 const app = express(); // creates the webapp
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const axios = require('axios')
 const path = require('path');
-var mongoose = require('mongoose');
 const router = express.Router();
-const Realm = require("realm");
+
+app.use(bodyParser.json());
+app.use(cors());
 
 const MongoClient = require('mongodb').MongoClient; //create client to use mongodb
 const uri = `mongodb+srv://delishfood:delishfood@cluster0.ailvm.mongodb.net/delishfood?retryWrites=true&w=majority`; //url to connect to mongodb atlas cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true }); //initalize our client
 
-//mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
-    //console.log("connected to database")); 
-
-    //name of database 
-const dbName = "delishfood"; 
-
-const realmApp = new Realm.App({ id: "application-0-tesrq" });
-
-const RatingSchema = {
-    name: 'ratings',
-    properties: {
-      _id: 'objectId',
-      rating: 'int',
-    },
-    primaryKey: '_id',
-  };
-  
-  async function handleLogin() {
-    // Create a Credentials object to identify the user.
-    // Anonymous credentials don't have any identifying information, but other
-    // authentication providers accept additional data, like a user's email and
-    // password.
-    const credentials = Realm.Credentials.anonymous();
-    // You can log in with any set of credentials using `app.logIn()`
-    const user = await realmApp.logIn(credentials);
-    console.log(`Logged in with the user id: ${user.id}`);
-  };
-  handleLogin().catch(err => {
-    console.error("Failed to log in:", err)
-  });
-
-
- 
-async function run() {
-  await realmApp.logIn(new Realm.Credentials.anonymous());
-  // When you open a synced realm, the SDK automatically automatically
-  // creates the realm on the device (if it didn't exist already) and
-  // syncs pending remote changes as well as any unsynced changes made
-  // to the realm on the device.
-  const realm = await Realm.open({
-    schema: [RatingSchema],
-    sync: {
-      user: realmApp.currentUser,
-      partitionValue: "ratings",
-    },
-  });
-
-  // The myPartition realm is now synced to the device. You can
-  // access it through the `realm` object returned by `Realm.open()`
-}
-run().catch(err => {
-  console.error("Failed to open realm:", err)
-}); 
-
-
-//function to test interacting with the database (adding a document and finding it)
- /*async function run() {
-    try {
-         await client.connect();
-         console.log("Connected correctly to database");
-
-         // use database "delishfood"
-         const db = client.db(dbName);
-
-         // Use the collection "ratings"
-         const col = db.collection("ratings");
-
-         // Construct a document                                                                                                                                                              
-         let ratingsDocument = {
-             "rating": 5
-         }
-
-         // Insert a single document, wait for promise so we can read it back
-         const p = await col.insertOne(ratingsDocument);
-         // Find one document
-         const myDoc = await col.findOne();
-         // Print to the console
-         console.log(myDoc);
-
-        } catch (err) {
-         console.log(err.stack);
-     }
- 
-     finally {
-        await client.close();
+const RatingSchema = mongoose.Schema({
+    placeid: String,
+    rating: {
+        type: Number,
+        default: 0
     }
-}
-//run the db testing function
-run().catch(console.dir); */
+});
 
-async function upVote(client, id) {
+const ratingDoc = mongoose.model('ratingDoc', RatingSchema);
+
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
+    console.log("Connected to database!")); 
+
+/*async function upVote(client, id) {
     await client.connect();
     result = await client.db("delishfood").collection("ratings")
     .updateOne({ _id: "sample_place" }, { $inc: { rating: 1} });
     console.log("Found id:" + id);
 }
 
-upVote(client, "sample_place");
+upVote(client, "sample_place");*/
 
 app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, '/public'))); 
 
-router.get('/', (req,res) => {
-  res.render("index");
+//gets all documents in ratingsDoc collection in delishfood database
+router.get('/', async (req,res) => {
+  try{
+      const getRatings = await ratingDoc.find();
+      res.json(getRatings);
+  }
+  catch(err) {
+      res.json({message: err});
+  }
 });
 
-
-router.post('/', (req,res) => {
-    
+//take data and store in our ratingDoc collection, sets id and rating. (rating has default 0)
+router.post('/', async (req,res) => {
+    const rating = new ratingDoc({
+        placeid: req.body.placeid,
+        rating: req.body.rating
+    });
+    try{
+    const savedRating = await rating.save();
+    res.json(savedRating);
+    }
+    catch(err) {
+        res.json({message: err});
+    }
 });
+
+//takes a param from url, searches database for document with param, return the document if found
+router.get('/:placeId', async (req, res) => {
+    try {
+    const findSpecificDoc = await ratingDoc.findById(req.params.placeId);
+    res.json(findSpecificDoc);
+    }
+    catch(err){
+        res.json({message: err});
+    }
+});
+
+//takes a param from url, searches database for document with param, deletes document if found
+router.delete('/:placeId', async (req, res) => {
+    try {
+    const removedDoc = await ratingDoc.remove({_id: req.params.placeId});
+    res.json(removedDoc);
+    }
+    catch(err){
+        res.json({message:err});
+    }
+});
+
+//finds a document with matching param from url, increments the rating by one
+router.patch('/:placeId', async (req, res) => {
+    try {
+    const updatedDoc = await ratingDoc.updateOne({_id: req.params.placeId}, { $inc: { rating: 1} });
+    res.json(updatedDoc);
+    }
+    catch(err){
+        res.json({message:err});
+    }
+});
+
 
 app.use('/', router); 
 
