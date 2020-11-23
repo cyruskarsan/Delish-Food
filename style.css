@@ -166,8 +166,9 @@ body {
   border-radius: 5px;
   z-index: 10;  
   background-color: white;
-  width: 400px;
+  width: 525px;
   max-width: 70%;
+  text-align: center;
 }
 .description.active{
   transform: translate(-50%, -50%) scale(0);
@@ -183,6 +184,8 @@ body {
 .description-header .title{
   font-size: 1.25rem;
   font-weight: bold;
+  padding-left: 100px;
+  
 }
 .description-header .close-button{
   cursor: pointer;
