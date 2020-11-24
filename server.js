@@ -29,7 +29,7 @@ const RatingSchema = mongoose.Schema({
 const ratingDoc = mongoose.model('ratingDoc', RatingSchema);
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
-    console.log("Connected to database!")); 
+    console.log("Connected to database!"));
 
 /*async function upVote(client, id) {
     await client.connect();
@@ -41,69 +41,69 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
 upVote(client, "sample_place");*/
 
 app.set("view engine", "pug");
-app.use(express.static(path.join(__dirname, '/public'))); 
+app.use(express.static(path.join(__dirname, '/public')));
 
 //gets all documents in ratingsDoc collection in delishfood database
-router.get('/', async (req,res) => {
-  try{
-      const getRatings = await ratingDoc.find();
-      res.json(getRatings);
-  }
-  catch(err) {
-      res.json({message: err});
-  }
+router.get('/', async (req, res) => {
+    try {
+        const getRatings = await ratingDoc.find();
+        res.json(getRatings);
+    }
+    catch (err) {
+        res.json({ message: err });
+    }
 });
 
 //take data and store in our ratingDoc collection, sets id and rating. (rating has default 0)
-router.post('/', async (req,res) => {
+router.post('/', async (req, res) => {
     const rating = new ratingDoc({
         placeid: req.body.placeid,
         rating: req.body.rating
     });
-    try{
-    const savedRating = await rating.save();
-    res.json(savedRating);
+    try {
+        const savedRating = await rating.save();
+        res.json(savedRating);
     }
-    catch(err) {
-        res.json({message: err});
+    catch (err) {
+        res.json({ message: err });
     }
 });
 
 //takes a param from url, searches database for document with param, return the document if found
 router.get('/:placeId', async (req, res) => {
     try {
-    const findSpecificDoc = await ratingDoc.findById(req.params.placeId);
-    res.json(findSpecificDoc);
+        const findSpecificDoc = await ratingDoc.findById(req.params.placeId);
+        res.json(findSpecificDoc);
     }
-    catch(err){
-        res.json({message: err});
+    catch (err) {
+        res.json({ message: err });
     }
 });
 
 //takes a param from url, searches database for document with param, deletes document if found
 router.delete('/:placeId', async (req, res) => {
     try {
-    const removedDoc = await ratingDoc.remove({_id: req.params.placeId});
-    res.json(removedDoc);
+        const removedDoc = await ratingDoc.remove({ _id: req.params.placeId });
+        res.json(removedDoc);
     }
-    catch(err){
-        res.json({message:err});
+    catch (err) {
+        res.json({ message: err });
     }
 });
 
 //finds a document with matching param from url, increments the rating by one
 router.patch('/:placeId', async (req, res) => {
     try {
-    const updatedDoc = await ratingDoc.updateOne({_id: req.params.placeId}, { $inc: { rating: 1} });
-    res.json(updatedDoc);
+        const updatedDoc = await ratingDoc.updateOne({ _id: req.params.placeId }, { $inc: { rating: 1 } });
+        res.json(updatedDoc);
     }
-    catch(err){
-        res.json({message:err});
+    catch (err) {
+        res.json({ message: err });
     }
 });
 
 
-app.use('/', router); 
+app.use('/', router);
 
 app.listen(process.env.port || 8080);
 
