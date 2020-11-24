@@ -6,12 +6,18 @@
     <title>Delish Food Map</title>
     <link rel="icon" type="image/png" href="./Icons/favicon-32x32.png" sizes="32x32" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <!--MarkerClusterer Import-->
+    <script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
+    <!--Local JS-->
+    <script src="./index.js"></script>
+    <script src="./cuisineSearch.js"></script>
     <script type="text/javascript" src="gmap.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;1,200;1,300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@509&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./style.css" />
   </head>
   <body>
+    
     <!--HEADER DIV-->
     <div class="nav-bar-title">Delish</div>
     
@@ -47,9 +53,22 @@
     <!--GMAPS DIVS-->
     <div id="box"></div>
     <div id="map"></div>
+  
 
-    <!--JS Scripts-->
-    <script src="./index.js"></script>
-    <script src="./cuisineSearch.js"></script>
+    <!-- pop-up divs -->
+    <div class="description" id="popup">
+      <div class="description-header">
+        <div class="title">Welcome to Delish Food!</div>
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+      <div class="description-body">
+        
+        We want to help you find the best ethnic food in your area. On
+        the next page, please enable the location permission and choose 
+        a category from the menu on the left.
+         
+      </div> 
+    </div>
+    <div id="overlay"></div>  
   </body>
 </html>
