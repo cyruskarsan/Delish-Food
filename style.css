@@ -73,45 +73,32 @@ body {
   display: absolute;
 }
 
-.left-side {
-  display:flex;
-}
-
 .nav-bar-title {
   position: absolute;
   margin-left: 48%;
-  font-size: 36px;
+  font-size: 40px;
   height: 22px;
-  font-family: Brush Script MT, cursive;
+  font-family: 'Dancing Script', cursive;
   align-items: center;
   justify-content: center;
-  padding-top: 10px;
+  padding-top: 5px;
   text-emphasis: outline;
-  color: rgb(16, 20, 73);
-  font-weight:bold;
+  font-weight: 500;
   z-index: 1;
 }
 
-.navigation-wrap>.left-side>div {
-  margin-right: 20px;
-  font-size: 1em;
-  display: flex;
-  text-transform: none;
-  z-index: 1;
-}
 
 .navigation-link-wrap {
   position: absolute;
   margin-left: 0%;
-  font-size: 36px;
+  font-size: 40px;
   height: 22px;
-  font-family: Brush Script MT, cursive;
+  font-family: 'Dancing Script', cursive;
   align-items: left;
   justify-content: left;
   padding-top: 5px;
   text-emphasis: outline;
-  color: rgb(16, 20, 73);
-  font-weight:bold;
+  color: black;
   z-index: 1;
   border-bottom: 1px solid transparent;
   transition: border-bottom 0.5s;
@@ -119,11 +106,16 @@ body {
 }
 
 .active-nav-demo {
-  font-family: 'Montserrat', sans-serif;  
+  font-family: 'Montserrat', sans-serif;
+  padding-top: 50px;
+  font-size: 20px;
+  border-bottom: none;
 }
 
 .navigation-link-wrap:hover {
-  border-bottom: 1px solid black;
+  border-bottom: 2px solid black;
+  padding-bottom: 14px;
+  transition: 0.3s;
 }
 
 .navigation-link-wrap a:hover {
@@ -141,13 +133,6 @@ body {
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-  height:6%;
-  transition: margin-left .5s;
-  background-image: linear-gradient(white, rgb(214, 236, 243));
-  background-color: white/*rgb(218, 219, 219)*/;
-  border-bottom: 3px solid black;
-}
 
 #box {
   transition: margin-left .5s;

@@ -30,7 +30,7 @@ function cuisineTypeSearch(request) {
       arguments
 
       const infowindow = new google.maps.InfoWindow();
-      const service = new google.maps.places.PlacesService(map);
+      
 
       const marker = new google.maps.Marker({
           map,
@@ -72,7 +72,7 @@ function cuisineTypeListener() {
           clearMarkers();
           document.getElementById("demo").innerText = "Cuisine Type: ".concat(`${cuisine.innerHTML}`);
           let request = {
-              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry"],
+              fields: ["name", "place_id", "formatted_address","url","address_components", "geometry"],
               location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
               radius: "5",
               type: "restaurant",
