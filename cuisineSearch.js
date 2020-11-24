@@ -7,6 +7,8 @@ function cuisineTypeSearch(request) {
   var service = new google.maps.places.PlacesService(map);
   service.textSearch(request, callback);
 
+  // show popup when click on marker
+
   //parse returned info from places
   function callback(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -32,32 +34,36 @@ function cuisineTypeSearch(request) {
       arguments
 
       const infowindow = new google.maps.InfoWindow();
+      const service = new google.maps.places.PlacesService(map);
+
       const marker = new google.maps.Marker({
           map,
           icon: image,
           title: place.name,
           position: place.geometry.location,
-      }).addListener('click', function() {     
-          infowindow.setContent(
-          "<div><strong>" +
-            place.name +
-            "</strong><br>" +
-            "Place ID: " +
-            place.place_id +
-            "<br>" +
-            place.formatted_address +
-            "</div>"
-        );
-        infowindow.open(map, this);
       });
       
+      google.maps.event.addListener(marker, "click", function () {
+          infowindow.setContent(
+          "<div><strong>" +
+              place.name +
+              "</strong><br>" +
+              "Place ID: " +
+              place.place_id +
+              "<br>" +
+              place.formatted_address +
+              "</div>"
+          );
+          infowindow.open(map, this);
+      });
       markers.push(marker);
       google.maps.event.addListener(marker, "click", () => {
-          infowindow.setContent(place.name);
-          infowindow.open(map);
+        infowindow.setContent(place.name);
+        infowindow.open(map);
       });
-    }
-    
+  }
+}
+
 // Cluster markers for given markers on map
 function clusters(){ 
     console.log("in clusters func, markers: \n".concat(`${markers}`));
@@ -67,26 +73,29 @@ function clusters(){
       });
 }
 
- /*Add onclick event listener for cuisine type options*/
+// Clear markers from previous search query
+function clearMarkers() {
+  for (let i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+  }
+}
+
 function cuisineTypeListener() {
+  /*onclick event listener for cuisine type options*/
   let mysidenav = document.getElementById("mySidenav");
   let cuisines = mysidenav.querySelectorAll('a.cuisine-type');
-  console.log(cuisines);
 
   for (let i = 0; i < cuisines.length; i++) {
       let cuisine = cuisines[i]; // select individual cuisine type
       cuisine.onclick = function() {
           clearMarkers();
           document.getElementById("demo").innerText = "Cuisine Type: ".concat(`${cuisine.innerHTML}`);
-          //clear markers in clusters and markers array
           if(markerClusterer) {
             markerClusterer.clearMarkers();
           }
           markers = []
-
-          document.getElementById("demo").innerText = "CUISINE TYPE: ".concat(`${cuisine.innerHTML}`);
           let request = {
-              fields: ["name", "place_id", "formatted_address","url","address_components", "geometry"],
+              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry"],
               location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
               radius: "5",
               type: "restaurant",
