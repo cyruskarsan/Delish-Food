@@ -1,3 +1,5 @@
+var markerClusterer = null; // Marker Clusterer object
+
 //Run requests from cuisine type clicks
 function cuisineTypeSearch(request) {
 
@@ -14,6 +16,8 @@ function cuisineTypeSearch(request) {
               var place = results[i];
               createMarker(place,request);
           }
+          console.log(place);
+          clusters();
       }
   }
 
@@ -39,21 +43,34 @@ function cuisineTypeSearch(request) {
           position: place.geometry.location,
       });
       
-        google.maps.event.addListener(marker, "click", function () {
-            infowindow.setContent(
-            "<div><strong>" +
-                place.name +
-                "</strong><br>" +
-                "Place ID: " +
-                place.place_id +
-                "<br>" +
-                place.formatted_address +
-                "</div>"
-            );
-            infowindow.open(map, this);
-        });
-        markers.push(marker);
-      }
+      google.maps.event.addListener(marker, "click", function () {
+          infowindow.setContent(
+          "<div><strong>" +
+              place.name +
+              "</strong><br>" +
+              "Place ID: " +
+              place.place_id +
+              "<br>" +
+              place.formatted_address +
+              "</div>"
+          );
+          infowindow.open(map, this);
+      });
+      markers.push(marker);
+      google.maps.event.addListener(marker, "click", () => {
+        infowindow.setContent(place.name);
+        infowindow.open(map);
+      });
+  }
+}
+
+// Cluster markers for given markers on map
+function clusters(){ 
+    console.log("in clusters func, markers: \n".concat(`${markers}`));
+    markerClusterer = new MarkerClusterer( map, markers, {
+        imagePath:
+          "https://unpkg.com/@googlemaps/markerclustererplus@1.0.3/images/m",
+      });
 }
 
 // Clear markers from previous search query
@@ -73,6 +90,10 @@ function cuisineTypeListener() {
       cuisine.onclick = function() {
           clearMarkers();
           document.getElementById("demo").innerText = "Cuisine Type: ".concat(`${cuisine.innerHTML}`);
+          if(markerClusterer) {
+            markerClusterer.clearMarkers();
+          }
+          markers = []
           let request = {
               fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry"],
               location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
