@@ -43,24 +43,21 @@ function cuisineTypeSearch(request) {
           position: place.geometry.location,
       });
       
+      var addr = place.formatted_address.split(",");
+
       google.maps.event.addListener(marker, "click", function () {
           infowindow.setContent(
           "<div><strong>" +
               place.name +
               "</strong><br>" +
-              "Place ID: " +
-              place.place_id +
-              "<br>" +
-              place.formatted_address +
+              addr[0] + 
+              "<br>" + 
+              addr[1] + ", " + addr[2] + 
               "</div>"
           );
           infowindow.open(map, this);
       });
       markers.push(marker);
-      google.maps.event.addListener(marker, "click", () => {
-        infowindow.setContent(place.name);
-        infowindow.open(map);
-      });
   }
 }
 
