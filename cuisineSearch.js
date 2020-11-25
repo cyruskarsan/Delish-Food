@@ -1,7 +1,7 @@
 var markerClusterer = null; // Marker Clusterer object
 
 //Run requests from cuisine type clicks
-function cuisineTypeSearch(request) {
+function cuisineTypeSearch(request, cusineType) {
 
   //hit the gmaps places API and do a text search
   var service = new google.maps.places.PlacesService(map);
@@ -15,7 +15,7 @@ function cuisineTypeSearch(request) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
               var place = results[i];
-              createMarker(place);
+              createMarker(place, cusineType);
 
           }
           console.log(place);
@@ -24,7 +24,7 @@ function cuisineTypeSearch(request) {
   }
 
   //create marker with icon and attributes
-  function createMarker(place) {
+  function createMarker(place, cuisineType) {
       console.log(place)
       const image = {
           url: place.icon,
@@ -36,10 +36,12 @@ function cuisineTypeSearch(request) {
       arguments
       const marker = new google.maps.Marker({
           map,
-          icon: image,
+          icon: `./MarkerIcons/${cuisineType}.png`, //./MarkerIcons/`${}`-32x32.png, instead of image
           title: place.name,
           position: place.geometry.location,
       });
+
+      console.log("cuisinetype: ", cuisineType);
 
       markers.push(marker);
 
@@ -81,7 +83,7 @@ function cuisineTypeListener() {
               type: "restaurant",
               query: cuisine.innerText.toLowerCase(),
           };
-          cuisineTypeSearch(request);
+          cuisineTypeSearch(request, cuisine.innerText.toLowerCase());
       }
   }
 }
