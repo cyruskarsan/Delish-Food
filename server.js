@@ -57,7 +57,8 @@ router.get('/', async (req, res) => {
 //take data and store in our ratingDoc collection, sets id and rating. (rating has default 0)
 router.post('/', async (req, res) => {
     const rating = new ratingDoc({
-        placeid: req.body.placeid,
+        // placeid: req.body.placeid,
+        _id: req.body._id,
         rating: req.body.rating
     });
     try {
