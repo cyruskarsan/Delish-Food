@@ -42,9 +42,8 @@ function cuisineTypeSearch(request) {
           title: place.name,
           position: place.geometry.location,
       });
-      
-      var addr = place.formatted_address.split(",");
 
+      var addr = place.formatted_address.split(",");
       google.maps.event.addListener(marker, "click", function () {
           infowindow.setContent(
           "<div><strong>" +
@@ -53,11 +52,20 @@ function cuisineTypeSearch(request) {
               addr[0] + 
               "<br>" + 
               addr[1] + ", " + addr[2] + 
+              "Place ID: " +
+              place.place_id +
+              "<br>" +
+              place.formatted_address +
               "</div>"
           );
           infowindow.open(map, this);
       });
       markers.push(marker);
+
+      google.maps.event.addListener(marker, "click", () => {
+        infowindow.setContent(place.name);
+        infowindow.open(map);
+      });
   }
 }
 
