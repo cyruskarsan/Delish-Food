@@ -52,20 +52,11 @@ function cuisineTypeSearch(request) {
               addr[0] + 
               "<br>" + 
               addr[1] + ", " + addr[2] + 
-              "Place ID: " +
-              place.place_id +
-              "<br>" +
-              place.formatted_address +
               "</div>"
           );
           infowindow.open(map, this);
       });
       markers.push(marker);
-
-      google.maps.event.addListener(marker, "click", () => {
-        infowindow.setContent(place.name);
-        infowindow.open(map);
-      });
   }
 }
 
@@ -94,7 +85,6 @@ function cuisineTypeListener() {
       let cuisine = cuisines[i]; // select individual cuisine type
       cuisine.onclick = function() {
           clearMarkers();
-          document.getElementById("demo").innerText = "Cuisine Type: ".concat(`${cuisine.innerHTML}`);
           if(markerClusterer) {
             markerClusterer.clearMarkers();
           }
