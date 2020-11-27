@@ -79,34 +79,42 @@ body {
   font-size: 40px;
   height: 22px;
   font-family: 'Work Sans', sans-serif;
-  //font-family: 'Dancing Script', cursive;
+  /* font-family: 'Dancing Script', cursive; */
   align-items: center;
   justify-content: center;
   padding-top: 5px;
   text-emphasis: outline;
   font-weight: 400;
   z-index: 1;
-
-
 }
-
 
 .navigation-link-wrap {
   position: absolute;
   margin-left: 10px;
   font-size: 40px;
   height: 22px;
-  font-family: 'Work Sans', sans-serif;
-  //font-family: 'Dancing Script', cursive;
+  font-family: Courier New, monospace;
+  /* font-family: 'Work Sans', sans-serif; */
+  /* font-family: 'Dancing Script', cursive; */
   align-items: left;
   justify-content: left;
   padding-top: 5px;
   text-emphasis: outline;
-  color: black;
+  color: white;
   z-index: 1;
   border-bottom: 1px solid transparent;
   transition: border-bottom 0.5s;
   transition: 0.5s;
+}
+.menu-box{
+  background-color: black;
+  width: 98px;
+  /* width: 107px; */
+  height: 42px;
+  padding-left: 2px;
+  /* border: 1px solid black; */
+  border-radius: 2px;
+  opacity: 0.8;
 }
 
 .active-nav-demo {

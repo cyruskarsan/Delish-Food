@@ -46,13 +46,15 @@ function cuisineTypeSearch(request) {
       var addr = place.formatted_address.split(",");
       google.maps.event.addListener(marker, "click", function () {
           infowindow.setContent(
-          "<div><strong>" +
-              place.name +
-              "</strong><br>" +
-              addr[0] + 
-              "<br>" + 
-              addr[1] + ", " + addr[2] + 
-              "</div>"
+            "<div><strong>" +
+            place.name +
+            "</strong><br>" +
+            addr[0] + 
+            "<br>" + 
+            addr[1] + ", " + addr[2] + 
+            "<br>" +
+            place.photos[1] +
+            "</div>"
           );
           infowindow.open(map, this);
       });
