@@ -1,0 +1,4 @@
+-virtualenv --system-site-packages -p python ./venv
+-Set-ExecutionPolicy RemoteSigned
+-.\venv\Scripts\activate
+-when done: Set-ExecutionPolicy Restricted
