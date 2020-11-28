@@ -53,7 +53,7 @@ function cuisineTypeSearch(request) {
             "<br>" + 
             addr[1] + ", " + addr[2] + 
             "<br>" +
-            place.photos[1] +
+            place.photos[0] +
             "</div>"
           );
           infowindow.open(map, this);
@@ -92,7 +92,7 @@ function cuisineTypeListener() {
           }
           markers = []
           let request = {
-              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry"],
+              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry", "photos[]"],
               location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
               radius: "5",
               type: "restaurant",
