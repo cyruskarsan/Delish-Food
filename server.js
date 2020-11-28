@@ -14,6 +14,7 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const swaggerOptions = {
     swaggerDefinition: {
+        openapi: '3.0.0',
       info: {
         version: "1.0.0",
         title: "Delish API",
