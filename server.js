@@ -10,9 +10,32 @@ const cors = require('cors');
 const axios = require('axios')
 const path = require('path');
 const router = express.Router();
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const swaggerOptions = {
+    swaggerDefinition: {
+      info: {
+        version: "1.0.0",
+        title: "Customer API",
+        description: "Customer API Information",
+        contact: {
+          name: "Amazing Developer"
+        },
+        servers: ["http://localhost:8080"]
+      }
+    },
+    // ['.routes/*.js']
+    apis: ["app.js"]
+  };
+
+//define the OpenAPI doc
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 
 app.use(bodyParser.json());
 app.use(cors());
+
 
 const MongoClient = require('mongodb').MongoClient; //create client to use mongodb
 const uri = `mongodb+srv://delishfood:delishfood@cluster0.ailvm.mongodb.net/delishfood?retryWrites=true&w=majority`; //url to connect to mongodb atlas cluster
