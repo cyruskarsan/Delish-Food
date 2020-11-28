@@ -21,8 +21,7 @@ const swaggerOptions = {
         description: "Delish API ratings information",
         contact: {
           name: "Cyrus Karsan"
-        },
-        servers: ["http://localhost:8080"]
+        }
       }
     },
     apis: ["server.js"]
@@ -30,7 +29,7 @@ const swaggerOptions = {
 
 //define the OpenAPI doc
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-console.log(swaggerDocs)
+console.log(swaggerDocs);
 
 //setup the visual api doc tester
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
@@ -69,7 +68,6 @@ upVote(client, "sample_place");*/
 app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, '/public')));
 
-//gets all documents in ratingsDoc collection in delishfood database
 /**
  * @swagger
  * /:
@@ -90,6 +88,30 @@ router.get('/', async (req, res) => {
 });
 
 //take data and store in our ratingDoc collection, sets id and rating. (rating has default 0)
+/**
+ * @swagger
+ * /:
+ *  post:
+ *    description: Add a new rating to the ratings collection in MongoDB
+ *    requestBody:
+ *      required: true
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      id:
+ *                          type: string
+ *                      rating:
+ *                          type: integer
+ *                          format: int64
+ *                          minimum: 1
+ * 
+ *
+ *    responses:
+ *      '200':
+ *        description: Rating added successfully
+ */
 router.post('/', async (req, res) => {
     const rating = new ratingDoc({
         // placeid: req.body.placeid,
