@@ -16,20 +16,22 @@ const swaggerOptions = {
     swaggerDefinition: {
       info: {
         version: "1.0.0",
-        title: "Customer API",
-        description: "Customer API Information",
+        title: "Delish API",
+        description: "Delish API ratings information",
         contact: {
-          name: "Amazing Developer"
+          name: "Cyrus Karsan"
         },
         servers: ["http://localhost:8080"]
       }
     },
-    // ['.routes/*.js']
-    apis: ["app.js"]
+    apis: ["server.js"]
   };
 
 //define the OpenAPI doc
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
+console.log(swaggerDocs)
+
+//setup the visual api doc tester
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
@@ -67,6 +69,15 @@ app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, '/public')));
 
 //gets all documents in ratingsDoc collection in delishfood database
+/**
+ * @swagger
+ * /:
+ *  get:
+ *    description: Retrieves all documents in the ratings collection in MongoDB
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 router.get('/', async (req, res) => {
     try {
         const getRatings = await ratingDoc.find();
