@@ -87,7 +87,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-//take data and store in our ratingDoc collection, sets id and rating. (rating has default 0)
 /**
  * @swagger
  * /:
@@ -128,7 +127,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-//takes a param from url, searches database for document with param, return the document if found
 /**
  * @swagger
  * /{mongo_id}:
@@ -156,7 +154,6 @@ router.get('/:mongo_id', async (req, res) => {
     }
 });
 
-//takes a param from url, searches database for document with param, deletes document if found
 /**
  * @swagger
  * /{mongo_id}:
@@ -184,10 +181,25 @@ router.delete('/:mongo_id', async (req, res) => {
     }
 });
 
-//finds a document with matching param from url, increments the rating by one
-router.patch('/:placeId', async (req, res) => {
+/**
+ * @swagger
+ * /{mongo_id}:
+ *  patch:
+ *    summary: increment rating of resturant in document
+ *    parameters:
+ *      - name: mongo_id
+ *        in: path 
+ *        required: true
+ *        description: unique document _id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
+router.patch('/:mongo_id', async (req, res) => {
     try {
-        const updatedDoc = await ratingDoc.updateOne({ _id: req.params.placeId }, { $inc: { rating: 1 } });
+        const updatedDoc = await ratingDoc.updateOne({ _id: req.params.mongo_id }, { $inc: { rating: 1 } });
         res.json(updatedDoc);
     }
     catch (err) {
