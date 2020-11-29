@@ -1,6 +1,6 @@
-const express = require('express'); // "imports" express framework
+const express = require('express');
 const mongoose = require('mongoose');
-const app = express(); // creates the webapp
+const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const axios = require('axios')
@@ -8,6 +8,8 @@ const path = require('path');
 const router = express.Router();
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+
+//required by swagger JS to setup initial swagger doc
 const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
@@ -25,7 +27,6 @@ const swaggerOptions = {
 
 //define the OpenAPI doc
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-console.log(swaggerDocs);
 
 //setup the visual api doc tester
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
