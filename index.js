@@ -1,68 +1,25 @@
 var map;
 var service;
 var infowindow;
-
+var mapcenterpos;
+var markers = [];
 
 function initMap() {
-  //SC coords
-  var sc = new google.maps.LatLng(36.9723111, -122.0383785, 14);
+  console.log("haha2");
 
-  // shwo popup when click on marker
+  //center of earth coords
+  var startCenter = new google.maps.LatLng(0, 0, 0);
+
+  // show popup when click on marker
   infowindow = new google.maps.InfoWindow();
 
+  console.log("beforeMapinit");
   //create the map
   map = new google.maps.Map(document.getElementById("map"), {
-    center: sc,
-    zoom: 14,
+    center: startCenter,
+    zoom: 3,
   });
-
-  //text request search
-  var request = {
-    location: sc,
-    radius: "5",
-    query: "Taqueria",
-  };
-
-  //hit the gmaps places API and do a text search
-  var service = new google.maps.places.PlacesService(map);
-  service.textSearch(request, callback);
-
-
-  //parse returned info from places
-  function callback(results, status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-      for (var i = 0; i < results.length; i++) {
-        var place = results[i];
-        createMarker(results[i]);
-      }
-    }
-  }
-
-  //create marker with icon and attributes
-  function createMarker(place) {
-    console.log(place)
-    const image = {
-      url: place.icon,
-      size: new google.maps.Size(71, 71),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(17, 34),
-      scaledSize: new google.maps.Size(25, 25),
-    };
-
-    const marker = new google.maps.Marker({
-      map,
-      icon: image,
-      title: place.name,
-      position: place.geometry.location,
-    });
-
-    google.maps.event.addListener(marker, "click", () => {
-      infowindow.setContent(place.name);
-      infowindow.open(map);
-    });
-  }
-
-
+  console.log("AfterMapinit");
 
   var mapStyle = [ // sets up getting rid of equator and international date line
     {
@@ -73,17 +30,31 @@ function initMap() {
       ]
     }
   ];
-  
+
   var styledMap = new google.maps.StyledMapType(mapStyle);
   map.mapTypes.set('myCustomMap', styledMap);
   map.setMapTypeId('myCustomMap');
 
-  infoWindow = new google.maps.InfoWindow();
-  const locationButton = document.createElement("button");
-  locationButton.textContent = "Pan to Current Location";
-  locationButton.classList.add("custom-map-control-button");
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-  locationButton.addEventListener("click", () => {
+  const closeDescriptionButton = document.querySelectorAll('[data-close-button]')
+  const overlay = document.getElementById('overlay')
+
+  closeDescriptionButton.forEach(button => {
+    button.addEventListener('click', () => {
+      const description = button.closest('.description')
+      closeDescription(description)
+    })
+  })
+  function closeDescription(description) {
+    if (description == null) return
+    description.classList.add('active')
+    overlay.classList.add('active')
+    overlay.parentNode.removeChild(overlay)
+    geoLocation()
+
+
+  }
+  function geoLocation() {
+    infoWindow = new google.maps.InfoWindow();
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -92,10 +63,10 @@ function initMap() {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          infoWindow.setPosition(pos);
-          infoWindow.setContent("Location found.");
-          infoWindow.open(map);
+          map.setZoom(13);
           map.setCenter(pos);
+          mapcenterpos = pos;
+          cuisineTypeListener();
         },
         () => {
           handleLocationError(true, infoWindow, map.getCenter());
@@ -105,18 +76,19 @@ function initMap() {
       // Browser doesn't support Geolocation
       handleLocationError(false, infoWindow, map.getCenter());
     }
-  });
-}
+  }
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(
-    browserHasGeolocation
-      ? "Error: The Geolocation service failed. Please enable your location."
-      : "Error: Your browser doesn't support geolocation."
-  );
+  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(
+      browserHasGeolocation
+        ? "Error: The Geolocation service failed. Please enable your location."
+        : "Error: Your browser doesn't support geolocation."
+    );
 
-  infoWindow.open(map);
+    infoWindow.open(map);
+  }
+
 }
 
 
