@@ -72,7 +72,7 @@ app.use(express.static(path.join(__dirname, '/public')));
  * @swagger
  * /:
  *  get:
- *    description: Retrieves all documents in the ratings collection in MongoDB
+ *    summary: Retrieves all documents in the ratings collection in MongoDB
  *    responses:
  *      '200':
  *        description: A successful response
@@ -92,7 +92,8 @@ router.get('/', async (req, res) => {
  * @swagger
  * /:
  *  post:
- *    description: Add a new rating to the ratings collection in MongoDB
+ *    summary: Add a new rating to the ratings collection in MongoDB
+ *    description: Create a new document in the ratings collection of the resturant and it's rating
  *    requestBody:
  *      required: true
  *      content:
@@ -128,6 +129,16 @@ router.post('/', async (req, res) => {
 });
 
 //takes a param from url, searches database for document with param, return the document if found
+/**
+ * @swagger
+ * /placeid:
+ *  get:
+ *    summary: Retrieves document of given id
+ *    description: Given a unique MongoDB document _id, return the data associated with the document.
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 router.get('/:placeId', async (req, res) => {
     try {
         const findSpecificDoc = await ratingDoc.findById(req.params.placeId);
@@ -139,6 +150,16 @@ router.get('/:placeId', async (req, res) => {
 });
 
 //takes a param from url, searches database for document with param, deletes document if found
+/**
+ * @swagger
+ * /placeid:
+ *  delete:
+ *    summary: Removes document from ratings collection
+ *    description: Given a unique MongoDB document _id, delete the document associated with the _id
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 router.delete('/:placeId', async (req, res) => {
     try {
         const removedDoc = await ratingDoc.remove({ _id: req.params.placeId });
