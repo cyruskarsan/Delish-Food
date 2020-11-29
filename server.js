@@ -1,7 +1,3 @@
-//require("dotenv").config() //ignore
-
-//console.log(process.env); // ignore 
-
 const express = require('express'); // "imports" express framework
 const mongoose = require('mongoose');
 const app = express(); // creates the webapp
@@ -34,15 +30,18 @@ console.log(swaggerDocs);
 //setup the visual api doc tester
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-
+//bodyparser parses json in the request body
 app.use(bodyParser.json());
+
+//cors allows us to access API from different machines with different ips
 app.use(cors());
 
-
+//setup connection to mongoDB atlas
 const MongoClient = require('mongodb').MongoClient; //create client to use mongodb
 const uri = `mongodb+srv://delishfood:delishfood@cluster0.ailvm.mongodb.net/delishfood?retryWrites=true&w=majority`; //url to connect to mongodb atlas cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true }); //initalize our client
 
+//define MongoDB schema
 const RatingSchema = mongoose.Schema({
     placeid: String,
     rating: {
@@ -51,22 +50,12 @@ const RatingSchema = mongoose.Schema({
     }
 });
 
+//create a document based on the rating schema
 const ratingDoc = mongoose.model('ratingDoc', RatingSchema);
 
+//connect to database
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
     console.log("Connected to database!"));
-
-/*async function upVote(client, id) {
-    await client.connect();
-    result = await client.db("delishfood").collection("ratings")
-    .updateOne({ _id: "sample_place" }, { $inc: { rating: 1} });
-    console.log("Found id:" + id);
-}
-
-upVote(client, "sample_place");*/
-
-app.set("view engine", "pug");
-app.use(express.static(path.join(__dirname, '/public')));
 
 /**
  * @swagger
@@ -206,9 +195,7 @@ router.patch('/:mongo_id', async (req, res) => {
     }
 });
 
-
 app.use('/', router);
-
 app.listen(process.env.port || 8080);
 
 console.log('Server listening on port 8080!');
