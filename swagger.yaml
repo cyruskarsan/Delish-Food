@@ -6,7 +6,7 @@ info:
   description: Delish API ratings information
   contact:
     name: Cyrus Karsan
-host: delish-food-292917.appspot.com"
+host: delish-food-292917.appspot.com
 paths:
   "/":
     get:
