@@ -1,0 +1,100 @@
+from selenium import webdriver 
+from selenium.webdriver.common.keys import Keys  
+from selenium.webdriver.chrome.options import Options 
+from time import sleep
+import os
+import time
+import requests
+import io
+from PIL import Image
+import hashlib
+from selenium import webdriver  
+import datetime
+
+#time test
+begin_time = datetime.datetime.now()
+
+'''Will go and grab specified merchant logos/icons if available,
+   Currently stores these images into a folder named imagestest, 
+   no masking at the moment (to make look like circles)'''
+
+# Grab Image Source based on specified search and Img.Class tag
+def getImageSrcs(search_key:str, css_imgclass:str, driver:webdriver, sleep_between_interactions:float):
+  img_srcs = set()
+
+  #send search request to browser
+  search_url = "https://www.google.com/search?q={q}&oq={q}&num=1"
+  driver.get(search_url.format(q=search_key)) 
+
+  # get desired element (css specified img.class tag)
+  sleep(sleep_between_interactions)
+  img_tag_object = driver.find_element_by_css_selector(css_imgclass)
+  img_src = img_tag_object.get_attribute('src')
+  print("Image src for search key,", search_key, ":", img_src)
+  return img_src
+
+# Save off images from URL to specified folder
+def saveImageFromUrl(src_url:str, folder_path:str, save_name:str):
+  try:
+      #image = Image.open(url)
+      image_content = requests.get(src_url).content
+
+  except Exception as e:
+      print(f"ERROR - Could not download {src_url} - {e}")
+
+  try:
+      image_file = io.BytesIO(image_content)
+      image = Image.open(image_file).convert('RGB')
+      file_path = os.path.join(folder_path,save_name+'.png')
+      print("this is file path: ", file_path)
+      with open(file_path, 'wb') as f:
+          image.save(f, "PNG", quality=85)
+      print(f"SUCCESS - saved {src_url} - as {file_path}")
+  except Exception as e:
+      print(f"ERROR - Could not save {src_url} - {e}")
+      return "no_icon"
+
+
+
+def startIconScrape(search_key:str, save_name:str):
+  #setting up chrome driver
+  DRIVER_PATH = './chromedriverv86'
+  options = Options()  
+  options.add_argument("--headless")
+  driver = webdriver.Chrome(executable_path=os.path.abspath("chromedriverv86"), chrome_options=options)
+
+  #setting search key
+  skey = search_key
+  css_imgclass = 'img.DU330c'
+
+  #setting sleep time between browser interactions (e.g. wait for JS to load necessary html divs)
+  sleep_time = 0.3
+
+  #init folder to save image off to
+  target_path = './imagestest'
+  target_folder = os.path.join(target_path)
+  if not os.path.exists(target_folder):
+    os.makedirs(target_folder)
+
+  # file name to save img to in target_folder
+  file_name = '_'.join(skey.lower().split(' '))
+
+  #get image source(s)
+  result = getImageSrcs(skey, css_imgclass, driver, sleep_time)
+
+  #if result == -1, return fail, else make image, return 0
+
+  #save off image(s) to file_name in target_folder
+  saveImageFromUrl(result, target_folder, file_name)
+  driver.quit()
+
+
+searchkeytest = ['los pinos santa cruz', 'cafe brasil santa cruz', 'snap taco santa cruz']
+
+for sk in searchkeytest:
+  startIconScrape(sk, sk)
+
+#close driver
+driver.quit()
+
+print(datetime.datetime.now()-begin_time)
