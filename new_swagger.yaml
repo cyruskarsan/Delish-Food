@@ -1,0 +1,87 @@
+swagger: '2.0'
+info:
+  contact:
+    name: Cyrus Karsan
+  description: Delish API ratings information
+  title: Delish API
+  version: 1.0.0
+host: delish-food-292917.appspot.com
+paths:
+  /:
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: A successful response
+      operationId: get_docs
+      summary: Retrieves all documents in the ratings collection in MongoDB
+    post:
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            properties:
+              id:
+                type: string
+              rating:
+                format: int64
+                minimum: 1
+                type: integer
+            type: object
+      responses:
+        '200':
+          description: Rating added successfully
+      description: >-
+        Create a new document in the ratings collection of the resturant and
+        it's rating
+      operationId: add_doc
+      summary: Add a new rating to the ratings collection in MongoDB
+  '/{mongo_id}':
+    delete:
+      parameters:
+        - description: unique document _id
+          in: path
+          name: mongo_id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: A successful response
+      description: >-
+        Given a unique MongoDB document _id, delete the document associated with
+        the _id
+      operationId: remove_doc
+      summary: Removes document from ratings collection
+    get:
+      parameters:
+        - description: unique document _id
+          in: path
+          name: mongo_id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: A successful response
+      description: >-
+        Given a unique MongoDB document _id, return the data associated with the
+        document.
+      operationId: get_doc
+      summary: Retrieves document of given id
+    patch:
+      parameters:
+        - description: unique document _id
+          in: path
+          name: mongo_id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: A successful response
+      operationId: add_one_to_rating
+      summary: increment rating of resturant in document
+tags: []
+x-components: {}
+
