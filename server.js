@@ -131,17 +131,24 @@ router.post('/', async (req, res) => {
 //takes a param from url, searches database for document with param, return the document if found
 /**
  * @swagger
- * /placeid:
+ * /{mongo_id}:
  *  get:
  *    summary: Retrieves document of given id
  *    description: Given a unique MongoDB document _id, return the data associated with the document.
+ *    parameters:
+ *      - name: mongo_id
+ *        in: path 
+ *        required: true
+ *        description: unique document _id
+ *        schema:
+ *          type: string    
  *    responses:
  *      '200':
  *        description: A successful response
  */
-router.get('/:placeId', async (req, res) => {
+router.get('/:mongo_id', async (req, res) => {
     try {
-        const findSpecificDoc = await ratingDoc.findById(req.params.placeId);
+        const findSpecificDoc = await ratingDoc.findById(req.params.mongo_id);
         res.json(findSpecificDoc);
     }
     catch (err) {
@@ -152,17 +159,24 @@ router.get('/:placeId', async (req, res) => {
 //takes a param from url, searches database for document with param, deletes document if found
 /**
  * @swagger
- * /placeid:
+ * /{mongo_id}:
  *  delete:
  *    summary: Removes document from ratings collection
  *    description: Given a unique MongoDB document _id, delete the document associated with the _id
+ *    parameters:
+ *      - name: mongo_id
+ *        in: path 
+ *        required: true
+ *        description: unique document _id
+ *        schema:
+ *          type: string
  *    responses:
  *      '200':
  *        description: A successful response
  */
-router.delete('/:placeId', async (req, res) => {
+router.delete('/:mongo_id', async (req, res) => {
     try {
-        const removedDoc = await ratingDoc.remove({ _id: req.params.placeId });
+        const removedDoc = await ratingDoc.remove({ _id: req.params.mongo_id});
         res.json(removedDoc);
     }
     catch (err) {
