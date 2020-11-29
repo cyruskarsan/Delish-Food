@@ -7,13 +7,14 @@ info:
     name: Cyrus Karsan
 host: delish-food-292917.appspot.com
 paths:
-  "/":
+  "/get-docs":
     get:
       summary: Retrieves all documents in the ratings collection in MongoDB
       operationId: get_docs
       responses:
         '200':
           description: A successful response
+  "/add-doc":
     post:
       summary: Add a new rating to the ratings collection in MongoDB
       operationId: add_doc

@@ -70,14 +70,14 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 /**
  * @swagger
- * /:
+ * /get-docs:
  *  get:
  *    summary: Retrieves all documents in the ratings collection in MongoDB
  *    responses:
  *      '200':
  *        description: A successful response
  */
-router.get('/', async (req, res) => {
+router.get('/get-docs', async (req, res) => {
     try {
         const getRatings = await ratingDoc.find();
         res.json(getRatings);
@@ -89,7 +89,7 @@ router.get('/', async (req, res) => {
 
 /**
  * @swagger
- * /:
+ * /add-doc:
  *  post:
  *    summary: Add a new rating to the ratings collection in MongoDB
  *    description: Create a new document in the ratings collection of the resturant and it's rating
@@ -100,7 +100,7 @@ router.get('/', async (req, res) => {
  *              schema:
  *                  type: object
  *                  properties:
- *                      id:
+ *                      placeid:
  *                          type: string
  *                      rating:
  *                          type: integer
@@ -112,10 +112,9 @@ router.get('/', async (req, res) => {
  *      '200':
  *        description: Rating added successfully
  */
-router.post('/', async (req, res) => {
+router.post('/add-doc', async (req, res) => {
     const rating = new ratingDoc({
-        // placeid: req.body.placeid,
-        _id: req.body._id,
+        placeid: req.body.placeid,
         rating: req.body.rating
     });
     try {
@@ -137,7 +136,7 @@ router.post('/', async (req, res) => {
  *      - name: mongo_id
  *        in: path 
  *        required: true
- *        description: unique document _id
+ *        description: unique mongo document _id
  *        schema:
  *          type: string    
  *    responses:
