@@ -23,7 +23,7 @@ def add():
     #return jsonify(startIconScrape(a, b))
     return jsonify({'status': 'OK','search_key':a, 'save_name':b})
 
-@app.route('/', methods=['POST'])
+@app.route('/')
 def default(): return jsonify("default")
 
 if __name__=='__main__':

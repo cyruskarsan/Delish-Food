@@ -30,7 +30,7 @@ function cuisineTypeSearch(request, cusineType) {
             //icon_query.preventDefault();
             $.ajax({
               type: "POST",
-              url: './app.py',
+              url: '/icon_scrape',
               data: {search_key:icon_query, save_name:icon_query},
               success: function (response) {
                   console.log("success, this is response: ", response);
