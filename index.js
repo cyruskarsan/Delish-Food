@@ -102,7 +102,7 @@ function initMap() {
   and add a black background color to body */
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
-  document.getElementById("menu").style.display = "none";
+  document.getElementById("menu").style.opacity = "0";
   document.getElementById("box").style.marginLeft = "250px";
   document.getElementById("map").style.marginLeft = "250px";
   document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
@@ -113,8 +113,7 @@ function openNav() {
 background color of body to white */
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("menu").style.display = "flex";
-
+  document.getElementById("menu").style.opacity = "1";
   document.getElementById("box").style.marginLeft = "0";
   document.getElementById("map").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
