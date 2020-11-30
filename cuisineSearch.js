@@ -8,15 +8,13 @@ function cuisineTypeSearch(request) {
   service.textSearch(request, callback);
 
   // show popup when click on marker
-  infowindow = new google.maps.InfoWindow();
 
   //parse returned info from places
   function callback(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
               var place = results[i];
-              createMarker(place);
-
+              createMarker(place,request);
           }
           console.log(place);
           clusters();
@@ -24,8 +22,8 @@ function cuisineTypeSearch(request) {
   }
 
   //create marker with icon and attributes
-  function createMarker(place) {
-      console.log(place)
+  function createMarker(place,request) {
+      
       const image = {
           url: place.icon,
           size: new google.maps.Size(71, 71),
@@ -34,6 +32,10 @@ function cuisineTypeSearch(request) {
           scaledSize: new google.maps.Size(25, 25),
       };
       arguments
+
+      const infowindow = new google.maps.InfoWindow();
+      const service = new google.maps.places.PlacesService(map);
+
       const marker = new google.maps.Marker({
           map,
           icon: image,
@@ -41,41 +43,56 @@ function cuisineTypeSearch(request) {
           position: place.geometry.location,
       });
 
-      markers.push(marker);
-
-      google.maps.event.addListener(marker, "click", () => {
-          infowindow.setContent(place.name);
-          infowindow.open(map);
+      var addr = place.formatted_address.split(",");
+    //   var pictures = place.photo;
+      google.maps.event.addListener(marker, "click", function () {
+          infowindow.setContent(
+            "<div><strong>" +
+            place.name +
+            "</strong><br>" +
+            addr[0] + 
+            "<br>" + 
+            addr[1] + ", " + addr[2] + 
+            // "<br>" +
+            // pictures[0]+
+            "</div>"
+          );
+          infowindow.open(map, this);
       });
-    }
+      markers.push(marker);
+  }
 }
 
 // Cluster markers for given markers on map
 function clusters(){ 
-    console.log("in clusters func, markers: \n".concat(`${markers}`));
     markerClusterer = new MarkerClusterer( map, markers, {
         imagePath:
           "https://unpkg.com/@googlemaps/markerclustererplus@1.0.3/images/m",
       });
 }
 
- /*Add onclick event listener for cuisine type options*/
+// Clear markers from previous search query
+function clearMarkers() {
+  for (let i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+  }
+}
+
 function cuisineTypeListener() {
+  /*onclick event listener for cuisine type options*/
   let mysidenav = document.getElementById("mySidenav");
   let cuisines = mysidenav.querySelectorAll('a.cuisine-type');
-  console.log(cuisines);
 
   for (let i = 0; i < cuisines.length; i++) {
       let cuisine = cuisines[i]; // select individual cuisine type
       cuisine.onclick = function() {
-          //clear markers in clusters and markers array
+          clearMarkers();
           if(markerClusterer) {
             markerClusterer.clearMarkers();
           }
           markers = []
-
-          document.getElementById("demo").innerText = "CUISINE TYPE: ".concat(`${cuisine.innerHTML}`);
           let request = {
+              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry", "photo[]"],
               location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
               radius: "5",
               type: "restaurant",

@@ -5,19 +5,23 @@ var mapcenterpos;
 var markers = [];
 
 function initMap() {
+
   //center of earth coords
   var startCenter = new google.maps.LatLng(0, 0, 0);
 
   // show popup when click on marker
   infowindow = new google.maps.InfoWindow();
 
-  console.log("beforeMapinit");
   //create the map
   map = new google.maps.Map(document.getElementById("map"), {
     center: startCenter,
     zoom: 3,
+    mapTypeControl: true,
+    mapTypeControlOptions: {
+      style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+      position: google.maps.ControlPosition.TOP_RIGHT
+    }
   });
-  console.log("AfterMapinit");
 
   var mapStyle = [ // sets up getting rid of equator and international date line
     {
@@ -95,20 +99,20 @@ function initMap() {
   and add a black background color to body */
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
-  document.getElementById("main").style.marginLeft = "250px";
+  document.getElementById("menu").style.opacity = "0";
+  // document.getElementById("demo").style.marginLeft = "0px";
   document.getElementById("box").style.marginLeft = "250px";
   document.getElementById("map").style.marginLeft = "250px";
   document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
-  console.log("opened nav");
 }
 
 /* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the 
 background color of body to white */
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("main").style.marginLeft = "0";
+  document.getElementById("menu").style.opacity = "1";
+  // document.getElementById("demo").style.marginLeft = "0"
   document.getElementById("box").style.marginLeft = "0";
   document.getElementById("map").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
-  console.log("closed nav");
 }
