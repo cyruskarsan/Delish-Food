@@ -5,7 +5,7 @@ var mapcenterpos;
 var markers = [];
 
 function initMap() {
-  console.log("haha2");
+  // console.log("haha2");
 
   //center of earth coords
   var startCenter = new google.maps.LatLng(0, 0, 0);
@@ -102,7 +102,7 @@ function initMap() {
   and add a black background color to body */
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
-  document.getElementById("menu").style.display = "none";
+  document.getElementById("menu").style.opacity = "0";
   // document.getElementById("demo").style.marginLeft = "0px";
   document.getElementById("box").style.marginLeft = "250px";
   document.getElementById("map").style.marginLeft = "250px";
@@ -114,8 +114,8 @@ function openNav() {
 background color of body to white */
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("menu").style.display = "flex";
-  // document.getElementById("demo").style.marginLeft = "0";
+  document.getElementById("menu").style.opacity = "1";
+  // document.getElementById("demo").style.marginLeft = "0"
   document.getElementById("box").style.marginLeft = "0";
   document.getElementById("map").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";

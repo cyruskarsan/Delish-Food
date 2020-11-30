@@ -75,21 +75,21 @@ body {
 
 .nav-bar-title {
   position: absolute;
-  margin-left: 48%;
+  margin-left: 40%;
   font-size: 40px;
   height: 22px;
   font-family: 'Work Sans', sans-serif;
-  /* font-family: 'Dancing Script', cursive; */
   align-items: center;
   justify-content: center;
-  padding-top: 5px;
+  padding-top: 9px;
   text-emphasis: outline;
   font-weight: 400;
   z-index: 1;
 }
 .title-box{
+  position: fixed;
   background-color: #f1f1f1;
-  width: 122px;
+  width: 166px;
   height: 42px;
   padding-left: 3px;
   border-radius: 2px;
@@ -100,31 +100,30 @@ body {
 .navigation-link-wrap {
   position: absolute;
   margin-left: 10px;
-  font-size: 35px;
+  font-size: 30px;
   height: 22px;
-  font-family: 'san francisco';
-  /* align-items: left; */
+  font-family: 'Work Sans', sans-serif;
   justify-content: left;
-  padding-top: 5px;
-  /* text-emphasis: outline; */
+  padding-top: 9px;
   color: black;
   z-index: 1;
   border-bottom: 1px solid transparent;
-  /* transition: border-bottom 0.5s; */
-  transition: 0.5s;
+  transition: opacity 1.5s ease-out;
 }
 .menu-box{
+  position: fixed;
   background-color: #f1f1f1;
-  width: 85px;
-  height: 39px;
+  width: 81px;
+  height: 32px;
   padding-left: 2px;
   border-radius: 2px;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
-  /* opacity: 0.9; */
+  z-index: 1;
 }
 .menu-box:hover {
   background-color: #d2d2d2;
 }
+
 .active-nav-demo {
   font-family: 'Montserrat', sans-serif;
   padding-top: 50px;
@@ -222,6 +221,7 @@ body {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, .7);
+  z-index: 8;
 }
 #overlay.active{
   opacity: 0;
