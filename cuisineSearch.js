@@ -23,7 +23,7 @@ function cuisineTypeSearch(request) {
 
   //create marker with icon and attributes
   function createMarker(place,request) {
-      console.log(place)
+      
       const image = {
           url: place.icon,
           size: new google.maps.Size(71, 71),
@@ -65,7 +65,6 @@ function cuisineTypeSearch(request) {
 
 // Cluster markers for given markers on map
 function clusters(){ 
-    console.log("in clusters func, markers: \n".concat(`${markers}`));
     markerClusterer = new MarkerClusterer( map, markers, {
         imagePath:
           "https://unpkg.com/@googlemaps/markerclustererplus@1.0.3/images/m",
