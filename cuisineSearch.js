@@ -44,7 +44,7 @@ function cuisineTypeSearch(request) {
       });
 
       var addr = place.formatted_address.split(",");
-    //   var pictures = place.photo;
+      var pictures = place.photos;
       google.maps.event.addListener(marker, "click", function () {
           infowindow.setContent(
             "<div><strong>" +
@@ -53,8 +53,8 @@ function cuisineTypeSearch(request) {
             addr[0] + 
             "<br>" + 
             addr[1] + ", " + addr[2] + 
-            // "<br>" +
-            // pictures[0]+
+            "<br>" +
+            console.log(pictures[1]) +
             "</div>"
           );
           infowindow.open(map, this);
@@ -92,7 +92,7 @@ function cuisineTypeListener() {
           }
           markers = []
           let request = {
-              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry", "photo[]"],
+              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry", "photos"],
               location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
               radius: "5",
               type: "restaurant",
