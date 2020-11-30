@@ -22,7 +22,7 @@ function cuisineTypeSearch(request) {
   }
 
   //create marker with icon and attributes
-  function createMarker(place,request) {
+  function createMarker(place) {
       
       const image = {
           url: place.icon,
@@ -42,9 +42,27 @@ function cuisineTypeSearch(request) {
           title: place.name,
           position: place.geometry.location,
       });
+      const request ={
+        placeId: place.place_id,
+        fields: ["photo", "icon", "website", "opening_hours", "utc_offset_minutes"],
+      };
+      var website = "";
+      try {
+        var placePhotoTag = (place.photos[0].getUrl()) ?  `<img src='${place.photos[0].getUrl()}' height="100">`:"";
 
+      }
+      catch(e){
+        console.log("fail no photos")
+      }
+      service.getDetails(request, (detailsRequest, status) =>{
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          console.log(detailsRequest.website);
+          detailsRequest= detailsRequest;
+          website = (detailsRequest.website) ?  (`<a href = "${detailsRequest.website}" target= "_blank">` + detailsRequest.website + "</a>" ): "";
+      
+        }
+      });
       var addr = place.formatted_address.split(",");
-      var pictures = place.photos;
       google.maps.event.addListener(marker, "click", function () {
           infowindow.setContent(
             "<div><strong>" +
@@ -54,7 +72,9 @@ function cuisineTypeSearch(request) {
             "<br>" + 
             addr[1] + ", " + addr[2] + 
             "<br>" +
-            console.log(pictures[1]) +
+            website +
+            "<br>" +
+            placePhotoTag +
             "</div>"
           );
           infowindow.open(map, this);
@@ -92,7 +112,7 @@ function cuisineTypeListener() {
           }
           markers = []
           let request = {
-              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry", "photos"],
+              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry"],
               location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
               radius: "5",
               type: "restaurant",
