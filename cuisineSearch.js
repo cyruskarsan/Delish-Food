@@ -7,8 +7,6 @@ function cuisineTypeSearch(request) {
   var service = new google.maps.places.PlacesService(map);
   service.textSearch(request, callback);
 
-  // show popup when click on marker
-
   //parse returned info from places
   function callback(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -33,52 +31,16 @@ function cuisineTypeSearch(request) {
       };
       arguments
 
-      const infowindow = new google.maps.InfoWindow();
-      const service = new google.maps.places.PlacesService(map);
-
       const marker = new google.maps.Marker({
           map,
           icon: image,
           title: place.name,
           position: place.geometry.location,
       });
-      const request ={
-        placeId: place.place_id,
-        fields: ["photo", "icon", "website", "opening_hours", "utc_offset_minutes"],
-      };
-      var website = "";
-      try {
-        var placePhotoTag = (place.photos[0].getUrl()) ?  `<img src='${place.photos[0].getUrl()}' height="100">`:"";
 
-      }
-      catch(e){
-        console.log("fail no photos")
-      }
-      service.getDetails(request, (detailsRequest, status) =>{
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          console.log(detailsRequest.website);
-          detailsRequest= detailsRequest;
-          website = (detailsRequest.website) ?  (`<a href = "${detailsRequest.website}" target= "_blank">` + detailsRequest.website + "</a>" ): "";
+      // Set place information when marker is clicked
+      setPlaceDetails(place, marker);
       
-        }
-      });
-      var addr = place.formatted_address.split(",");
-      google.maps.event.addListener(marker, "click", function () {
-          infowindow.setContent(
-            "<div><strong>" +
-            place.name +
-            "</strong><br>" +
-            addr[0] + 
-            "<br>" + 
-            addr[1] + ", " + addr[2] + 
-            "<br>" +
-            website +
-            "<br>" +
-            placePhotoTag +
-            "</div>"
-          );
-          infowindow.open(map, this);
-      });
       markers.push(marker);
   }
 }
