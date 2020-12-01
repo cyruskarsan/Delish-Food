@@ -115,7 +115,6 @@ function cuisineTypeListener() {
             }
             markers = []
 
-            document.getElementById("demo").innerText = "CUISINE TYPE: ".concat(`${cuisine.innerHTML}`);
             let request = {
                 location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
                 radius: "5",
