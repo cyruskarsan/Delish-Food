@@ -26,7 +26,7 @@ function setMarkerInfoBox (place, marker, websiteTag, placePhotoTag) {
 function getPlacePhoto(place) {
   let placePhotoTag = "";
   try {
-    placePhotoTag = (place.photos[0].getUrl()) ? `<img src='${place.photos[0].getUrl()}' height="100">`:placePhotoTag;
+    placePhotoTag = (place.photos[0].getUrl()) ? `<img src='${place.photos[0].getUrl()}' height = "100">`:placePhotoTag;
   }
   catch(e){}
 
@@ -61,7 +61,7 @@ function setPlaceDetails(place, marker) {
   service.getDetails(request, (detailsRequest, status) =>{
     if (status === google.maps.places.PlacesServiceStatus.OK) {
       try { // If website is associated with place, overwrite default search query websiteTag for infobox
-        placeWebsiteUrl = `<a href = "${detailsRequest.website}" target= "_blank">` + detailsRequest.website + "</a>";
+        placeWebsiteUrl = `<a href = "${detailsRequest.website}" target= "_blank">` + "Restaurant Info" + "</a>";
         websiteTag = (detailsRequest.website) ? placeWebsiteUrl:websiteTag;
       }
       catch(e) {}
