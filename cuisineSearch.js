@@ -7,8 +7,6 @@ function cuisineTypeSearch(request) {
   var service = new google.maps.places.PlacesService(map);
   service.textSearch(request, callback);
 
-  // show popup when click on marker
-
   //parse returned info from places
   function callback(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -22,7 +20,7 @@ function cuisineTypeSearch(request) {
   }
 
   //create marker with icon and attributes
-  function createMarker(place,request) {
+  function createMarker(place) {
       
       const image = {
           url: place.icon,
@@ -33,9 +31,6 @@ function cuisineTypeSearch(request) {
       };
       arguments
 
-      const infowindow = new google.maps.InfoWindow();
-      const service = new google.maps.places.PlacesService(map);
-
       const marker = new google.maps.Marker({
           map,
           icon: image,
@@ -43,22 +38,9 @@ function cuisineTypeSearch(request) {
           position: place.geometry.location,
       });
 
-      var addr = place.formatted_address.split(",");
-    //   var pictures = place.photo;
-      google.maps.event.addListener(marker, "click", function () {
-          infowindow.setContent(
-            "<div><strong>" +
-            place.name +
-            "</strong><br>" +
-            addr[0] + 
-            "<br>" + 
-            addr[1] + ", " + addr[2] + 
-            // "<br>" +
-            // pictures[0]+
-            "</div>"
-          );
-          infowindow.open(map, this);
-      });
+      // Set place information when marker is clicked
+      setPlaceDetails(place, marker);
+      
       markers.push(marker);
   }
 }
@@ -92,7 +74,7 @@ function cuisineTypeListener() {
           }
           markers = []
           let request = {
-              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry", "photo[]"],
+              fields: ["name", "place_id", "formatted_address","url","address_components[]", "geometry"],
               location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
               radius: "5",
               type: "restaurant",
