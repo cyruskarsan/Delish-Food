@@ -164,10 +164,21 @@ router.delete('/:placeId', async (req, res) => {
     }
 });
 
-router.patch('/:placeId', async (req, res) => {
+//finds a document with matching param from url, pass a value to increment rating by (positive or negative number)
+router.put('/upvote', async (req, res) => {
     try {
-        const updatedDoc = await ratingDoc.updateOne({placeid: req.params.placeId}, { $inc: { rating: req.body.rating} });
-        res.json(updatedDoc);
+    const updatedDoc = await ratingDoc.updateOne({placeid: req.body.placeid}, { $inc: { rating: 1} });
+    res.json(updatedDoc);
+    }
+    catch(err){
+        res.json({message:err});
+    }
+});
+
+router.put('/downvote', async (req, res) => {
+    try {
+    const updatedDoc = await ratingDoc.updateOne({placeid: req.body.placeid}, { $inc: { rating: -1} });
+    res.json(updatedDoc);
     }
     catch(err){
         res.json({message:err});
