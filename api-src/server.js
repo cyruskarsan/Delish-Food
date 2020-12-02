@@ -27,7 +27,7 @@ const swaggerOptions = {
 
 //define the OpenAPI doc
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
+console.log(swaggerDocs);
 //setup the visual api doc tester
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
@@ -92,12 +92,7 @@ router.get('/get-docs', async (req, res) => {
  *                  properties:
  *                      placeid:
  *                          type: string
- *                      rating:
- *                          type: integer
- *                          format: int64
- *                          minimum: 1
- * 
- *
+ *                      
  *    responses:
  *      '200':
  *        description: Rating added successfully
@@ -105,11 +100,9 @@ router.get('/get-docs', async (req, res) => {
 router.post('/add-doc', async (req, res) => {
     const rating = new ratingDoc({
         placeid: req.body.placeid,
-        rating: req.body.rating
     }); 
-    try{
-    const savedRating = await ratingDoc.updateOne({placeid: req.body.placeid}, {$inc:{rating:req.body.rating}}, {upsert:true});
-    //const savedRating = await rating.save();
+    try {
+    const savedRating = await rating.save();
     res.json(savedRating);
     }
     catch(err) {
@@ -171,22 +164,6 @@ router.delete('/:placeId', async (req, res) => {
     }
 });
 
-/**
- * @swagger
- * /{mongo_id}:
- *  patch:
- *    summary: increment rating of resturant in document
- *    parameters:
- *      - name: mongo_id
- *        in: path 
- *        required: true
- *        description: unique document _id
- *        schema:
- *          type: string
- *    responses:
- *      '200':
- *        description: A successful response
- */
 router.patch('/:placeId', async (req, res) => {
     try {
         const updatedDoc = await ratingDoc.updateOne({placeid: req.params.placeId}, { $inc: { rating: req.body.rating} });
