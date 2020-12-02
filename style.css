@@ -150,6 +150,14 @@ body {
   color: black !important;
 }
 
+/*checkmark divs*/
+.cuisine-type-check {
+  font-size: 20px;
+  color: green;
+  font-weight: bold;
+  font-family: "Lato", sans-serif;
+}
+
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 
 #box {
