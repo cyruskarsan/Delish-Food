@@ -106,13 +106,14 @@ router.post('/add-doc', async (req, res) => {
     const rating = new ratingDoc({
         placeid: req.body.placeid,
         rating: req.body.rating
-    });
-    try {
-        const savedRating = await rating.save();
-        res.json(savedRating);
+    }); 
+    try{
+    const savedRating = await ratingDoc.updateOne({placeid: req.body.placeid}, {$inc:{rating:req.body.rating}}, {upsert:true});
+    //const savedRating = await rating.save();
+    res.json(savedRating);
     }
-    catch (err) {
-        res.json({ message: err });
+    catch(err) {
+        res.json({message: err});
     }
 });
 
@@ -133,13 +134,13 @@ router.post('/add-doc', async (req, res) => {
  *      '200':
  *        description: A successful response
  */
-router.get('/:mongo_id', async (req, res) => {
+router.get('/:placeId', async (req, res) => {
     try {
-        const findSpecificDoc = await ratingDoc.findById(req.params.mongo_id);
-        res.json(findSpecificDoc);
+    const findSpecificDoc = await ratingDoc.find({placeid: req.params.placeId});
+    res.json(findSpecificDoc);
     }
-    catch (err) {
-        res.json({ message: err });
+    catch(err){
+        res.json({message: err});
     }
 });
 
@@ -160,13 +161,13 @@ router.get('/:mongo_id', async (req, res) => {
  *      '200':
  *        description: A successful response
  */
-router.delete('/:mongo_id', async (req, res) => {
+router.delete('/:placeId', async (req, res) => {
     try {
-        const removedDoc = await ratingDoc.remove({ _id: req.params.mongo_id});
+        const removedDoc = await ratingDoc.remove({placeid: req.params.placeId});
         res.json(removedDoc);
     }
-    catch (err) {
-        res.json({ message: err });
+    catch(err){
+        res.json({message:err});
     }
 });
 
@@ -186,13 +187,13 @@ router.delete('/:mongo_id', async (req, res) => {
  *      '200':
  *        description: A successful response
  */
-router.patch('/:mongo_id', async (req, res) => {
+router.patch('/:placeId', async (req, res) => {
     try {
-        const updatedDoc = await ratingDoc.updateOne({ _id: req.params.mongo_id }, { $inc: { rating: 1 } });
+        const updatedDoc = await ratingDoc.updateOne({placeid: req.params.placeId}, { $inc: { rating: req.body.rating} });
         res.json(updatedDoc);
     }
-    catch (err) {
-        res.json({ message: err });
+    catch(err){
+        res.json({message:err});
     }
 });
 
