@@ -13,21 +13,21 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
-      info: {
-        version: "1.0.0",
-        title: "Delish API",
-        description: "Delish API ratings information",
-        contact: {
-          name: "Cyrus Karsan"
+        info: {
+            version: "1.0.0",
+            title: "Delish API",
+            description: "Delish API ratings information",
+            contact: {
+                name: "Cyrus Karsan"
+            }
         }
-      }
     },
     apis: ["server.js"]
-  };
+};
 
 //define the OpenAPI doc
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-console.log(swaggerDocs);
+
 //setup the visual api doc tester
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
@@ -100,27 +100,27 @@ router.get('/get-docs', async (req, res) => {
 router.post('/add-doc', async (req, res) => {
     const rating = new ratingDoc({
         placeid: req.body.placeid,
-    }); 
+    });
     try {
-    const savedRating = await rating.save();
-    res.json(savedRating);
+        const savedRating = await rating.save();
+        res.json(savedRating);
     }
-    catch(err) {
-        res.json({message: err});
+    catch (err) {
+        res.json({ message: err });
     }
 });
 
 /**
  * @swagger
- * /{mongo_id}:
+ * /{placeid}:
  *  get:
  *    summary: Retrieves document of given id
- *    description: Given a unique MongoDB document _id, return the data associated with the document.
+ *    description: Given a unique google placeid, return the data associated with the document.
  *    parameters:
- *      - name: mongo_id
+ *      - name: placeid
  *        in: path 
  *        required: true
- *        description: unique mongo document _id
+ *        description: google placeid
  *        schema:
  *          type: string    
  *    responses:
@@ -129,25 +129,25 @@ router.post('/add-doc', async (req, res) => {
  */
 router.get('/:placeId', async (req, res) => {
     try {
-    const findSpecificDoc = await ratingDoc.find({placeid: req.params.placeId});
-    res.json(findSpecificDoc);
+        const findSpecificDoc = await ratingDoc.find({ placeid: req.params.placeId });
+        res.json(findSpecificDoc);
     }
-    catch(err){
-        res.json({message: err});
+    catch (err) {
+        res.json({ message: err });
     }
 });
 
 /**
  * @swagger
- * /{mongo_id}:
+ * /{placeid}:
  *  delete:
  *    summary: Removes document from ratings collection
- *    description: Given a unique MongoDB document _id, delete the document associated with the _id
+ *    description: Given a unique google placeid, delete the document associated with the id
  *    parameters:
- *      - name: mongo_id
+ *      - name: placeid
  *        in: path 
  *        required: true
- *        description: unique document _id
+ *        description: unique google placeid
  *        schema:
  *          type: string
  *    responses:
@@ -156,32 +156,70 @@ router.get('/:placeId', async (req, res) => {
  */
 router.delete('/:placeId', async (req, res) => {
     try {
-        const removedDoc = await ratingDoc.remove({placeid: req.params.placeId});
+        const removedDoc = await ratingDoc.remove({ placeid: req.params.placeId });
         res.json(removedDoc);
     }
-    catch(err){
-        res.json({message:err});
+    catch (err) {
+        res.json({ message: err });
     }
 });
-
-//finds a document with matching param from url, pass a value to increment rating by (positive or negative number)
+/**
+ * @swagger
+ * /upvote:
+ *  put:
+ *    summary: Increment resturant rating by 1
+ *    description: Given a placeid, update its rating by 1
+ *    requestBody:
+ *      required: true
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      placeid:
+ *                          type: string
+ *                      
+ *    responses:
+ *      '200':
+ *        description: Rating incremented by 1
+ */
 router.put('/upvote', async (req, res) => {
     try {
-    const updatedDoc = await ratingDoc.updateOne({placeid: req.body.placeid}, { $inc: { rating: 1} });
-    res.json(updatedDoc);
+        const updatedDoc = await ratingDoc.updateOne({ placeid: req.body.placeid }, { $inc: { rating: 1 } });
+        res.json(updatedDoc);
     }
-    catch(err){
-        res.json({message:err});
+    catch (err) {
+        res.json({ message: err });
     }
 });
 
+/**
+ * @swagger
+ * /downvote:
+ *  put:
+ *    summary: Decrement resturant rating by 1
+ *    description: Given a placeid, decrement its rating by 1
+ *    requestBody:
+ *      required: true
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      placeid:
+ *                          type: string
+ *                      
+ *    responses:
+ *      '200':
+ *        description: Rating decremented by 1
+ */
 router.put('/downvote', async (req, res) => {
     try {
-    const updatedDoc = await ratingDoc.updateOne({placeid: req.body.placeid}, { $inc: { rating: -1} });
-    res.json(updatedDoc);
+        const updatedDoc = await ratingDoc.updateOne({ placeid: req.body.placeid }, { $inc: { rating: -1 } });
+        res.json(updatedDoc);
     }
-    catch(err){
-        res.json({message:err});
+    catch (err) {
+        res.json({ message: err });
     }
 });
 
