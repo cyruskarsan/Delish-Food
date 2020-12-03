@@ -68,6 +68,8 @@ function initMap() {
           map.setZoom(13);
           map.setCenter(pos);
           mapcenterpos = pos;
+
+          //Call cuisineTypeListener to init menu search options
           cuisineTypeListener();
         },
         () => {
@@ -93,14 +95,12 @@ function initMap() {
 
 }
 
-
 // DIV ELEMENT MOVEMENT SCRIPTS
 /* Set the width of the side navigation to 250px and the left margin of the page content to 250px
   and add a black background color to body */
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
   document.getElementById("menu").style.opacity = "0";
-  // document.getElementById("demo").style.marginLeft = "0px";
   document.getElementById("box").style.marginLeft = "250px";
   document.getElementById("map").style.marginLeft = "250px";
   document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
@@ -111,7 +111,6 @@ background color of body to white */
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
   document.getElementById("menu").style.opacity = "1";
-  // document.getElementById("demo").style.marginLeft = "0"
   document.getElementById("box").style.marginLeft = "0";
   document.getElementById("map").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";

@@ -12,13 +12,14 @@ function cuisineTypeSearch(request, cuisineType) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
+
+                // Create marker for given place
                 createMarker(place, cuisineType);
             }
-            console.log(place);
         }
     }
 
-    //create marker with icon and attributes
+    // Create marker with icon and info attributes
     function createMarker(place, cuisineType) {
 
         const image = {
@@ -66,8 +67,9 @@ function clearMarkerSets(cuisineType) {
 // Individual cuisine marker dict/hash table to store marker arrays
 var cuisine_marker_dict = {};
 
+// Initialize onclick event listener for cuisine type options
 function cuisineTypeListener() {
-    /*onclick event listener for cuisine type options*/
+    
     let mysidenav = document.getElementById("mySidenav");
     let cuisines = mysidenav.querySelectorAll('a.cuisine-type');
 
@@ -75,17 +77,16 @@ function cuisineTypeListener() {
     clusters();
 
     for (let i = 0; i < cuisines.length; i++) {
-        let cuisine = cuisines[i]; // select individual cuisine type
+        let cuisine = cuisines[i]; // Select individual cuisine type
 
         let cuisineType = cuisine.innerText.toLowerCase();
         cuisine_marker_dict[cuisineType] = [];
 
         cuisine.onclick = function() {
-            cuisine_check = document.getElementById(`${cuisine.innerText}`); // C-TYPE CHECK BOX DIV
+            cuisine_check = document.getElementById(`${cuisine.innerText}`); // CSN-TYPE CHECK BOX DIV
 
             // IF CUISINE TYPE CLICKED ALREADY SELECTED, CLEAR SELECTION, ELSE, RUN REQUEST/CREATE MARKERS
             if (cuisine_check.innerText == "✓") {
-                console.log("clearing markers")
                 cuisine_check.innerText = "";
                 clearMarkerSets(cuisineType);
             } else {
