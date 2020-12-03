@@ -15,7 +15,6 @@ function cuisineTypeSearch(request, cuisineType) {
                 createMarker(place, cuisineType);
             }
             console.log(place);
-            clusters();
         }
     }
 
