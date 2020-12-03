@@ -14,7 +14,7 @@ const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
         info: {
-            version: "1.0.0",
+            version: "1.0.1",
             title: "Delish API",
             description: "Delish API ratings information",
             contact: {
@@ -63,6 +63,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
  * /get-docs:
  *  get:
  *    summary: Retrieves all documents in the ratings collection in MongoDB
+ *    operationId: get_docs
  *    responses:
  *      '200':
  *        description: A successful response
@@ -82,6 +83,7 @@ router.get('/get-docs', async (req, res) => {
  * /add-doc:
  *  post:
  *    summary: Add a new rating to the ratings collection in MongoDB
+ *    operationId: add-doc
  *    description: Create a new document in the ratings collection of the resturant and it's rating
  *    requestBody:
  *      required: true
@@ -115,6 +117,7 @@ router.post('/add-doc', async (req, res) => {
  * /{placeid}:
  *  get:
  *    summary: Retrieves document of given id
+ *    operationId: retrieve_doc
  *    description: Given a unique google placeid, return the data associated with the document.
  *    parameters:
  *      - name: placeid
@@ -142,6 +145,7 @@ router.get('/:placeId', async (req, res) => {
  * /{placeid}:
  *  delete:
  *    summary: Removes document from ratings collection
+ *    operationId: delete_doc
  *    description: Given a unique google placeid, delete the document associated with the id
  *    parameters:
  *      - name: placeid
@@ -168,6 +172,7 @@ router.delete('/:placeId', async (req, res) => {
  * /upvote:
  *  put:
  *    summary: Increment resturant rating by 1
+ *    operationId: upvote
  *    description: Given a placeid, update its rating by 1
  *    requestBody:
  *      required: true
@@ -198,6 +203,7 @@ router.put('/upvote', async (req, res) => {
  * /downvote:
  *  put:
  *    summary: Decrement resturant rating by 1
+ *    operationId: downvote
  *    description: Given a placeid, decrement its rating by 1
  *    requestBody:
  *      required: true
