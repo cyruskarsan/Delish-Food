@@ -94,7 +94,4 @@ searchkeytest = ['los pinos santa cruz', 'cafe brasil santa cruz', 'snap taco sa
 for sk in searchkeytest:
   startIconScrape(sk, sk)
 
-#close driver
-driver.quit()
-
 print(datetime.datetime.now()-begin_time)
