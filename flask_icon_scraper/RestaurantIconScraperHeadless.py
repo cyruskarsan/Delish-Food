@@ -1,6 +1,9 @@
 from selenium import webdriver 
 from selenium.webdriver.common.keys import Keys  
 from selenium.webdriver.chrome.options import Options 
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 import os
 import time
@@ -26,9 +29,17 @@ def getImageSrcs(search_key:str, css_imgclass:str, driver:webdriver, sleep_betwe
   search_url = "https://www.google.com/search?q={q}&oq={q}&num=1"
   driver.get(search_url.format(q=search_key)) 
 
-  # get desired element (css specified img.class tag)
-  sleep(sleep_between_interactions)
-  img_tag_object = driver.find_element_by_css_selector(css_imgclass)
+  # get desired element (css specified img.class tag), if too long too load/not found, return -1
+  print("This is search url:", search_url.format(q=search_key))
+  try:
+    img_tag_object = WebDriverWait(driver, sleep_between_interactions).until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, css_imgclass))
+    )
+  except Exception as e:
+    return -1
+  finally:
+    pass
+
   img_src = img_tag_object.get_attribute('src')
   print("Image src for search key,", search_key, ":", img_src)
   return img_src
@@ -36,7 +47,6 @@ def getImageSrcs(search_key:str, css_imgclass:str, driver:webdriver, sleep_betwe
 # Save off images from URL to specified folder
 def saveImageFromUrl(src_url:str, folder_path:str, save_name:str):
   try:
-      #image = Image.open(url)
       image_content = requests.get(src_url).content
 
   except Exception as e:
@@ -77,16 +87,20 @@ def startIconScrape(search_key:str, save_name:str):
     os.makedirs(target_folder)
 
   # file name to save img to in target_folder
-  file_name = '_'.join(skey.lower().split(' '))
+  file_name = '_'.join(save_name.lower().split(' '))
 
   #get image source(s)
   result = getImageSrcs(skey, css_imgclass, driver, sleep_time)
 
   #if result == -1, return fail, else make image, return 0
+  if (result==-1):
+    return -1
 
   #save off image(s) to file_name in target_folder
   saveImageFromUrl(result, target_folder, file_name)
+  
   driver.quit()
+  return 0
 
 '''
 searchkeytest = ['los pinos santa cruz', 'cafe brasil santa cruz', 'snap taco santa cruz']
