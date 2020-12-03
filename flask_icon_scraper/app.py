@@ -21,6 +21,7 @@ def add():
     a = request.form['search_key']
     b = request.form['save_name']
     #return jsonify(startIconScrape(a, b))
+    print("This is search_key: ", a, ". This is save_name: ", b, ".")
     return jsonify({'status': 'OK','search_key':a, 'save_name':b})
 
 @app.route('/')

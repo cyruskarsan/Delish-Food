@@ -7,9 +7,6 @@ function cuisineTypeSearch(request, cusineType) {
     var service = new google.maps.places.PlacesService(map);
     service.textSearch(request, callback);
 
-    // show popup when click on marker
-    infowindow = new google.maps.InfoWindow();
-
     //parse returned info from places
     function callback(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -30,7 +27,7 @@ function cuisineTypeSearch(request, cusineType) {
             //icon_query.preventDefault();
             $.ajax({
               type: "POST",
-              url: '/icon_scrape',
+              url: 'https://127.0.0.5000/icon_scrape',
               data: {search_key:icon_query, save_name:icon_query},
               success: function (response) {
                   console.log("success, this is response: ", response);
