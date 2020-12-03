@@ -88,10 +88,10 @@ def startIconScrape(search_key:str, save_name:str):
   saveImageFromUrl(result, target_folder, file_name)
   driver.quit()
 
-
+'''
 searchkeytest = ['los pinos santa cruz', 'cafe brasil santa cruz', 'snap taco santa cruz']
 
 for sk in searchkeytest:
   startIconScrape(sk, sk)
 
-print(datetime.datetime.now()-begin_time)
+print(datetime.datetime.now()-begin_time)'''
