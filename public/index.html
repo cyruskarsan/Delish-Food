@@ -1,89 +1,95 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/8.1.1/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/8.1.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/8.1.1/firebase-database.js"></script>
-    <script defer src="/__/firebase/8.1.1/firebase-firestore.js"></script>
-    <script defer src="/__/firebase/8.1.1/firebase-functions.js"></script>
-    <script defer src="/__/firebase/8.1.1/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/8.1.1/firebase-storage.js"></script>
-    <script defer src="/__/firebase/8.1.1/firebase-analytics.js"></script>
-    <script defer src="/__/firebase/8.1.1/firebase-remote-config.js"></script>
-    <script defer src="/__/firebase/8.1.1/firebase-performance.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <title>Delish Food Map</title>
+    <link rel="icon" type="image/png" href="./Icons/favicon-32x32.png" sizes="32x32" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <!--MarkerClusterer Import-->
+    <script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
+    <!--Local JS-->
+    <script src="./index.js"></script>
+    <script src="./cuisineSearch.js"></script>
+    <script src="./placeDetails.js"></script>
+    <script type="text/javascript" src="gmap.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;1,200;1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@509&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital@1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./style.css" />
   </head>
   <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+    
+    <!--HEADER DIV-->
+    <div class="nav-bar-title">
+      <div class = "title-box" style="white-space:nowrap">
+      <img src="./Icons/favicon-32x32.png" sizes="50x50"/>
+      Delish
+      </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    <!--SIDE NAV BAR DIVS-->
+      <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div id="menuDescription" class="sidenav-header">
+            Cuisine Type
+        </div>
+        <div class="cuisine-type-check" id="Mexican" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Mexican</a>
+        <div class="cuisine-type-check" id="Vietnamese" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Vietnamese</a>
+        <div class="cuisine-type-check" id="Indian" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Indian</a>
+        <div class="cuisine-type-check" id="Italian" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Italian</a>
+        <div class="cuisine-type-check" id="Chinese" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Chinese</a>
+        <div class="cuisine-type-check" id="Thai" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Thai</a>
+        <div class="cuisine-type-check" id="Greek" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Greek</a>
+        <div class="cuisine-type-check" id="Middle Eastern" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Middle Eastern</a>
+        <div class="cuisine-type-check" id="Korean" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Korean</a>
+        <div class="cuisine-type-check" id="Japanese" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Japanese</a>
+        <div class="cuisine-type-check" id="African" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">African</a>
+        <div class="cuisine-type-check" id="Cajun" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Cajun</a>
+        <div class="cuisine-type-check" id="Latin" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">Latin</a>
+        <div class="cuisine-type-check" id="American" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
+        <a href="#" class="cuisine-type">American</a>
+      </div>
+      
+      <!-- ELEMENT TO OPEN SIDENAVBAR DIV -->
+      <div class="navigation-link-wrap active-nav-link" id = "menu" onclick="openNav()">
+          <div class="menu-box" id = "menu-box">
+          Menu
+          </div>
+      </div>
+    </div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+    <!--GMAPS DIVS-->
+    <div id="box"></div>
+    <div id="map"></div>
+  
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
+    <!-- pop-up divs -->
+    <div class="description" id="popup">
+      <div class="description-header">
+        <div class="title">Welcome to Delish Food!</div>
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+      <div class="description-body">
+        
+        We want to help you find the best ethnic food in your area. On
+        the next page, please enable the location permission and choose 
+        a category from the menu on the left.
+         
+      </div> 
+    </div>
+    <div id="overlay"></div>  
   </body>
 </html>
