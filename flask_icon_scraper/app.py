@@ -16,6 +16,10 @@ from RestaurantIconScraperHeadless import startIconScrape, initWebDriver
 app=Flask(__name__)
 CORS(app)
 
+#in same folder as this app.py, run: python -m flask run
+#for Delish-Food folder, run python -m http.server 8080 to locally host serv
+#uncomment appropriate lines in /icon_scrape method below and findIcon call in cs.js
+
 #can set up headless chrome driver globablly
 '''DRIVER_PATH = './chromedriverv86'
 options = Options()  
@@ -39,8 +43,6 @@ def add():
 
     #print("This is search_key: ", search_key, ". This is save_name: ", save_name)
     return jsonify({'status': 200,'search_key':search_key, 'save_name':save_name, 'returnScrape':scrapeSuccess})
-
-
 
 if __name__=='__main__':
   app.run()
