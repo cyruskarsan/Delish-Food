@@ -14,7 +14,7 @@ const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
         info: {
-            version: "1.0.1",
+            version: "1.0.2",
             title: "Delish API",
             description: "Delish API ratings information",
             contact: {
@@ -66,15 +66,17 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
  *    operationId: get_docs
  *    responses:
  *      '200':
- *        description: A successful response
+ *        description: Retrieved documents successfully
+ *      '500':
+ *        description: Unexpected error
  */
 router.get('/get-docs', async (req, res) => {
     try {
         const getRatings = await ratingDoc.find();
-        res.json(getRatings);
+        res.send(getRatings,200);
     }
     catch (err) {
-        res.json({ message: err });
+        res.send({ message: err },500);
     }
 });
 
@@ -96,20 +98,31 @@ router.get('/get-docs', async (req, res) => {
  *                          type: string
  *                      
  *    responses:
- *      '200':
+ *      '201':
  *        description: Rating added successfully
+ *      '400':
+ *        description: Place already in database
  */
 router.post('/add-doc', async (req, res) => {
     const rating = new ratingDoc({
         placeid: req.body.placeid,
     });
-    try {
-        const savedRating = await rating.save();
-        res.json(savedRating);
+    let findSpecificDoc = await ratingDoc.find({ placeid: req.body.placeid });
+    console.log(findSpecificDoc);
+    //make sure we don't add duplicate documents
+    if (!findSpecificDoc || findSpecificDoc.length==0) {
+        try {
+            const savedRating = await rating.save();
+            res.send(savedRating,201);
+        }
+        catch (err) {
+            res.json({ message: err });
+        }
     }
-    catch (err) {
-        res.json({ message: err });
+    else{
+        res.status(400).send();
     }
+    
 });
 
 /**
@@ -128,23 +141,26 @@ router.post('/add-doc', async (req, res) => {
  *          type: string    
  *    responses:
  *      '200':
- *        description: A successful response
+ *        description: Place retreived successfully
+ *      '404':
+ *        description: Place not found 
  */
 router.get('/:placeId', async (req, res) => {
     try {
-        var findSpecificDoc = await ratingDoc.find({ placeid: req.params.placeid });
-        console.log("in placeid");
-        console.log(findSpecificDoc);
+        var findSpecificDoc = await ratingDoc.find({ placeid: req.params.placeId });
     }
     catch (err) {
         res.json({ message: err });
     }
+
+    //couldn't find document
     if (!findSpecificDoc || findSpecificDoc.length==0) {
         res.status(404).send();
     }
+    //doc found, return its rating
     else {
-        console.log('there');
-        res.json(findSpecificDoc);
+        rating = findSpecificDoc[0].rating;
+        res.send({"rating":rating});
     }
 });
 
@@ -164,15 +180,22 @@ router.get('/:placeId', async (req, res) => {
  *          type: string
  *    responses:
  *      '200':
- *        description: A successful response
+ *        description: Place deleted successfully
+ *      '404':
+ *        description: Place not found 
  */
 router.delete('/:placeId', async (req, res) => {
     try {
-        const removedDoc = await ratingDoc.remove({ placeid: req.params.placeId });
-        res.json(removedDoc);
+        var mongoRemovedMsg = await ratingDoc.remove({ placeid: req.params.placeId });
     }
     catch (err) {
         res.json({ message: err });
+    }
+    if (mongoRemovedMsg.deletedCount == 1) {
+        res.send({"Deleted": true},200)
+    }
+    else {
+        res.send(404);
     }
 });
 /**
@@ -195,14 +218,21 @@ router.delete('/:placeId', async (req, res) => {
  *    responses:
  *      '200':
  *        description: Rating incremented by 1
+ *      '400':
+ *        description: place not found
  */
 router.put('/upvote', async (req, res) => {
     try {
-        const updatedDoc = await ratingDoc.updateOne({ placeid: req.body.placeid }, { $inc: { rating: 1 } });
-        res.json(updatedDoc);
+        var updatedDocMsg = await ratingDoc.updateOne({ placeid: req.body.placeid }, { $inc: { rating: 1 } });
     }
     catch (err) {
         res.json({ message: err });
+    }
+    if (updatedDocMsg.n==1) {
+        res.send(200)
+    }
+    else{
+        res.send(404)
     }
 });
 
@@ -226,14 +256,21 @@ router.put('/upvote', async (req, res) => {
  *    responses:
  *      '200':
  *        description: Rating decremented by 1
+ *      '400':
+ *        description: Place not found
  */
 router.put('/downvote', async (req, res) => {
     try {
-        const updatedDoc = await ratingDoc.updateOne({ placeid: req.body.placeid }, { $inc: { rating: -1 } });
-        res.json(updatedDoc);
+        var updatedDocMsg = await ratingDoc.updateOne({ placeid: req.body.placeid }, { $inc: { rating: -1 } });
     }
     catch (err) {
         res.json({ message: err });
+    }
+    if (updatedDocMsg.n==1) {
+        res.send(200)
+    }
+    else {
+        res.send(404)
     }
 });
 
