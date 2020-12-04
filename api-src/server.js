@@ -132,11 +132,19 @@ router.post('/add-doc', async (req, res) => {
  */
 router.get('/:placeId', async (req, res) => {
     try {
-        const findSpecificDoc = await ratingDoc.find({ placeid: req.params.placeId });
-        res.json(findSpecificDoc);
+        var findSpecificDoc = await ratingDoc.find({ placeid: req.params.placeid });
+        console.log("in placeid");
+        console.log(findSpecificDoc);
     }
     catch (err) {
         res.json({ message: err });
+    }
+    if (!findSpecificDoc || findSpecificDoc.length==0) {
+        res.status(404).send();
+    }
+    else {
+        console.log('there');
+        res.json(findSpecificDoc);
     }
 });
 

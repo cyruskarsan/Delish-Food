@@ -4,7 +4,7 @@ var markerClusterer = null; // Marker Clusterer object
 function findPlaceRating(goog_id) {
    
     $.ajax({
-        url: "http://localhost:8080/" + goog_id,
+        url: "http://delish-food-292917.appspot.com/" + goog_id,
         type: "GET",
         success: function(response) {
             console.log("this is placeid:",goog_id)
