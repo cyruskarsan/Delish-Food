@@ -65,9 +65,10 @@ function initMap() {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          map.setZoom(13);
+          map.setZoom(15);
           map.setCenter(pos);
           mapcenterpos = pos;
+          console.log("this is center lat/lng: ", mapcenterpos["lat"], " ", mapcenterpos["lng"]);
           cuisineTypeListener();
         },
         () => {

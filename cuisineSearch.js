@@ -24,7 +24,6 @@ function cuisineTypeSearch(request, cusineType) {
     function createMarker(place, cuisineType) {
 
         function findIcon(icon_query) {
-            //icon_query.preventDefault();
             $.ajax({
               type: "POST",
               url: 'http://127.0.0.1:5000/icon_scrape',
@@ -95,6 +94,7 @@ function clusters() {
     markerClusterer = new MarkerClusterer(map, markers, {
         imagePath: "https://unpkg.com/@googlemaps/markerclustererplus@1.0.3/images/m",
     });
+    markerClusterer.setMinimumClusterSize(5);
 }
 
 /*Add onclick event listener for cuisine type options*/
@@ -111,9 +111,9 @@ function cuisineTypeListener() {
                 markerClusterer.clearMarkers();
             }
             markers = []
-
+            console.log("The center is at: "+mapcenterpos[0]+" "+mapcenterpos[1]);
             let request = {
-                location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
+                location: new google.maps.LatLng(mapcenterpos["lat"], mapcenterpos["lng"], 14),
                 radius: "5",
                 type: "restaurant",
                 query: cuisine.innerText.toLowerCase(),
