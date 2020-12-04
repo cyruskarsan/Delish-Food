@@ -2,15 +2,12 @@ var markerClusterer = null; // Marker Clusterer object
 
 //GET request to find if a place exists in Mongo using placeid as identifier
 function findPlaceRating(goog_id) {
-    let data = {};
-    data.placeid = goog_id;
-
+   
     $.ajax({
-        url: "http://delish-food-292917.appspot.com/{placeid}",
+        url: "http://localhost:8080/" + goog_id,
         type: "GET",
-        data: JSON.stringify(data),
-        contentType: "application/json",
         success: function(response) {
+            console.log("this is placeid:",goog_id)
             console.log("Successful GET");
             console.log(response);
             return (0)
@@ -35,7 +32,7 @@ function cuisineTypeSearch(request, cuisineType) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-                var rating = findPlaceRating(place.placeid);
+                var rating = findPlaceRating(place.place_id);
                 if (rating != -999) {
                     // Create marker for given place
                     createMarker(place, cuisineType);
