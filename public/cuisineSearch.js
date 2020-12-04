@@ -1,5 +1,28 @@
 var markerClusterer = null; // Marker Clusterer object
 
+//GET request to MongoDB ratings collection
+function findPlaceRating(goog_id) {
+    let data = {};
+    data.placeid = goog_id;
+
+    $.ajax({
+        url: "http://delish-food-292917.appspot.com/{placeid}",
+        type: "GET",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function(response) {
+            console.log("Successful GET");
+            console.log(response);
+            return (0)
+        },
+        error: function(error) {
+            console.log(error);
+            return (-999)
+        }
+    })
+}
+
+
 //Run requests from cuisine type clicks
 function cuisineTypeSearch(request, cuisineType) {
 
@@ -12,9 +35,15 @@ function cuisineTypeSearch(request, cuisineType) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-
-                // Create marker for given place
-                createMarker(place, cuisineType);
+                var rating = findPlaceRating(place.placeid);
+                if (rating != -999) {
+                    // Create marker for given place
+                    createMarker(place, cuisineType);
+                }
+                // else{
+                //     addPlace(place.placeid);
+                // }
+                
             }
         }
     }
