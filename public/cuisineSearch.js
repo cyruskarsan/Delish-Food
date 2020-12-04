@@ -1,6 +1,6 @@
 var markerClusterer = null; // Marker Clusterer object
 
-//GET request to MongoDB ratings collection
+//GET request to find if a place exists in Mongo using placeid as identifier
 function findPlaceRating(goog_id) {
     let data = {};
     data.placeid = goog_id;
