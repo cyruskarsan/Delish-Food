@@ -126,7 +126,7 @@ router.post('/add-doc', async (req, res) => {
  *      - name: mongo_id
  *        in: path 
  *        required: true
- *        description: unique mongo document _id
+ *        description: unique mongo document placeid
  *        schema:
  *          type: string    
  *    responses:
@@ -135,7 +135,7 @@ router.post('/add-doc', async (req, res) => {
  */
 router.get('/:mongo_id', async (req, res) => {
     try {
-        const findSpecificDoc = await ratingDoc.findById(req.params.mongo_id);
+        const findSpecificDoc = await ratingDoc.find({placeid: req.params.mongo_id});
         res.json(findSpecificDoc);
     }
     catch (err) {
@@ -153,7 +153,7 @@ router.get('/:mongo_id', async (req, res) => {
  *      - name: mongo_id
  *        in: path 
  *        required: true
- *        description: unique document _id
+ *        description: unique document placeid
  *        schema:
  *          type: string
  *    responses:
@@ -162,7 +162,7 @@ router.get('/:mongo_id', async (req, res) => {
  */
 router.delete('/:mongo_id', async (req, res) => {
     try {
-        const removedDoc = await ratingDoc.remove({ _id: req.params.mongo_id});
+        const removedDoc = await ratingDoc.remove({ placeid: req.params.mongo_id});
         res.json(removedDoc);
     }
     catch (err) {
