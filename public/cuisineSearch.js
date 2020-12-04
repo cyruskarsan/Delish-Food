@@ -54,8 +54,8 @@ var markerClusterer = null;
 function clusters() {
     markerClusterer = new MarkerClusterer(map, cuisine_marker_dict, {
         imagePath: "https://unpkg.com/@googlemaps/markerclustererplus@1.0.3/images/m",
-        markerClusterer.setMinimumClusterSize(5)
     });
+    markerClusterer.setMinimumClusterSize(5);
 }
 
 // Clear specified set of markers from the map
