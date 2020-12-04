@@ -33,11 +33,13 @@ function initMap() {
     }
   ];
 
+  //Style the map
   var styledMap = new google.maps.StyledMapType(mapStyle);
   map.mapTypes.set('myCustomMap', styledMap);
   map.setMapTypeId('myCustomMap');
 
-  const closeDescriptionButton = document.querySelectorAll('[data-close-button]')
+  //create the button to close discription
+  const closeDescriptionButton = document.querySelectorAll('[data-close-button]') 
   const overlay = document.getElementById('overlay')
 
   closeDescriptionButton.forEach(button => {
@@ -46,22 +48,24 @@ function initMap() {
       closeDescription(description)
     })
   })
+
+  //button to close description
   function closeDescription(description) {
     if (description == null) return
     description.classList.add('active')
     overlay.classList.add('active')
     overlay.parentNode.removeChild(overlay)
     geoLocation()
-
-
   }
+
+  //Geolocation to track user location
   function geoLocation() {
     infoWindow = new google.maps.InfoWindow();
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const pos = {
+          const pos = { //get User coordinaties 
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
@@ -82,6 +86,7 @@ function initMap() {
     }
   }
 
+  //Error function on geolocation failure 
   function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
     infoWindow.setContent(
@@ -98,7 +103,7 @@ function initMap() {
 // DIV ELEMENT MOVEMENT SCRIPTS
 /* Set the width of the side navigation to 250px and the left margin of the page content to 250px
   and add a black background color to body */
-function openNav() {
+function openNav() { //Onclick, open the side navigator
   document.getElementById("mySidenav").style.width = "250px";
   document.getElementById("menu").style.opacity = "0";
   document.getElementById("box").style.marginLeft = "250px";
@@ -108,7 +113,7 @@ function openNav() {
 
 /* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the 
 background color of body to white */
-function closeNav() {
+function closeNav() { //On close, close the side navigator
   document.getElementById("mySidenav").style.width = "0";
   document.getElementById("menu").style.opacity = "1";
   document.getElementById("box").style.marginLeft = "0";

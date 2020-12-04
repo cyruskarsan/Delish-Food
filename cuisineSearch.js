@@ -54,6 +54,7 @@ var markerClusterer = null;
 function clusters() {
     markerClusterer = new MarkerClusterer(map, cuisine_marker_dict, {
         imagePath: "https://unpkg.com/@googlemaps/markerclustererplus@1.0.3/images/m",
+        markerClusterer.setMinimumClusterSize(5)
     });
 }
 
@@ -76,7 +77,7 @@ function cuisineTypeListener() {
     //Initialize Clusterer
     clusters();
 
-    for (let i = 0; i < cuisines.length; i++) {
+    for (let i = 0; i < cuisines.length; i++) { 
         let cuisine = cuisines[i]; // Select individual cuisine type
 
         let cuisineType = cuisine.innerText.toLowerCase();
@@ -90,14 +91,15 @@ function cuisineTypeListener() {
                 cuisine_check.innerText = "";
                 clearMarkerSets(cuisineType);
             } else {
-                let request = {
-                    location: new google.maps.LatLng(mapcenterpos[0], mapcenterpos[1], 14),
+                let request = { //Create the request for searching 
+                    location: new google.maps.LatLng(mapcenterpos["lat"], mapcenterpos["lng"], 14),
                     radius: "5",
                     type: "restaurant",
                     query: cuisine.innerText.toLowerCase(),
                 };
                 document.getElementById(cuisine.innerText).innerText = "✓";
                 cuisineTypeSearch(request, cuisineType);
+
             }
         }
     }
