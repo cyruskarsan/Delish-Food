@@ -1,20 +1,43 @@
+// const { func } = require("assert-plus");
+
 var markerClusterer = null; // Marker Clusterer object
 
 //GET request to find if a place exists in Mongo using placeid as identifier
 function findPlaceRating(goog_id) {
    
     $.ajax({
-        url: "http://delish-food-292917.appspot.com/" + goog_id,
+        url: "https://delish-food-292917.appspot.com/" + goog_id,
         type: "GET",
         success: function(response) {
             console.log("this is placeid:",goog_id)
             console.log("Successful GET");
             console.log(response);
-            return (0)
         },
         error: function(error) {
-            console.log(error);
-            return (-999)
+            console.log("error, adding place to DB")
+            addPlace(goog_id);
+        }
+    })
+}
+
+function addPlace(goog_id) {
+    var payload = {
+        "placeid": goog_id
+    }
+    $.ajax({
+        url: "https://delish-food-292917.appspot.com/add-doc",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        // crossDomain: true,
+        // headers: {
+        //     "Access-Control-Allow-Origin": "*"
+        // },
+        success: function(response) {
+            console.log("added place with placeid:" + goog_id);
+        },
+        error: function(error) {
+            console.log(error)
         }
     })
 }
@@ -32,14 +55,8 @@ function cuisineTypeSearch(request, cuisineType) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-                var rating = findPlaceRating(place.place_id);
-                if (rating != -999) {
-                    // Create marker for given place
-                    createMarker(place, cuisineType);
-                }
-                // else{
-                //     addPlace(place.placeid);
-                // }
+                findPlaceRating(place.place_id);
+                createMarker(place, cuisineType);
                 
             }
         }
