@@ -1,5 +1,25 @@
 var markerClusterer = null; // Marker Clusterer object
 
+//GET request to find if a place exists in Mongo using placeid as identifier
+function findPlaceRating(goog_id) {
+   
+    $.ajax({
+        url: "http://localhost:8080/" + goog_id,
+        type: "GET",
+        success: function(response) {
+            console.log("this is placeid:",goog_id)
+            console.log("Successful GET");
+            console.log(response);
+            return (0)
+        },
+        error: function(error) {
+            console.log(error);
+            return (-999)
+        }
+    })
+}
+
+
 //Run requests from cuisine type clicks
 function cuisineTypeSearch(request, cuisineType) {
 
@@ -12,9 +32,15 @@ function cuisineTypeSearch(request, cuisineType) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-
-                // Create marker for given place
-                createMarker(place, cuisineType);
+                var rating = findPlaceRating(place.place_id);
+                if (rating != -999) {
+                    // Create marker for given place
+                    createMarker(place, cuisineType);
+                }
+                // else{
+                //     addPlace(place.placeid);
+                // }
+                
             }
         }
     }
