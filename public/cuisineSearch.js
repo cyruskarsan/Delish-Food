@@ -27,23 +27,18 @@ function cuisineTypeSearch(request, cuisineType) {
                 url: 'http://127.0.0.1:5000/icon_scrape',
                 data: { search_key: icon_query, save_name: place.place_id },
                 success: function(response) {
-                    console.log("success, this is response: ", response);
+                    console.log("Success on ajax post, this is response: ", response);
                 },
                 error: function(error) {
-                    console.log("failure, this is response ", error);
+                    console.log("Failure on ajax post, this is response ", error);
                 }
-            }).done(setIcon);
+            });
         }
-
-        function setIcon(data) {
-            console.log("This is data return from python POST func, setIcon: ", data);
-        }
-
-        console.log(place)
 
         let icon_query = place["name"].concat(" ", place["formatted_address"])
-        console.log("this is icon_query at: ", icon_query)
-        findIcon(icon_query)
+
+        //uncomment line below to run ajax requests to flask app
+        //findIcon(icon_query)
 
         const image = {
             url: `./MarkerIcons/${cuisineType.toLowerCase()}.png`,
