@@ -2,26 +2,29 @@
 
 var markerClusterer = null; // Marker Clusterer object
 
-//GET request to find if a place exists in Mongo using placeid as identifier
+//GET request to find if a place exists in Mongo using placeid as identifier, returns rating
 function findPlaceRating(goog_id) {
-
+    var res = [];
     $.ajax({
         url: "https://delish-food-292917.appspot.com/" + goog_id,
         type: "GET",
         success: function (response) {
             console.log("this is placeid:", goog_id)
             console.log("Successful GET");
-            console.log(response);
+            res.push(response);
+            
         },
         error: function (error) {
             console.log("error, adding place to DB")
             addPlace(goog_id);
         }
     })
+    return res[0].rating;
 }
 
 function addPlace(goog_id) {
-    const url = "https://delish-food-292917.appspot.com/add-doc";
+    //const url = "https://delish-food-292917.appspot.com/add-doc";
+    const url = "http:localhost:8080/add-doc";
     const data = { "placeid": goog_id };
 
     fetch(url, {
@@ -53,15 +56,16 @@ function cuisineTypeSearch(request, cuisineType) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-                findPlaceRating(place.place_id);
-                createMarker(place, cuisineType);
+                rating = findPlaceRating(place.place_id);
+                console.log(rating);
+                createMarker(place, cuisineType, 0);
 
             }
         }
     }
 
     // Create marker with icon and info attributes
-    function createMarker(place, cuisineType) {
+    function createMarker(place, cuisineType, rating) {
 
         const image = {
             url: place.icon,
