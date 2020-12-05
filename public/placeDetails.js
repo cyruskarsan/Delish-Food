@@ -10,9 +10,9 @@ function setMarkerInfoBox (place, marker, websiteTag, placePhotoTag) {
 			place.name +
 			"<br>" + 
 			"Rating: 0 " +  
-			`<img src="./Icons/upvote.png" onclick="upVote(${place.place_id})" width="20"  height="20"/>` +
+			`<img src="./Icons/upvote.png" onclick="upVote('${place.place_id}')"width="20" height="20" />` +
 			" " +  
-			`<img src="./Icons/downvote.png" onclick="downVote(${place.place_id})"width="20" height="20" />` +
+			`<img src="./Icons/downvote.png" onclick="downVote('${place.place_id}')"width="20" height="20" />` +
 			"</strong><br>" +  
 			addr[0] + 
 			"<br>" + 
@@ -33,8 +33,8 @@ function upVote(placeid) { //Increment the rating of the place by 1
 	data.placeid = placeid;
 
 	$.ajax({
-		url: '/',
-		type: 'POST',
+		url: 'http://localhost:8080/upvote',
+		type: 'PUT',
 		data: JSON.stringify(data),
 		contentType: 'application/json',
 		success: function(data) {
@@ -49,8 +49,8 @@ function downVote(placeid) { //Decrement the rating of the place by 1
 	data.placeid = placeid;
 
 	$.ajax({
-		url: '/',
-		type: 'POST',
+		url: 'http://localhost:8080/downvote',
+		type: 'PUT',
 		data: JSON.stringify(data),
 		contentType: 'application/json',
 		success: function(data) {
