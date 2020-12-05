@@ -21,7 +21,8 @@ function findPlaceRating(goog_id) {
 }
 
 function addPlace(goog_id) {
-    const url = "https://delish-food-292917.appspot.com/add-doc";
+    // const url = "https://delish-food-292917.appspot.com/add-doc";
+    const url = "http://localhost:8080/add-doc"
     const data = { "placeid": goog_id };
 
     fetch(url, {
