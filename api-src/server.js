@@ -31,11 +31,11 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 //setup the visual api doc tester
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-//bodyparser parses json in the request body
-app.use(bodyParser.json());
-
 //cors allows us to access API from different machines with different ips
 app.use(cors());
+
+//bodyparser parses json in the request body
+app.use(bodyParser.json());
 
 //setup connection to mongoDB atlas
 const MongoClient = require('mongodb').MongoClient; //create client to use mongodb
