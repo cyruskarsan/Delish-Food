@@ -4,16 +4,16 @@ var markerClusterer = null; // Marker Clusterer object
 
 //GET request to find if a place exists in Mongo using placeid as identifier
 function findPlaceRating(goog_id) {
-   
+
     $.ajax({
         url: "https://delish-food-292917.appspot.com/" + goog_id,
         type: "GET",
-        success: function(response) {
-            console.log("this is placeid:",goog_id)
+        success: function (response) {
+            console.log("this is placeid:", goog_id)
             console.log("Successful GET");
             console.log(response);
         },
-        error: function(error) {
+        error: function (error) {
             console.log("error, adding place to DB")
             addPlace(goog_id);
         }
@@ -21,25 +21,23 @@ function findPlaceRating(goog_id) {
 }
 
 function addPlace(goog_id) {
-    var payload = {
-        "placeid": goog_id
-    }
-    $.ajax({
-        url: "https://delish-food-292917.appspot.com/add-doc",
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        // crossDomain: true,
-        // headers: {
-        //     "Access-Control-Allow-Origin": "*"
-        // },
-        success: function(response) {
-            console.log("added place with placeid:" + goog_id);
+    const url = "https://delish-food-292917.appspot.com/add-doc";
+    const data = { "placeid": goog_id };
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
         },
-        error: function(error) {
-            console.log(error)
-        }
+        body: JSON.stringify(data)
     })
+    .then(response => response.json())
+    .then(data=> {
+        console.log("Success:", data)
+    })
+    .catch((error) => {
+        console.error("Error:", error)
+    });
 }
 
 
@@ -57,7 +55,7 @@ function cuisineTypeSearch(request, cuisineType) {
                 var place = results[i];
                 findPlaceRating(place.place_id);
                 createMarker(place, cuisineType);
-                
+
             }
         }
     }
@@ -112,7 +110,7 @@ var cuisine_marker_dict = {};
 
 // Initialize onclick event listener for cuisine type options
 function cuisineTypeListener() {
-    
+
     let mysidenav = document.getElementById("mySidenav");
     let cuisines = mysidenav.querySelectorAll('a.cuisine-type');
 
@@ -125,7 +123,7 @@ function cuisineTypeListener() {
         let cuisineType = cuisine.innerText.toLowerCase();
         cuisine_marker_dict[cuisineType] = [];
 
-        cuisine.onclick = function() {
+        cuisine.onclick = function () {
             cuisine_check = document.getElementById(`${cuisine.innerText}`); // CSN-TYPE CHECK BOX DIV
 
             // IF CUISINE TYPE CLICKED ALREADY SELECTED, CLEAR SELECTION, ELSE, RUN REQUEST/CREATE MARKERS
