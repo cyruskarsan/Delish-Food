@@ -34,7 +34,6 @@ app.options('*',cors());
 //cors allows us to access API from different machines with different ips
 app.use(cors());
 //bodyparser parses json in the request body
-
 app.use(bodyParser.json());
 
 
