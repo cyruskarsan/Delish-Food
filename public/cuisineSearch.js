@@ -3,31 +3,42 @@
 var markerClusterer = null; // Marker Clusterer object
 
 //GET request to find if a place exists in Mongo using placeid as identifier, returns rating
-function findPlaceRating(goog_id) {
-    var res = [];
-    $.ajax({
-        url: "https://delish-food-292917.appspot.com/" + goog_id,
-        type: "GET",
-        success: function (response) {
-            console.log("this is placeid:", goog_id)
-            console.log("Successful GET");
-            //TODO FIGURE OUT WHY I CAN'T RETURN, PRBABLY BECAUSE OF ASYNC
-            res.push(response.rating);
-            console.log("response", response.rating);
-            
-        },
-        error: function (error) {
-            console.log("error, adding place to DB")
-            addPlace(goog_id);
-        }
-    })
-    // console.log(res);
-    // return res[0].rating;
+async function findPlaceRating(goog_id) {
+    // $.ajax({
+    //     //url: "https://delish-food-292917.appspot.com/" + goog_id,
+    //     url: "http://localhost:8080/" + goog_id,
+    //     type: "GET",
+    //     success: function (response) {
+    //         console.log("this is placeid:", goog_id)
+    //         console.log("Successful GET");
+    //         //TODO FIGURE OUT WHY I CAN'T RETURN, PRBABLY BECAUSE OF ASYNC
+    //         console.log("respomse", response);
+    //         res.push(response);
+    //         console.log("res", res);
+    //         return response;
+    //         //console.log("response[rating]", response[0]);
+
+    //     },
+    //     error: function (error) {
+    //         console.log("error, adding place to DB")
+    //         addPlace(goog_id);
+    //     }
+    // })
+
+    return await fetch("https://delish-food-292917.appspot.com/" + goog_id)
+        //fetch("http://localhost:8080/"+ goog_id)
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch((error) => {
+            console.log("place not found, calling addPlace");
+            addPlace(goog_id)
+        })
+    //console.log(res);
+    //return res[0].rating;
 }
 
 function addPlace(goog_id) {
     const url = "https://delish-food-292917.wl.r.appspot.com/add-doc";
-    //const url = "http:localhost:8080/add-doc";
     const data = { "placeid": goog_id };
 
     fetch(url, {
@@ -37,13 +48,13 @@ function addPlace(goog_id) {
         },
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(data=> {
-        console.log("Success:", data)
-    })
-    .catch((error) => {
-        console.error("Error:", error)
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log("Added place to GCP:", data)
+        })
+        .catch((error) => {
+            console.error("Error:", error)
+        });
 }
 
 
@@ -60,7 +71,8 @@ function cuisineTypeSearch(request, cuisineType) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
                 rating = findPlaceRating(place.place_id);
-                console.log(rating);
+                    
+                console.log("rating", rating);
                 createMarker(place, cuisineType, 0);
 
             }
@@ -75,7 +87,7 @@ function cuisineTypeSearch(request, cuisineType) {
             size: new google.maps.Size(71, 71),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(size,size),
+            scaledSize: new google.maps.Size(size, size),
         };
         arguments
 

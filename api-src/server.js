@@ -149,6 +149,7 @@ router.post('/add-doc', async (req, res) => {
 router.get('/:placeId', async (req, res) => {
     try {
         var findSpecificDoc = await ratingDoc.find({ placeid: req.params.placeId });
+        console.log(findSpecificDoc)
     }
     catch (err) {
         res.json({ message: err });
@@ -161,7 +162,8 @@ router.get('/:placeId', async (req, res) => {
     //doc found, return its rating
     else {
         rating = findSpecificDoc[0].rating;
-        res.send({"rating":rating});
+        //res.send({"rating":rating});
+        res.send(findSpecificDoc)
     }
 });
 
