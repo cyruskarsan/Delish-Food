@@ -4,8 +4,12 @@ info:
     name: Cyrus Karsan
   description: Delish API ratings information
   title: Delish API
-  version: 1.0.2
+  version: 1.0.3
 host: delish-food-292917.appspot.com
+x-google-endpoints:
+- name: delish-food-292917.appspot.com
+  allowCors: True
+
 paths:
   /get-docs:
     get:

@@ -11,7 +11,9 @@ function findPlaceRating(goog_id) {
         success: function (response) {
             console.log("this is placeid:", goog_id)
             console.log("Successful GET");
-            res.push(response);
+            //TODO FIGURE OUT WHY I CAN'T RETURN, PRBABLY BECAUSE OF ASYNC
+            res.push(response.rating);
+            console.log("response", response.rating);
             
         },
         error: function (error) {
@@ -19,12 +21,13 @@ function findPlaceRating(goog_id) {
             addPlace(goog_id);
         }
     })
-    return res[0].rating;
+    // console.log(res);
+    // return res[0].rating;
 }
 
 function addPlace(goog_id) {
-    //const url = "https://delish-food-292917.appspot.com/add-doc";
-    const url = "http:localhost:8080/add-doc";
+    const url = "https://delish-food-292917.wl.r.appspot.com/add-doc";
+    //const url = "http:localhost:8080/add-doc";
     const data = { "placeid": goog_id };
 
     fetch(url, {
@@ -66,13 +69,13 @@ function cuisineTypeSearch(request, cuisineType) {
 
     // Create marker with icon and info attributes
     function createMarker(place, cuisineType, rating) {
-
+        size = 25 + rating;
         const image = {
             url: place.icon,
             size: new google.maps.Size(71, 71),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(25, 25),
+            scaledSize: new google.maps.Size(size,size),
         };
         arguments
 
