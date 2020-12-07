@@ -37,3 +37,22 @@ function addPlace(goog_id) {
             console.error("Error:", error)
         });
 }
+
+function updateRating(placeid, voteVal) {
+    const url = "https://delish-food-292917.appspot.com/" + voteVal;
+    console.log("url", url);
+	var data = {"placeid": placeid};
+    console.log("data", data);
+
+    fetch(url, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(console.log(voteVal, " :completed!"))
+    .catch((error) => {
+        console.error("Error:", error)
+    });
+}

@@ -1,18 +1,18 @@
 // Open on click/set information for marker's info box
-function setMarkerInfoBox (place, marker, websiteTag, placePhotoTag) {
+function setMarkerInfoBox (place, marker, websiteTag, placePhotoTag, rating) {
 	const infowindow = new google.maps.InfoWindow();
 	var addr = place.formatted_address.split(",");
-
+	var params = [place, marker, websiteTag, placePhotoTag, rating];
 	// Add event listener to marker and set information for infobox
 	google.maps.event.addListener(marker, "click", function () {
 		infowindow.setContent( //Contents of each infowindow for each pin
 			"<div><strong>" +
 			place.name +
 			"<br>" + 
-			"Rating: 0 " +  
-			`<img src="./Icons/upvote.png" onclick="upVote('${place.place_id}')"width="20" height="20" />` +
+			`Rating: ${rating} ` +  
+			`<img src="./Icons/upvote.png" onclick="updateRating('${place.place_id}', 'upvote') "width="20" height="20" />` +
 			" " +  
-			`<img src="./Icons/downvote.png" onclick="downVote('${place.place_id}')"width="20" height="20" />` +
+			`<img src="./Icons/downvote.png" onclick="updateRating('${place.place_id}', 'downvote') "width="20" height="20" />` +
 			"</strong><br>" +  
 			addr[0] + 
 			"<br>" + 
@@ -25,39 +25,6 @@ function setMarkerInfoBox (place, marker, websiteTag, placePhotoTag) {
 			);
 		infowindow.open(map, this);
 	});
-}
-
-function upVote(placeid) { //Increment the rating of the place by 1 
-
-	var data = {};
-	data.placeid = placeid;
-
-	$.ajax({
-		url: 'http://localhost:8080/upvote',
-		type: 'PUT',
-		data: JSON.stringify(data),
-		contentType: 'application/json',
-		success: function(data) {
-			console.log("successfully posted data");
-			console.log(data);
-		}
-	})
-}
-function downVote(placeid) { //Decrement the rating of the place by 1 
-
-	var data = {};
-	data.placeid = placeid;
-
-	$.ajax({
-		url: 'http://localhost:8080/downvote',
-		type: 'PUT',
-		data: JSON.stringify(data),
-		contentType: 'application/json',
-		success: function(data) {
-			console.log("successfully posted data");
-			console.log(data);
-		}
-	})
 }
 
 // Retrieve place photo if it exists, return photo html tag for infobox
@@ -83,7 +50,7 @@ function getPlaceSearchUrl(place) {
 }
 
 // Retrieve information about a specific place, via gmaps service.getDetails()
-function setPlaceDetails(place, marker) {
+function setPlaceDetails(place, marker, rating) {
 	
 	// Initialize service object and desired details request for place
 	const service = new google.maps.places.PlacesService(map);
@@ -107,6 +74,6 @@ function setPlaceDetails(place, marker) {
 
 		// Set MarkerInfoBox with retrieved details about place
 		var placePhotoTag = getPlacePhoto(place);
-		setMarkerInfoBox(place, marker, websiteTag, placePhotoTag);
+		setMarkerInfoBox(place, marker, websiteTag, placePhotoTag, rating);
 	});
 }

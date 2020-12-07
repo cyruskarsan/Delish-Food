@@ -39,7 +39,7 @@ function createMarker(place, cuisineType, rating) {
     });
 
     // Set place information when marker is clicked
-    setPlaceDetails(place, marker);
+    setPlaceDetails(place, marker, rating);
 
     // add generated marker to dictionary and clusterer set
     cuisine_marker_dict[cuisineType].push(marker);
