@@ -1,51 +1,5 @@
-// const { func } = require("assert-plus");
-
-var markerClusterer = null; // Marker Clusterer object
-
-//GET request to find if a place exists in Mongo using placeid as identifier, returns rating
-function findPlaceRating(place, cuisineType) {
-    fetch("https://delish-food-292917.appspot.com/" + place.place_id)
-        //fetch("http://localhost:8080/"+ goog_id)
-        .then(response => response.json())
-        .then(
-            data => {
-                console.log("sending data to create marker");
-                createMarker(place, cuisineType, data.rating)
-            }
-        )
-        .catch((error) => {
-            console.log("error in fetch get", error);
-            console.log("place not found, calling addPlace");
-            addPlace(goog_id)
-        })
-    // return function returnData(data){
-    //     return data
-    // }
-
-    //console.log(res);
-    // return rating;
-}
-
-function addPlace(goog_id) {
-    const url = "https://delish-food-292917.wl.r.appspot.com/add-doc";
-    const data = { "placeid": goog_id };
-
-    fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Added place to GCP:", data)
-        })
-        .catch((error) => {
-            console.error("Error:", error)
-        });
-}
-
+// Marker Clusterer object
+var markerClusterer = null;
 
 //Run requests from cuisine type clicks
 function cuisineTypeSearch(request, cuisineType) {
@@ -54,30 +8,28 @@ function cuisineTypeSearch(request, cuisineType) {
     var service = new google.maps.places.PlacesService(map);
     service.textSearch(request, callback);
 
-    //parse returned info from places
+    //parse returned info from places and either add or find place
     function callback(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
                 findPlaceRating(place, cuisineType);
-
-
             }
         }
     }
 }
 
-// Create marker with icon and info attributes
+// Create marker with custom size
 function createMarker(place, cuisineType, rating) {
-    size = 25 + rating;
+    size = Math.min(25 + rating,70);
+
+    //sets custom image attributes
     const image = {
         url: place.icon,
-        size: new google.maps.Size(71, 71),
         origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
+        anchor: new google.maps.Point(0, 0),
         scaledSize: new google.maps.Size(size, size),
     };
-    arguments
 
     const marker = new google.maps.Marker({
         map,
