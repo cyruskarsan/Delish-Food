@@ -14,7 +14,7 @@ const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
         info: {
-            version: "1.0.2",
+            version: "1.0.3",
             title: "Delish API",
             description: "Delish API ratings information",
             contact: {
