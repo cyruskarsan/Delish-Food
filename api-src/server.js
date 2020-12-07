@@ -38,6 +38,9 @@ app.use(bodyParser.json());
 
 
 
+//bodyparser parses json in the request body
+app.use(bodyParser.json());
+
 //setup connection to mongoDB atlas
 const MongoClient = require('mongodb').MongoClient; //create client to use mongodb
 const uri = `mongodb+srv://delishfood:delishfood@cluster0.ailvm.mongodb.net/delishfood?retryWrites=true&w=majority`; //url to connect to mongodb atlas cluster

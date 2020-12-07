@@ -20,11 +20,10 @@ body {
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
-/* The navigation menu links */
-.sidenav a {
+/* The navigation menu links for each cuisine type*/
+.sidenav a { 
   font-family: 'Work Sans', sans-serif;
   cursor: pointer;
-  /*padding-bottom: 5px;*/
   padding: 8px 8px 8px 20px;
   text-decoration: none;
   text-align: left;
@@ -34,7 +33,7 @@ body {
   transition: 0.3s;
 }
 
-.sidenav .sidenav-header {
+.sidenav .sidenav-header { /* Style for SideNav Title */ 
   font-family: 'Work Sans', sans-serif;
   cursor: default;
   padding: 0px 0px 8px 20px;
@@ -45,7 +44,7 @@ body {
   transition: 0.3s;
 }
 
-/* When you mouse over the navigation links, change their color */
+/* When you mouse over the navigation links, highlight them */
 .sidenav a:hover {
   cursor: pointer;
   color: #f1f1f1;
@@ -73,7 +72,7 @@ body {
   display: absolute;
 }
 
-.nav-bar-title {
+.nav-bar-title { /* Style for the title */ 
   position: absolute;
   margin-left: 44%;
   font-size: 40px;
@@ -86,7 +85,7 @@ body {
   font-weight: 400;
   z-index: 1;
 }
-.title-box{
+.title-box{ /* Style for the box of behind the title */ 
   position: fixed;
   background-color: #f1f1f1;
   width: 166px;
@@ -96,7 +95,7 @@ body {
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
 }
 
-.navigation-link-wrap {
+.navigation-link-wrap { /* Style for the button "Menu" */ 
   position: absolute;
   margin-left: 10px;
   font-size: 30px;
@@ -109,7 +108,7 @@ body {
   border-bottom: 1px solid transparent;
   transition: opacity 1.5s ease-out;
 }
-.menu-box{
+.menu-box{ /* Style for the box behind "Menu" */ 
   position: fixed;
   background-color: #f1f1f1;
   width: 81px;
@@ -119,11 +118,11 @@ body {
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
   z-index: 1;
 }
-.menu-box:hover {
+.menu-box:hover { /* On hover, darken the menu box */
   background-color: #d2d2d2;
 }
 
-.active-nav-demo {
+.active-nav-demo { 
   font-family: 'Montserrat', sans-serif;
   padding-top: 50px;
   font-size: 20px;
@@ -176,7 +175,7 @@ body {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
-.description{
+.description{ /* Style for the text of the description box */ 
   position: fixed;
   top: 50%;
   left: 50%;
@@ -190,24 +189,24 @@ body {
   max-width: 70%;
   text-align: center;
 }
-.description.active{
+.description.active{ /* Closing the description, shrink the box instead of instantly closing */ 
   transform: translate(-50%, -50%) scale(0);
    
 }
-.description-header{
+.description-header{ /* Style for the header of the description */
   padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid black;
 }
-.description-header .title{
+.description-header .title{ 
   font-size: 1.25rem;
   font-weight: bold;
-  padding-left: 100px;
+  padding-left: 110px;
   
 }
-.description-header .close-button{
+.description-header .close-button{ 
   cursor: pointer;
   border: none;
   outline: none;
