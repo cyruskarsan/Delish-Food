@@ -1,4 +1,5 @@
-var markerClusterer = null; // Marker Clusterer object
+// Marker Clusterer object
+var markerClusterer = null;
 
 //Run requests from cuisine type clicks
 function cuisineTypeSearch(request, cuisineType) {
@@ -7,44 +8,42 @@ function cuisineTypeSearch(request, cuisineType) {
     var service = new google.maps.places.PlacesService(map);
     service.textSearch(request, callback);
 
-    //parse returned info from places
+    //parse returned info from places and either add or find place
     function callback(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-
-                // Create marker for given place
-                createMarker(place, cuisineType);
+                findPlaceRating(place, cuisineType);
             }
         }
     }
+}
 
-    // Create marker with icon and info attributes
-    function createMarker(place, cuisineType) {
+// Create marker with custom size
+function createMarker(place, cuisineType, rating) {
+    size = Math.min(25 + rating,70);
 
-        const image = {
-            url: place.icon,
-            size: new google.maps.Size(71, 71),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(25, 25),
-        };
-        arguments
+    //sets custom image attributes
+    const image = {
+        url: place.icon,
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(0, 0),
+        scaledSize: new google.maps.Size(size, size),
+    };
 
-        const marker = new google.maps.Marker({
-            map,
-            icon: image,
-            title: place.name,
-            position: place.geometry.location,
-        });
+    const marker = new google.maps.Marker({
+        map,
+        icon: image,
+        title: place.name,
+        position: place.geometry.location,
+    });
 
-        // Set place information when marker is clicked
-        setPlaceDetails(place, marker);
+    // Set place information when marker is clicked
+    setPlaceDetails(place, marker);
 
-        // add generated marker to dictionary and clusterer set
-        cuisine_marker_dict[cuisineType].push(marker);
-        markerClusterer.addMarker(marker);
-    }
+    // add generated marker to dictionary and clusterer set
+    cuisine_marker_dict[cuisineType].push(marker);
+    markerClusterer.addMarker(marker);
 }
 
 // Marker Clusterer object
@@ -70,7 +69,7 @@ var cuisine_marker_dict = {};
 
 // Initialize onclick event listener for cuisine type options
 function cuisineTypeListener() {
-    
+
     let mysidenav = document.getElementById("mySidenav");
     let cuisines = mysidenav.querySelectorAll('a.cuisine-type');
 
@@ -83,7 +82,7 @@ function cuisineTypeListener() {
         let cuisineType = cuisine.innerText.toLowerCase();
         cuisine_marker_dict[cuisineType] = [];
 
-        cuisine.onclick = function() {
+        cuisine.onclick = function () {
             cuisine_check = document.getElementById(`${cuisine.innerText}`); // CSN-TYPE CHECK BOX DIV
 
             // IF CUISINE TYPE CLICKED ALREADY SELECTED, CLEAR SELECTION, ELSE, RUN REQUEST/CREATE MARKERS
