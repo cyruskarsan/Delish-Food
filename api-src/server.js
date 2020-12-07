@@ -30,11 +30,6 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 //setup the visual api doc tester
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-<<<<<<< HEAD
-
-//cors allows us to access API from different machines with different ips
-app.use(cors());
-=======
 app.options('*',cors());
 //cors allows us to access API from different machines with different ips
 app.use(cors());
@@ -42,7 +37,6 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
->>>>>>> ff3d5365af79cad1f9d33d1be1609aad88c2b293
 
 //bodyparser parses json in the request body
 app.use(bodyParser.json());
