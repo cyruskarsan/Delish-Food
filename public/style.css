@@ -204,8 +204,7 @@ body {
 .description-header .title{
   font-size: 1.25rem;
   font-weight: bold;
-  padding-left: 100px;
-  
+  padding-left: 110px;
 }
 .description-header .close-button{
   cursor: pointer;
