@@ -21,7 +21,7 @@ function cuisineTypeSearch(request, cuisineType) {
 
 // Create marker with custom size
 function createMarker(place, cuisineType, rating) {
-    size = Math.min(35 + rating,70);
+    size = Math.min(35 + rating, 70);
 
     //sets custom image attributes
     const image = {
