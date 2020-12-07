@@ -40,9 +40,7 @@ function addPlace(goog_id) {
 
 function updateRating(placeid, voteVal) {
     const url = "https://delish-food-292917.appspot.com/" + voteVal;
-    console.log("url", url);
 	var data = {"placeid": placeid};
-    console.log("data", data);
 
     fetch(url, {
         method: "PUT",
