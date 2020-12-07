@@ -3,38 +3,27 @@
 var markerClusterer = null; // Marker Clusterer object
 
 //GET request to find if a place exists in Mongo using placeid as identifier, returns rating
-async function findPlaceRating(goog_id) {
-    // $.ajax({
-    //     //url: "https://delish-food-292917.appspot.com/" + goog_id,
-    //     url: "http://localhost:8080/" + goog_id,
-    //     type: "GET",
-    //     success: function (response) {
-    //         console.log("this is placeid:", goog_id)
-    //         console.log("Successful GET");
-    //         //TODO FIGURE OUT WHY I CAN'T RETURN, PRBABLY BECAUSE OF ASYNC
-    //         console.log("respomse", response);
-    //         res.push(response);
-    //         console.log("res", res);
-    //         return response;
-    //         //console.log("response[rating]", response[0]);
-
-    //     },
-    //     error: function (error) {
-    //         console.log("error, adding place to DB")
-    //         addPlace(goog_id);
-    //     }
-    // })
-
-    return await fetch("https://delish-food-292917.appspot.com/" + goog_id)
+function findPlaceRating(place, cuisineType) {
+    fetch("https://delish-food-292917.appspot.com/" + place.place_id)
         //fetch("http://localhost:8080/"+ goog_id)
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(
+            data => {
+                console.log("sending data to create marker");
+                createMarker(place, cuisineType, data.rating)
+            }
+        )
         .catch((error) => {
+            console.log("error in fetch get", error);
             console.log("place not found, calling addPlace");
             addPlace(goog_id)
         })
+    // return function returnData(data){
+    //     return data
+    // }
+
     //console.log(res);
-    //return res[0].rating;
+    // return rating;
 }
 
 function addPlace(goog_id) {
@@ -70,41 +59,39 @@ function cuisineTypeSearch(request, cuisineType) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-                rating = findPlaceRating(place.place_id);
-                    
-                console.log("rating", rating);
-                createMarker(place, cuisineType, 0);
+                findPlaceRating(place, cuisineType);
+
 
             }
         }
     }
+}
 
-    // Create marker with icon and info attributes
-    function createMarker(place, cuisineType, rating) {
-        size = 25 + rating;
-        const image = {
-            url: place.icon,
-            size: new google.maps.Size(71, 71),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(size, size),
-        };
-        arguments
+// Create marker with icon and info attributes
+function createMarker(place, cuisineType, rating) {
+    size = 25 + rating;
+    const image = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(size, size),
+    };
+    arguments
 
-        const marker = new google.maps.Marker({
-            map,
-            icon: image,
-            title: place.name,
-            position: place.geometry.location,
-        });
+    const marker = new google.maps.Marker({
+        map,
+        icon: image,
+        title: place.name,
+        position: place.geometry.location,
+    });
 
-        // Set place information when marker is clicked
-        setPlaceDetails(place, marker);
+    // Set place information when marker is clicked
+    setPlaceDetails(place, marker);
 
-        // add generated marker to dictionary and clusterer set
-        cuisine_marker_dict[cuisineType].push(marker);
-        markerClusterer.addMarker(marker);
-    }
+    // add generated marker to dictionary and clusterer set
+    cuisine_marker_dict[cuisineType].push(marker);
+    markerClusterer.addMarker(marker);
 }
 
 // Marker Clusterer object
