@@ -21,11 +21,11 @@ function cuisineTypeSearch(request, cuisineType) {
 
 // Create marker with custom size
 function createMarker(place, cuisineType, rating) {
-    size = Math.min(25 + rating,70);
+    size = Math.min(35 + rating,70);
 
     //sets custom image attributes
     const image = {
-        url: place.icon,
+        url: `./MarkerIcons/${cuisineType}.png`,
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(0, 0),
         scaledSize: new google.maps.Size(size, size),
@@ -60,7 +60,7 @@ function clusters() {
 function clearMarkerSets(cuisineType) {
     if (markerClusterer) {
         markerClusterer.removeMarkers(cuisine_marker_dict[cuisineType]);
-    }
+    }   
 }
 
 // Individual cuisine marker dict/hash table to store marker arrays
