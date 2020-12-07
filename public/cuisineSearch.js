@@ -21,6 +21,7 @@ function cuisineTypeSearch(request, cuisineType) {
 
     // Create marker with icon and info attributes
     function createMarker(place, cuisineType) {
+
         function findIcon(icon_query) {
             $.ajax({
                 type: "POST",
@@ -28,6 +29,7 @@ function cuisineTypeSearch(request, cuisineType) {
                 data: { search_key: icon_query, save_name: place.place_id },
                 success: function(response) {
                     console.log("Success on ajax post, this is response: ", response);
+                    //if returnScrape val == 0
                 },
                 error: function(error) {
                     console.log("Failure on ajax post, this is response ", error);
@@ -36,12 +38,12 @@ function cuisineTypeSearch(request, cuisineType) {
         }
 
         let icon_query = place["name"].concat(" ", place["formatted_address"])
-
-        //uncomment line below to run ajax requests to flask app
-        //findIcon(icon_query)
-
+        // uncomment line below to run ajax requests to flask app
+        findIcon(icon_query)
+        
         const image = {
             url: `./MarkerIcons/${cuisineType.toLowerCase()}.png`,
+            //url: `./MarkerIcons/roof.png`,
             size: new google.maps.Size(71, 71),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(17, 34),

@@ -60,7 +60,7 @@ def saveImageFromUrl(src_url:str, folder_path:str, save_name:str):
       return "no_icon"
 
 
-def startIconScrape(search_key:str, save_name:str):
+def startIconScrape(search_key:str, save_name:str): #add driver arg for parallel testing
   # setting up headless chrome driver
   DRIVER_PATH = './chromedriverv86'
   options = Options()  
@@ -93,7 +93,7 @@ def startIconScrape(search_key:str, save_name:str):
   #save off image(s) to file_name in target_folder
   saveImageFromUrl(result, target_folder, file_name)
   
-  driver.quit()
+  #driver.quit()
   return 0
 
 # Init headless selenium webdriver with driver at pathToDriver

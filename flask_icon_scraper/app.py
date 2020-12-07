@@ -12,6 +12,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from RestaurantIconScraperHeadless import startIconScrape, initWebDriver
+from joblib import Parallel, delayed
 
 app=Flask(__name__)
 CORS(app)
@@ -38,8 +39,21 @@ def add():
     #global wDriver
     scrapeSuccess = -1
 
-    #Uncomnet line below left to run IconScrape, stores in scrapeImagesTest Folder
-    #scrapeSuccess = startIconScrape(search_key,save_name)
+    def iconScrape():
+      DRIVER_PATH = './chromedriverv86'
+      options = Options()
+      options.add_argument("--headless")
+      wDriver = webdriver.Chrome(executable_path=DRIVER_PATH, chrome_options=options)
+
+      scrapeSuccess = startIconScrape(search_key, save_name, wDriver)
+
+      wDriver.quit()
+
+      return scrapeSuccess
+
+    #Uncomment line below left to run IconScrape, stores in scrapeImagesTest Folder
+    scrapeSuccess = startIconScrape(search_key, save_name)
+    #scrapeSuccess = Parallel(n_jobs=-1)(delayed(iconScrape)())
 
     #print("This is search_key: ", search_key, ". This is save_name: ", save_name)
     return jsonify({'status': 200,'search_key':search_key, 'save_name':save_name, 'returnScrape':scrapeSuccess})
