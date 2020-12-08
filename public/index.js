@@ -60,6 +60,7 @@ function initMap() {
 
   //Geolocation to track user location
   function geoLocation() {
+
     infoWindow = new google.maps.InfoWindow();
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
@@ -72,6 +73,10 @@ function initMap() {
           map.setZoom(15);
           map.setCenter(pos);
           mapcenterpos = pos;
+
+          // Open nav/menu bar by default, set menu button to be transparent on start
+          setMenuTransition(0);
+          openNav()
 
           //Call cuisineTypeListener to init menu search options
           cuisineTypeListener();
@@ -97,7 +102,6 @@ function initMap() {
 
     infoWindow.open(map);
   }
-
 }
 
 // DIV ELEMENT MOVEMENT SCRIPTS
@@ -114,9 +118,15 @@ function openNav() { //Onclick, open the side navigator
 /* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the 
 background color of body to white */
 function closeNav() { //On close, close the side navigator
+  setMenuTransition(1);
   document.getElementById("mySidenav").style.width = "0";
   document.getElementById("menu").style.opacity = "1";
   document.getElementById("box").style.marginLeft = "0";
   document.getElementById("map").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
+}
+
+// Set Menu button transition time
+function setMenuTransition(transitionTime) {
+  document.getElementById("menu").style.transition = `opacity ${transitionTime}s ease-out`;
 }
