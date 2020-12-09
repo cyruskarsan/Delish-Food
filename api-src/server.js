@@ -13,29 +13,33 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
-      info: {
-        version: "1.0.0",
-        title: "Delish API",
-        description: "Delish API ratings information",
-        contact: {
-          name: "Cyrus Karsan"
+        info: {
+            version: "1.0.3",
+            title: "Delish API",
+            description: "Delish API ratings information",
+            contact: {
+                name: "Cyrus Karsan"
+            }
         }
-      }
     },
     apis: ["server.js"]
-  };
+};
 
 //define the OpenAPI doc
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 //setup the visual api doc tester
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
+app.options('*',cors());
+//cors allows us to access API from different machines with different ips
+app.use(cors());
 //bodyparser parses json in the request body
 app.use(bodyParser.json());
 
-//cors allows us to access API from different machines with different ips
-app.use(cors());
+
+
+//bodyparser parses json in the request body
+app.use(bodyParser.json());
 
 //setup connection to mongoDB atlas
 const MongoClient = require('mongodb').MongoClient; //create client to use mongodb
@@ -63,17 +67,20 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
  * /get-docs:
  *  get:
  *    summary: Retrieves all documents in the ratings collection in MongoDB
+ *    operationId: get_docs
  *    responses:
  *      '200':
- *        description: A successful response
+ *        description: Retrieved documents successfully
+ *      '500':
+ *        description: Unexpected error
  */
 router.get('/get-docs', async (req, res) => {
     try {
         const getRatings = await ratingDoc.find();
-        res.json(getRatings);
+        res.send(getRatings,200);
     }
     catch (err) {
-        res.json({ message: err });
+        res.send({ message: err },500);
     }
 });
 
@@ -82,6 +89,7 @@ router.get('/get-docs', async (req, res) => {
  * /add-doc:
  *  post:
  *    summary: Add a new rating to the ratings collection in MongoDB
+ *    operationId: add-doc
  *    description: Create a new document in the ratings collection of the resturant and it's rating
  *    requestBody:
  *      required: true
@@ -92,107 +100,183 @@ router.get('/get-docs', async (req, res) => {
  *                  properties:
  *                      placeid:
  *                          type: string
- *                      rating:
- *                          type: integer
- *                          format: int64
- *                          minimum: 1
- * 
- *
+ *                      
  *    responses:
- *      '200':
+ *      '201':
  *        description: Rating added successfully
+ *      '400':
+ *        description: Place already in database
  */
 router.post('/add-doc', async (req, res) => {
     const rating = new ratingDoc({
         placeid: req.body.placeid,
-        rating: req.body.rating
     });
-    try {
-        const savedRating = await rating.save();
-        res.json(savedRating);
+    let findSpecificDoc = await ratingDoc.find({ placeid: req.body.placeid });
+    console.log(findSpecificDoc);
+    //make sure we don't add duplicate documents
+    if (!findSpecificDoc || findSpecificDoc.length==0) {
+        try {
+            const savedRating = await rating.save();
+            res.send(savedRating,201);
+        }
+        catch (err) {
+            res.json({ message: err });
+        }
     }
-    catch (err) {
-        res.json({ message: err });
+    else{
+        res.status(400).send();
     }
+    
 });
 
 /**
  * @swagger
- * /{mongo_id}:
+ * /{placeid}:
  *  get:
  *    summary: Retrieves document of given id
- *    description: Given a unique MongoDB document _id, return the data associated with the document.
+ *    operationId: retrieve_doc
+ *    description: Given a unique google placeid, return the data associated with the document.
  *    parameters:
- *      - name: mongo_id
+ *      - name: placeid
  *        in: path 
  *        required: true
- *        description: unique mongo document _id
+ *        description: google placeid
  *        schema:
  *          type: string    
  *    responses:
  *      '200':
- *        description: A successful response
+ *        description: Place retreived successfully
+ *      '404':
+ *        description: Place not found 
  */
-router.get('/:mongo_id', async (req, res) => {
+router.get('/:placeId', async (req, res) => {
     try {
-        const findSpecificDoc = await ratingDoc.findById(req.params.mongo_id);
-        res.json(findSpecificDoc);
+        var findSpecificDoc = await ratingDoc.find({ placeid: req.params.placeId });
+        console.log(findSpecificDoc)
     }
     catch (err) {
         res.json({ message: err });
+    }
+
+    //couldn't find document
+    if (!findSpecificDoc || findSpecificDoc.length==0) {
+        res.status(404).send();
+    }
+    //doc found, return its rating
+    else {
+        rating = findSpecificDoc[0].rating;
+        //res.send({"rating":rating});
+        res.send(findSpecificDoc)
     }
 });
 
 /**
  * @swagger
- * /{mongo_id}:
+ * /{placeid}:
  *  delete:
  *    summary: Removes document from ratings collection
- *    description: Given a unique MongoDB document _id, delete the document associated with the _id
+ *    operationId: delete_doc
+ *    description: Given a unique google placeid, delete the document associated with the id
  *    parameters:
- *      - name: mongo_id
+ *      - name: placeid
  *        in: path 
  *        required: true
- *        description: unique document _id
+ *        description: unique google placeid
  *        schema:
  *          type: string
  *    responses:
  *      '200':
- *        description: A successful response
+ *        description: Place deleted successfully
+ *      '404':
+ *        description: Place not found 
  */
-router.delete('/:mongo_id', async (req, res) => {
+router.delete('/:placeId', async (req, res) => {
     try {
-        const removedDoc = await ratingDoc.remove({ _id: req.params.mongo_id});
-        res.json(removedDoc);
+        var mongoRemovedMsg = await ratingDoc.remove({ placeid: req.params.placeId });
     }
     catch (err) {
         res.json({ message: err });
+    }
+    if (mongoRemovedMsg.deletedCount == 1) {
+        res.send({"Deleted": true},200)
+    }
+    else {
+        res.send(404);
+    }
+});
+/**
+ * @swagger
+ * /upvote:
+ *  put:
+ *    summary: Increment resturant rating by 1
+ *    operationId: upvote
+ *    description: Given a placeid, update its rating by 1
+ *    requestBody:
+ *      required: true
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      placeid:
+ *                          type: string
+ *                      
+ *    responses:
+ *      '200':
+ *        description: Rating incremented by 1
+ *      '400':
+ *        description: place not found
+ */
+router.put('/upvote', async (req, res) => {
+    try {
+        var updatedDocMsg = await ratingDoc.updateOne({ placeid: req.body.placeid }, { $inc: { rating: 1 } });
+    }
+    catch (err) {
+        res.json({ message: err });
+    }
+    if (updatedDocMsg.n==1) {
+        res.send(200)
+    }
+    else{
+        res.send(404)
     }
 });
 
 /**
  * @swagger
- * /{mongo_id}:
- *  patch:
- *    summary: increment rating of resturant in document
- *    parameters:
- *      - name: mongo_id
- *        in: path 
- *        required: true
- *        description: unique document _id
- *        schema:
- *          type: string
+ * /downvote:
+ *  put:
+ *    summary: Decrement resturant rating by 1
+ *    operationId: downvote
+ *    description: Given a placeid, decrement its rating by 1
+ *    requestBody:
+ *      required: true
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      placeid:
+ *                          type: string
+ *                      
  *    responses:
  *      '200':
- *        description: A successful response
+ *        description: Rating decremented by 1
+ *      '400':
+ *        description: Place not found
  */
-router.patch('/:mongo_id', async (req, res) => {
+router.put('/downvote', async (req, res) => {
     try {
-        const updatedDoc = await ratingDoc.updateOne({ _id: req.params.mongo_id }, { $inc: { rating: 1 } });
-        res.json(updatedDoc);
+        var updatedDocMsg = await ratingDoc.updateOne({ placeid: req.body.placeid }, { $inc: { rating: -1 } });
     }
     catch (err) {
         res.json({ message: err });
+    }
+    if (updatedDocMsg.n==1) {
+        res.send(200)
+    }
+    else {
+        res.send(404)
     }
 });
 

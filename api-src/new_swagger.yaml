@@ -4,18 +4,24 @@ info:
     name: Cyrus Karsan
   description: Delish API ratings information
   title: Delish API
-  version: 1.0.0
+  version: 1.0.3
 host: delish-food-292917.appspot.com
+x-google-endpoints:
+- name: delish-food-292917.appspot.com
+  allowCors: True
+
 paths:
-  "/get-docs":
+  /get-docs:
     get:
       parameters: []
       responses:
         '200':
-          description: A successful response
+          description: Retrieved documents successfully
+        '500':
+          description: Unexpected error
       operationId: get_docs
       summary: Retrieves all documents in the ratings collection in MongoDB
-  "/add-doc":
+  /add-doc:
     post:
       consumes:
         - application/json
@@ -25,64 +31,95 @@ paths:
           required: true
           schema:
             properties:
-              id:
+              placeid:
                 type: string
-              rating:
-                format: int64
-                minimum: 1
-                type: integer
             type: object
       responses:
         '200':
           description: Rating added successfully
+        '400':
+          description: Place already in database
       description: >-
         Create a new document in the ratings collection of the resturant and
         it's rating
-      operationId: add_doc
+      operationId: add-doc
       summary: Add a new rating to the ratings collection in MongoDB
-  '/{mongo_id}':
+  /upvote:
+    put:
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            properties:
+              placeid:
+                type: string
+            type: object
+      responses:
+        '200':
+          description: Rating incremented by 1
+        '400':
+          description: Place not found          
+      description: 'Given a placeid, update its rating by 1'
+      operationId: upvote
+      summary: Increment resturant rating by 1
+  /downvote:
+    put:
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            properties:
+              placeid:
+                type: string
+            type: object
+      responses:
+        '200':
+          description: Rating decremented by 1
+        '400':
+          description: Place not found
+      description: 'Given a placeid, decrement its rating by 1'
+      operationId: downvote
+      summary: Decrement resturant rating by 1
+  '/{placeid}':
     delete:
       parameters:
-        - description: unique document _id
+        - description: unique google placeid
           in: path
-          name: mongo_id
+          name: placeid
           required: true
           type: string
       responses:
         '200':
           description: A successful response
+        '404':
+          description: Place not found
       description: >-
-        Given a unique MongoDB document _id, delete the document associated with
-        the _id
-      operationId: remove_doc
+        Given a unique google placeid, delete the document associated with the
+        id
+      operationId: delete_doc
       summary: Removes document from ratings collection
     get:
       parameters:
-        - description: unique document _id
+        - description: google placeid
           in: path
-          name: mongo_id
+          name: placeid
           required: true
           type: string
       responses:
         '200':
-          description: A successful response
+          description: Place retrieved successfully
+        '404':
+          description: Place not found
       description: >-
-        Given a unique MongoDB document _id, return the data associated with the
+        Given a unique google placeid, return the data associated with the
         document.
-      operationId: get_doc
+      operationId: retrieve_doc
       summary: Retrieves document of given id
-    patch:
-      parameters:
-        - description: unique document _id
-          in: path
-          name: mongo_id
-          required: true
-          type: string
-      responses:
-        '200':
-          description: A successful response
-      operationId: add_one_to_rating
-      summary: increment rating of resturant in document
 tags: []
 x-components: {}
-
