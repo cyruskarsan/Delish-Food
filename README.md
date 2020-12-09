@@ -7,7 +7,7 @@ Simply visit our website and choose the category, or categories, of food you are
 
 # Icons and ratings
 Delish Food uses crowdsourcing to let you know where the best places are to eat in your neighborhood. Places with larger icons are highly rated while places with smaller icons are rated less.
-![map](readme-images/map.png)
+![map](readme-images/map_update.png)
 
 ## Crowdsourcing
 We need your help! When you find a good place to eat, add an upvote to your favorite place on the app! This will help others know where the best places are in town. 
