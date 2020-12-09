@@ -3,13 +3,19 @@
 
 # Usage
 https://delish-food-292917.web.app/ \
-Simply visit our website and choose the cateogry of food you are craving.
+Simply visit our website and choose the category, or categories, of food you are craving.
 
 # Icons and ratings
 Delish Food uses crowdsourcing to let you know where the best places are to eat in your neighborhood. Places with larger icons are highly rated while places with smaller icons are rated less.
+![map](readme-images/map.png)
 
 ## Crowdsourcing
 We need your help! When you find a good place to eat, add an upvote to your favorite place on the app! This will help others know where the best places are in town. 
 
-![Image](readme-images/pericos.png)
+![upvote](readme-images/pericos.png)
+
 # Tech
+* Our website is hosted on Google Firebase.
+* Populated maps data using Google Maps and Places API
+* Our REST API is hosted by GCP endpoints.
+* We used MongoDB Atlas as our database to store ratings.
