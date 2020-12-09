@@ -9,14 +9,14 @@ function setMarkerInfoBox (place, marker, websiteTag, placePhotoTag, rating) {
 			"<div><strong>" +
 			place.name +
 			"<br>" + 
-			`Rating: ${rating} ` +  
-			`<img src="./Icons/upvote.png" onclick="updateRating('${place.place_id}', 'upvote') "width="20" height="20" />` +
+			`Rating: ${rating} ` + 
+			`<img src="./Icons/upvote.png" onclick="updateRating('${place.place_id}', 'Upvote') "width="20" height="20" />` +
 			" " +  
-			`<img src="./Icons/downvote.png" onclick="updateRating('${place.place_id}', 'downvote') "width="20" height="20" />` +
+			`<img src="./Icons/downvote.png" onclick="updateRating('${place.place_id}', 'Downvote') "width="20" height="20" />` +
 			"</strong><br>" +  
 			addr[0] + 
 			"<br>" + 
-			addr[1] + ", " + addr[2] + 
+			addr[1] + ((addr[2] == null) ? "":", "+addr[2]) + 
 			"<br>" +
 			websiteTag +
 			"<br>" +
