@@ -1,6 +1,3 @@
-// Marker Clusterer object
-var markerClusterer = null;
-
 //Run requests from cuisine type clicks
 function cuisineTypeSearch(request, cuisineType) {
 
@@ -19,16 +16,23 @@ function cuisineTypeSearch(request, cuisineType) {
     }
 }
 
+// Marker Size Attributes
+var minimumMarkerSize = 25;
+var maximumMarkerSize = 70;
+var baseMarkerSize = 35;
+
 // Create marker with custom size
 function createMarker(place, cuisineType, rating) {
-    size = Math.min(35 + rating, 70);
+    // Set size for marker based on rating/min or max val
+    let candidateSize = baseMarkerSize+rating;
+    markerSize = Math.max(minimumMarkerSize, Math.min(candidateSize, maximumMarkerSize));
 
-    //sets custom image attributes
+    // Sets custom image attributes
     const image = {
         url: `./MarkerIcons/${cuisineType}.png`,
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(0, 0),
-        scaledSize: new google.maps.Size(size, size),
+        scaledSize: new google.maps.Size(markerSize, markerSize),
     };
 
     const marker = new google.maps.Marker({
@@ -73,9 +77,6 @@ function cuisineTypeListener() {
     let mysidenav = document.getElementById("mySidenav");
     let cuisines = mysidenav.querySelectorAll('a.cuisine-type');
 
-    //Initialize Clusterer
-    clusters();
-
     for (let i = 0; i < cuisines.length; i++) { 
         let cuisine = cuisines[i]; // Select individual cuisine type
 
@@ -86,17 +87,19 @@ function cuisineTypeListener() {
             cuisine_check = document.getElementById(`${cuisine.innerText}`); // CSN-TYPE CHECK BOX DIV
 
             // IF CUISINE TYPE CLICKED ALREADY SELECTED, CLEAR SELECTION, ELSE, RUN REQUEST/CREATE MARKERS
-            if (cuisine_check.innerText == "✓") {
-                cuisine_check.innerText = "";
+            if (cuisine_check.innerHTML != "") {
+                cuisine_check.innerHTML = "";
                 clearMarkerSets(cuisineType);
             } else {
                 let request = { //Create the request for searching 
-                    location: new google.maps.LatLng(mapcenterpos["lat"], mapcenterpos["lng"], 14),
+                    location: new google.maps.LatLng(mapCenterPos["lat"], mapCenterPos["lng"], 14),
                     radius: "5",
                     type: "restaurant",
                     query: cuisine.innerText.toLowerCase(),
                 };
-                document.getElementById(cuisine.innerText).innerText = "✓";
+                
+                // Add default cuisine icon image next to listing in menu, then query search
+                document.getElementById(cuisine.innerHTML).innerHTML = `<img src="./MarkerIcons/${cuisineType}.png" width="25" height="25"/>`;
                 cuisineTypeSearch(request, cuisineType);
 
             }

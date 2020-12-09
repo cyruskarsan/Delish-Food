@@ -5,13 +5,11 @@ function findPlaceRating(place, cuisineType) {
         //place found, creating marker with rating
         .then(
             data => {
-                console.log("Successfully found place, sending data to create marker");
                 createMarker(place, cuisineType, data.rating)
             }
         )
         //place not found, add place to mongo and create marker for new place
         .catch((error) => {
-            console.log("error, place not found calling addPlace");
             addPlace(place.place_id)
             createMarker(place, cuisineType, 0)
         })
@@ -30,16 +28,14 @@ function addPlace(goog_id) {
         body: JSON.stringify(data)
     })
         .then(response => response.json())
-        .then(data => {
-            console.log("Added place to GCP:", data)
-        })
         .catch((error) => {
             console.error("Error:", error)
         });
 }
 
 function updateRating(placeid, voteVal) {
-    const url = "https://delish-food-292917.appspot.com/" + voteVal;
+    alert(`${voteVal} recorded!`);
+    const url = "https://delish-food-292917.appspot.com/" + voteVal.toLowerCase();
 	var data = {"placeid": placeid};
 
     fetch(url, {
@@ -49,7 +45,6 @@ function updateRating(placeid, voteVal) {
         },
         body: JSON.stringify(data)
     })
-    .then(console.log(voteVal, " :completed!"))
     .catch((error) => {
         console.error("Error:", error)
     });
