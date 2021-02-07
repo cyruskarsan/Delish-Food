@@ -58,12 +58,15 @@ exports.getPlace = functions.https.onRequest(async (req, res) => {
   if(!place.exists) {
     res.json({result: `No place found for placeid ${placeid}`});
   } else {
-    res.json({result: `Place found for placeid ${placeid},`+ place.data()[rating]});
+    res.json({result: `Place found for placeid ${placeid},`+ place.data()['rating']});
   }
   // Push the new message into Firestore using the Firebase Admin SDK.
   // Send back a message that we've successfully written the message
-  res.json({result: `Place with ID: ${placeid} searched.`});
 });
 
 
 //updateRating
+
+//tests:
+//http://localhost:5001/delish-2/us-central1/addMessage?text=asdf1234ghjk
+//http://localhost:5001/delish-2/us-central1/addMessage?text=asdf1234ghjk
