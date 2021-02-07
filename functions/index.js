@@ -36,10 +36,19 @@ exports.makeUppercase = functions.firestore.document('/messages/{documentId}')
 // Firestore under the path /messages/:documentId/original
 exports.addMessage = functions.https.onRequest(async (req, res) => {
   // Grab the text parameter.
-  const original = req.query.text;
+  const placeid = req.query.text;
+
+  const data = {
+    rating: 0
+  };
   // Push the new message into Firestore using the Firebase Admin SDK.
-  const writeResult = await admin.firestore().collection('messages').add({original: original});
+  const writeResult = await admin.firestore().collection('places').doc(placeid).set(data);
   // Send back a message that we've successfully written the message
   res.json({result: `Message with ID: ${writeResult.id} added.`});
 });
 
+//addnewplace
+
+//findplacerating
+
+//updateRating
