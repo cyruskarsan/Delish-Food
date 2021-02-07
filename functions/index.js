@@ -77,12 +77,18 @@ exports.updateRating = functions.https.onRequest(async (req, res) => {
   const ratingChange = splitInput[1]
 
   //use placeid to update rating in collection accordingly
-  const placeRef = admin.firestore().collection('places').doc(placeId);
-  const results = await placeRef.update({
-    rating: admin.firestore.FieldValue.increment(parseInt(ratingChange))
-  });
-  console.log("resultcode",results.exists)
-  res.json({results:results})
+  try {
+    const placeRef = admin.firestore().collection('places').doc(placeId);
+    const results = await placeRef.update({
+      rating: admin.firestore.FieldValue.increment(parseInt(ratingChange))
+    });
+    res.json({ results: results })
+  }
+  catch (err) {
+    res.send({ message: err },401);
+}
+  
+  
   // if (!place.exists) {
   //   res.json({result: `No place found for placeid ${placeid}`});
   // } 
