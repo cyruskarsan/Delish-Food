@@ -31,7 +31,7 @@ exports.makeUppercase = functions.firestore.document('/messages/{documentId}')
       return snap.ref.set({uppercase}, {merge: true});
     });
 
-
+//addnewplace
 // Take the text parameter passed to this HTTP endpoint and insert it into 
 // Firestore under the path /messages/:documentId/original
 exports.addMessage = functions.https.onRequest(async (req, res) => {
@@ -47,8 +47,23 @@ exports.addMessage = functions.https.onRequest(async (req, res) => {
   res.json({result: `Message with ID: ${writeResult.id} added.`});
 });
 
-//addnewplace
-
 //findplacerating
+exports.getPlace = functions.https.onRequest(async (req, res) => {
+  // Grab the text parameter.
+  const placeid = req.query.text;
+
+  const placeRef = admin.firestore().collection('places').doc(placeid);
+  const place = await placeRef.get();
+
+  if(!place.exists) {
+    res.json({result: `No place found for placeid ${placeid}`});
+  } else {
+    res.json({result: `Place found for placeid ${placeid},`+ place.data()[rating]});
+  }
+  // Push the new message into Firestore using the Firebase Admin SDK.
+  // Send back a message that we've successfully written the message
+  res.json({result: `Place with ID: ${placeid} searched.`});
+});
+
 
 //updateRating
