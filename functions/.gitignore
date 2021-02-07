@@ -1,1 +1,4 @@
 node_modules/
+database-debug.log
+firestore-debug.log
+pubsub-debug.log
