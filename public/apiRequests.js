@@ -1,6 +1,6 @@
 //GET request to find if a place exists in Mongo using placeid as identifier, returns rating
 function findPlaceRating(place, cuisineType) {
-    fetch("https://delish-food-292917.appspot.com/" + place.place_id)
+    fetch("http://localhost:5001/delish-2/us-central1/getPlace?text=" + place.place_id)
         .then(response => response.json())
         //place found, creating marker with rating
         .then(
@@ -15,36 +15,22 @@ function findPlaceRating(place, cuisineType) {
         })
 }
 
-//POST request to add place to mongoDB
-function addPlace(goog_id) {
-    const url = "https://delish-food-292917.wl.r.appspot.com/add-doc";
-    const data = { "placeid": goog_id };
-
-    fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
+//add place with key being placeid value being a rating of 0 to the firestore
+function addPlace(placeid) {
+    const url = "http://localhost:5001/delish-2/us-central1/addPlace?text=" + placeid;
+    fetch(url)
         .then(response => response.json())
         .catch((error) => {
             console.error("Error:", error)
         });
 }
 
+//update rating in firestore by parsing value passed in
+//will increment rating based on value passed by client
 function updateRating(placeid, voteVal) {
     alert(`${voteVal} recorded!`);
-    const url = "https://delish-food-292917.appspot.com/" + voteVal.toLowerCase();
-	var data = {"placeid": placeid};
-
-    fetch(url, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
+    const url = "http://localhost:5001/delish-2/us-central1/updateRating?text=" + placeid + ":" + voteVal;
+    fetch(url)
     .catch((error) => {
         console.error("Error:", error)
     });
