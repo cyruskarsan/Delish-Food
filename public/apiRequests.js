@@ -5,11 +5,13 @@ function findPlaceRating(place, cuisineType) {
         //place found, creating marker with rating
         .then(
             data => {
+                console.log('data from getPlace', data)
                 createMarker(place, cuisineType, data.rating)
             }
         )
         //place not found, add place to mongo and create marker for new place
         .catch((error) => {
+            console.log('error in FPR', error)
             addPlace(place.place_id)
             createMarker(place, cuisineType, 0)
         })

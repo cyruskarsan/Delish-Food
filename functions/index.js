@@ -1,4 +1,5 @@
 const functions = require('firebase-functions');
+const cors = require('cors')({origin: true,});
 
 // firebase emulators:start
 // // Create and Deploy Your First Cloud Functions
@@ -17,15 +18,17 @@ admin.initializeApp();
 // Take the text parameter passed to this HTTP endpoint and insert it into 
 // Firestore under the path /messages/:documentId/original
 exports.addPlace = functions.https.onRequest(async (req, res) => {
-  // Grab the text parameter.
+    // Grab the text parameter.
   const placeid = req.query.text;
 
   const data = {
     rating: 0
   };
+  res.set("Access-Control-Allow-Origin", "*")
   // Push the new message into Firestore using the Firebase Admin SDK.
   const writeResult = await admin.firestore().collection('places').doc(placeid).set(data);
   // Send back a message that we've successfully written the message
+  
   res.status(200).send(`Added place with ID: ${placeid} added.`);
 });
 
@@ -33,15 +36,15 @@ exports.addPlace = functions.https.onRequest(async (req, res) => {
 exports.getPlace = functions.https.onRequest(async (req, res) => {
   // Grab the text parameter.
   const placeid = req.query.text;
-
   const placeRef = admin.firestore().collection('places').doc(placeid);
   const place = await placeRef.get();
-
+  res.set("Access-Control-Allow-Origin", "*")
   if (!place.exists) {
     res.json({result: `Could not find place: ${placeid}`}, 404);
   } else {
-    res.json({ result: `Place found for placeid ${placeid},rating: ` + place.data()['rating'] });
+    res.json({ result: `Place found for placeid ${placeid},rating: `+ place.data()['rating'], rating: place.data()['rating']},200);
   }
+  
 });
 
 //updateRating
@@ -57,10 +60,12 @@ exports.updateRating = functions.https.onRequest(async (req, res) => {
   const splitInput = input.split(':')
   const placeId = splitInput[0]
   const ratingChange = splitInput[1]
-
+  res.set("Access-Control-Allow-Origin", "*")
   //use placeid to update rating in collection accordingly
   try {
+    console.log('placeid', placeId)
     const placeRef = admin.firestore().collection('places').doc(placeId);
+    console.log('placeref', placeRef)
     const results = await placeRef.update({
       rating: admin.firestore.FieldValue.increment(parseInt(ratingChange))
     });
