@@ -5,8 +5,13 @@ function findPlaceRating(place, cuisineType) {
         //place found, creating marker with rating
         .then(
             data => {
-                console.log('data from getPlace', data)
-                createMarker(place, cuisineType, data.rating)
+                if (!response.ok) {
+                    throw new Error("could not find place, add it")
+                }
+                else {
+                    console.log('data from getPlace', data)
+                    createMarker(place, cuisineType, data.rating)
+                }
             }
         )
         //place not found, add place to mongo and create marker for new place
