@@ -46,7 +46,7 @@ exports.getPlace = functions.https.onRequest(async (req, res) => {
   if (!place.exists) {
     res.json({result: `Could not find place: ${placeid}`}, 404);
   } else {
-    res.json({ result: `Place found for placeid ${placeid},rating: `+ place.data()['rating'], rating: place.data()['rating']}, 200);
+    res.json({ result: `Place found for placeid ${placeid},rating: `+ place.data()['rating'], rating: place.data()['rating']},200);
   }
   
 });
@@ -79,21 +79,6 @@ exports.updateRating = functions.https.onRequest(async (req, res) => {
   catch (err) {
     res.send({ message: err }, 404);
   }
-  
-  
-  // if (!place.exists) {
-  //   res.json({result: `No place found for placeid ${placeid}`});
-  // } 
-
-  // else {
-  //   //update thsplitString[1]e rating
-  //   const data = {
-  //     rating: ratingChange
-  //   };
-  //   // Push the new message into Firestore using the Firebase Admin SDK.
-  //   const writeResult = await admin.firestore().collection('places').doc(placeid).set(data);
-  //   res.json({result: `Update place with ID: ${placeid}. New rating: ` + place.data()['rating']});
-  // }
 });
 
 //tests:
