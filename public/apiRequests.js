@@ -35,9 +35,17 @@ function addPlace(placeid) {
 //will increment rating based on value passed by client
 function updateRating(placeid, voteVal) {
     alert(`${voteVal} recorded!`);
-    const url = "http://localhost:5001/delish-2/us-central1/updateRating?text=" + placeid + ":" + voteVal;
+
+    // Set value of voteVal to 1 or -1 from 'Upvote' or 'Downvote'
+    voteValNum = '';
+    if (voteVal[0] == 'U') {
+        voteValNum = '1';
+    } else {
+        voteValNum = '-1';
+    }
+    const url = "http://localhost:5001/delish-2/us-central1/updateRating?text=" + placeid + ":" + voteValNum;
     fetch(url)
     .catch((error) => {
-        console.error("Error:", error)
+        console.error("Error:", error);
     });
 }

@@ -21,10 +21,12 @@ exports.addPlace = functions.https.onRequest(async (req, res) => {
     // Grab the text parameter.
   const placeid = req.query.text;
 
+  console.log("Request to addPlace made with:", req.query.text, placeid);
+
   const data = {
     rating: 0
   };
-  res.set("Access-Control-Allow-Origin", "*")
+  res.set("Access-Control-Allow-Origin", "*");
   // Push the new message into Firestore using the Firebase Admin SDK.
   const writeResult = await admin.firestore().collection('places').doc(placeid).set(data);
   // Send back a message that we've successfully written the message
@@ -38,7 +40,9 @@ exports.getPlace = functions.https.onRequest(async (req, res) => {
   const placeid = req.query.text;
   const placeRef = admin.firestore().collection('places').doc(placeid);
   const place = await placeRef.get();
-  res.set("Access-Control-Allow-Origin", "*")
+
+  console.log("Request to getPlace made with:", req.query.text, placeid, place);
+  res.set("Access-Control-Allow-Origin", "*");
   if (!place.exists) {
     res.json({result: `Could not find place: ${placeid}`}, 404);
   } else {
@@ -54,26 +58,29 @@ exports.getPlace = functions.https.onRequest(async (req, res) => {
 //update rating using the function thing
 
 exports.updateRating = functions.https.onRequest(async (req, res) => {
+  
   // Grab the text parameter.
   const input = req.query.text;
-  // input will come in as this form (placeid:1)
+  // input will come in as this form (placeid:ratingChange)
   const splitInput = input.split(':')
   const placeId = splitInput[0]
   const ratingChange = splitInput[1]
   res.set("Access-Control-Allow-Origin", "*")
+  console.log("Request to updateRating made with:", req.query.text, placeId, ratingChange);
+
   //use placeid to update rating in collection accordingly
   try {
-    console.log('placeid', placeId)
     const placeRef = admin.firestore().collection('places').doc(placeId);
-    console.log('placeref', placeRef)
     const results = await placeRef.update({
       rating: admin.firestore.FieldValue.increment(parseInt(ratingChange))
     });
-    res.json({ results: results })
+    res.json({ results: results });
   }
   catch (err) {
-    res.send({ message: err },404);
-}
+    res.send({ message: err }, 404);
+  }
+
+  console.log("This is res before finish of updateRating:", res);
   
   
   // if (!place.exists) {
