@@ -41,7 +41,7 @@ exports.getPlace = functions.https.onRequest(async (req, res) => {
   const placeRef = admin.firestore().collection('places').doc(placeid);
   const place = await placeRef.get();
 
-  console.log("Request to getPlace made with:", req.query.text, placeid, place);
+  console.log("Request to getPlace made with:", req.query.text, placeid);
   res.set("Access-Control-Allow-Origin", "*");
   if (!place.exists) {
     res.json({result: `Could not find place: ${placeid}`}, 404);
@@ -79,8 +79,6 @@ exports.updateRating = functions.https.onRequest(async (req, res) => {
   catch (err) {
     res.send({ message: err }, 404);
   }
-
-  console.log("This is res before finish of updateRating:", res);
   
   
   // if (!place.exists) {
