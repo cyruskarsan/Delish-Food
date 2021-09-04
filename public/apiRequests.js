@@ -14,9 +14,8 @@ function findPlaceRating(place, cuisineType) {
                 }
             }
         )
-        //place not found, add place to mongo and create marker for new place
+        //place not found, add place to firestore and create marker for new place
         .catch((error) => {
-            console.log('error in FPR', error)
             addPlace(place.place_id)
             createMarker(place, cuisineType, 0)
         })
@@ -26,7 +25,7 @@ function findPlaceRating(place, cuisineType) {
 function addPlace(placeid) {
     const url = "http://localhost:5001/delish-2/us-central1/addPlace?text=" + placeid;
     fetch(url)
-        .then(response => response.json())
+        .then(response => console.log('adding place'))
         .catch((error) => {
             console.error("Error:", error)
         });
