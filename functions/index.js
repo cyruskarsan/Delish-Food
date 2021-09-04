@@ -46,7 +46,7 @@ exports.getPlace = functions.https.onRequest(async (req, res) => {
   if (!place.exists) {
     res.json({result: `Could not find place: ${placeid}`}, 404);
   } else {
-    res.json({ result: `Place found for placeid ${placeid},rating: `+ place.data()['rating'], rating: place.data()['rating']},200);
+    res.json({ result: `Place found for placeid ${placeid},rating: `+ place.data()['rating'], rating: place.data()['rating']}, 200);
   }
   
 });

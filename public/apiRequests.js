@@ -1,35 +1,29 @@
 //GET request to find if a place exists in Mongo using placeid as identifier, returns rating
 function findPlaceRating(place, cuisineType) {
-    fetch("http://localhost:5001/delish-2/us-central1/getPlace?text=" + place.place_id)
-        .then(response => response.json())
-        //place found, creating marker with rating
+    fetch("http://localhost:5001/delish-2/us-central1/getPlace?text=" + place.place_id)   
+        .then((response) => {
+            if(response.status != 200) { // If place not found, add it and create fresh marker
+                addPlace(place.place_id)
+                createMarker(place, cuisineType, 0)
+                throw new Error("Place not found")
+            } else { // Else create marker with found rating
+                return response.json(); 
+            }
+        })    
         .then(
             data => {
-                if (!response.ok) {
-                    throw new Error("could not find place, add it")
-                }
-                else {
-                    console.log('data from getPlace', data)
-                    createMarker(place, cuisineType, data.rating)
-                }
-            }
-        )
-        //place not found, add place to mongo and create marker for new place
+                console.log("Place found")
+                createMarker(place, cuisineType, data.rating)
+            })
         .catch((error) => {
-            console.log('error in FPR', error)
-            addPlace(place.place_id)
-            createMarker(place, cuisineType, 0)
+            console.log(error)
         })
 }
 
 //add place with key being placeid value being a rating of 0 to the firestore
 function addPlace(placeid) {
     const url = "http://localhost:5001/delish-2/us-central1/addPlace?text=" + placeid;
-    fetch(url)
-        .then(response => response.json())
-        .catch((error) => {
-            console.error("Error:", error)
-        });
+    fetch(url);
 }
 
 //update rating in firestore by parsing value passed in
