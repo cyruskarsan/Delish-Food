@@ -3,3 +3,4 @@ node_modules/
 public/gmap.js
 run_ff
 .gcloudignore
+*.log
