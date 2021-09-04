@@ -2,6 +2,9 @@
 [Delish Food](https://delish-food-292917.web.app/) is a crowdsourced website designed to be intuitive and visually appealing. Our goal is to help you find the best ethnic food in your area. 
 
 # Usage
+
+**Warning, undergoing service provider changes. Website may be down**
+
 https://delish-food-292917.web.app/ \
 Simply visit our website and choose a category, or categories, of food you are craving.
 
