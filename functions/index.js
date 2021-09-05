@@ -80,7 +80,3 @@ exports.updateRating = functions.https.onRequest(async (req, res) => {
     res.send({ message: err }, 404);
   }
 });
-
-//tests:
-//http://localhost:5001/delish-2/us-central1/addMessage?text=asdf1234ghjk
-//http://localhost:5001/delish-2/us-central1/addMessage?text=asdf1234ghjk

@@ -4,3 +4,4 @@ public/gmap.js
 run_ff
 .gcloudignore
 *.log
+.firebase

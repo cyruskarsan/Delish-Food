@@ -1,6 +1,9 @@
 //GET request to find if a place exists in Mongo using placeid as identifier, returns rating
 function findPlaceRating(place, cuisineType) {
-    fetch("http://localhost:5001/delish-2/us-central1/getPlace?text=" + place.place_id)   
+    // for local
+    //http://localhost:5001/delish-2/us-central1/getPlace
+    
+    fetch("https://us-central1-delish-2.cloudfunctions.net/getPlace?text=" + place.place_id)   
         .then((response) => {
             if(response.status != 200) { // If place not found, add it and create fresh marker
                 addPlace(place.place_id)
@@ -22,7 +25,9 @@ function findPlaceRating(place, cuisineType) {
 
 //add place with key being placeid value being a rating of 0 to the firestore
 function addPlace(placeid) {
-    const url = "http://localhost:5001/delish-2/us-central1/addPlace?text=" + placeid;
+    //for local dev
+    // http://localhost:5001/delish-2/us-central1
+    const url = "https://us-central1-delish-2.cloudfunctions.net/addPlace?text=" + placeid;
     fetch(url);
 }
 
@@ -38,7 +43,9 @@ function updateRating(placeid, voteVal) {
     } else {
         voteValNum = '-1';
     }
-    const url = "http://localhost:5001/delish-2/us-central1/updateRating?text=" + placeid + ":" + voteValNum;
+    //for local
+    //http://localhost:5001/delish-2/us-central1/updateRating
+    const url = "https://us-central1-delish-2.cloudfunctions.net/updateRating?text=" + placeid + ":" + voteValNum;
     fetch(url)
     .catch((error) => {
         console.error("Error:", error);
