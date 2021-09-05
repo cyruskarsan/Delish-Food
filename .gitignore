@@ -1,5 +1,7 @@
 .env
 node_modules/
-gmap.js
+public/gmap.js
 run_ff
 .gcloudignore
+*.log
+.firebase

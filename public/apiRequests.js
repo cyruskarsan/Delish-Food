@@ -1,51 +1,53 @@
 //GET request to find if a place exists in Mongo using placeid as identifier, returns rating
 function findPlaceRating(place, cuisineType) {
-    fetch("https://delish-food-292917.appspot.com/" + place.place_id)
-        .then(response => response.json())
-        //place found, creating marker with rating
+    // for local
+    //http://localhost:5001/delish-2/us-central1/getPlace
+    
+    fetch("https://us-central1-delish-2.cloudfunctions.net/getPlace?text=" + place.place_id)   
+        .then((response) => {
+            if(response.status != 200) { // If place not found, add it and create fresh marker
+                addPlace(place.place_id)
+                createMarker(place, cuisineType, 0)
+                throw new Error("Place not found")
+            } else { // Else create marker with found rating
+                return response.json(); 
+            }
+        })    
         .then(
             data => {
+                console.log("Place found")
                 createMarker(place, cuisineType, data.rating)
-            }
-        )
-        //place not found, add place to mongo and create marker for new place
+            })
         .catch((error) => {
-            addPlace(place.place_id)
-            createMarker(place, cuisineType, 0)
+            console.log(error)
         })
 }
 
-//POST request to add place to mongoDB
-function addPlace(goog_id) {
-    const url = "https://delish-food-292917.wl.r.appspot.com/add-doc";
-    const data = { "placeid": goog_id };
-
-    fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => response.json())
-        .catch((error) => {
-            console.error("Error:", error)
-        });
+//add place with key being placeid value being a rating of 0 to the firestore
+function addPlace(placeid) {
+    //for local dev
+    // http://localhost:5001/delish-2/us-central1
+    const url = "https://us-central1-delish-2.cloudfunctions.net/addPlace?text=" + placeid;
+    fetch(url);
 }
 
+//update rating in firestore by parsing value passed in
+//will increment rating based on value passed by client
 function updateRating(placeid, voteVal) {
     alert(`${voteVal} recorded!`);
-    const url = "https://delish-food-292917.appspot.com/" + voteVal.toLowerCase();
-	var data = {"placeid": placeid};
 
-    fetch(url, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
+    // Set value of voteVal to 1 or -1 from 'Upvote' or 'Downvote'
+    voteValNum = '';
+    if (voteVal[0] == 'U') {
+        voteValNum = '1';
+    } else {
+        voteValNum = '-1';
+    }
+    //for local
+    //http://localhost:5001/delish-2/us-central1/updateRating
+    const url = "https://us-central1-delish-2.cloudfunctions.net/updateRating?text=" + placeid + ":" + voteValNum;
+    fetch(url)
     .catch((error) => {
-        console.error("Error:", error)
+        console.error("Error:", error);
     });
 }
