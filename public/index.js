@@ -183,3 +183,12 @@ function closeNav() { //On close, close the side navigator
 function setMenuTransition(transitionTime) {
   document.getElementById("menu").style.transition = `opacity ${transitionTime}s ease-out`;
 }
+
+// On sucessful sign in, retrieve and store user information
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}

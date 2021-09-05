@@ -2,6 +2,8 @@
 <html>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="609530060923-6a276d3itljrb5986lq2tlrgiudduafc.apps.googleusercontent.com">
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
     <title>Delish Food Map</title>
@@ -71,8 +73,12 @@
           <div class="menu-box" id = "menu-box">
           Menu
           </div>
+
+          <!--Google Sign In Divs-->
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
       </div>
     </div>
+
     
     <!--GMAPS DIVS-->
     <div id="box"></div>
