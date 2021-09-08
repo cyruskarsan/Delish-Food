@@ -2,7 +2,6 @@ var auth2;
 
 // Ensure auth2 object is initialized (important for signout), then load button
 function initSigninV2() {
-  console.log("Starting here...")
   gapi.load('auth2', function() {
     gapi.auth2.init({
       client_id: '609530060923-6a276d3itljrb5986lq2tlrgiudduafc.apps.googleusercontent.com'
