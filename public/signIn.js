@@ -6,11 +6,11 @@ function initSigninV2() {
     gapi.auth2.init({
       client_id: '609530060923-6a276d3itljrb5986lq2tlrgiudduafc.apps.googleusercontent.com'
     }).then(function (authInstance) {
-      console.log("Making auth instance")
+      console.log("Making auth instance");
       auth2 = authInstance;
       renderButton();
     });
-  })
+  });
 }
 
 // Render the google sign in button as well as information scope
