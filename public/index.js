@@ -6,6 +6,14 @@ var mapCenterPos = {lat: 0, lng:0};
 var centerMarkerContainer = [];
 var centerMarkerSize = {height: 28, width: 30};
 
+// Does not allow user to view out of bounds (grey regions) above map
+const WORLD_BOUNDS = { 
+  north: 85,
+  south: -85,
+  west: -180, // Change to -179 for west bounds
+  east: 180, // Change to 179 for east bounds
+}
+
 function initMap() {
 
   //center of earth coords
@@ -14,15 +22,21 @@ function initMap() {
   // show popup when click on marker
   infowindow = new google.maps.InfoWindow();
 
-  //create the map
+  // create the map
   map = new google.maps.Map(document.getElementById("map"), {
     center: startCenter,
+    restriction: {
+      latLngBounds: WORLD_BOUNDS,
+      strictBounds: true,
+    },
     zoom: 3,
-    mapTypeControl: true,
+    maxZoom: 18,
+    minZoom: 3, 
     fullscreenControl: false,
+    mapTypeControl: true,
     mapTypeControlOptions: {
       style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-      position: google.maps.ControlPosition.TOP_RIGHT
+      position: google.maps.ControlPosition.LEFT_BOTTOM
     }
   });
 
@@ -39,7 +53,7 @@ function initMap() {
   // Initialize centerMarkerContainer
   initCenterMarker();
 
-  //Style the map
+  // Style the map
   var styledMap = new google.maps.StyledMapType(mapStyle);
   map.mapTypes.set('myCustomMap', styledMap);
   map.setMapTypeId('myCustomMap');
@@ -50,7 +64,7 @@ function initMap() {
     placeMarkerAndPanTo(mapCenterPos, map);
   });
 
-  //create the button to close discription
+  // create the button to close discription
   const closeDescriptionButton = document.querySelectorAll('[data-close-button]') 
   const overlay = document.getElementById('overlay')
 
@@ -61,7 +75,7 @@ function initMap() {
     })
   })
 
-  //button to close description
+  // button to close description
   function closeDescription(description) {
     if (description == null) return
     description.classList.add('active')
@@ -73,16 +87,16 @@ function initMap() {
   //Geolocation to track user location
   function geoLocation() {
 
-    infoWindow = new google.maps.InfoWindow();
+    infowindow = new google.maps.InfoWindow();
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
 
-          //Initialize Marker Clusterer
+          // Initialize Marker Clusterer
           clusters();
 
-          const pos = { //get User coordinaties 
+          const pos = { // get User coordinaties 
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
@@ -98,30 +112,31 @@ function initMap() {
           setMenuTransition(0);
           openNav()
 
-          //Call cuisineTypeListener to init menu search options
+          // Call cuisineTypeListener to init menu search options
           cuisineTypeListener();
         },
         () => { // Enable Location not allowed
-          handleLocationError(true, infoWindow, map.getCenter());
+          handleLocationError(true, infowindow, map.getCenter());
         }
       );
     } else {
       // Browser doesn't support Geolocation
-      handleLocationError(false, infoWindow, map.getCenter());
+      handleLocationError(false, infowindow, map.getCenter());
     }
   }
 
-  //Error function on geolocation failure 
-  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(
+  // Error function on geolocation failure 
+  function handleLocationError(browserHasGeolocation, infowindow, pos) {
+    infowindow.setPosition(pos);
+    infowindow.setContent(
       browserHasGeolocation
         ? "Error: The Geolocation service failed. Please enable your location."
         : "Error: Your browser doesn't support geolocation."
     );
 
-    infoWindow.open(map);
+    infowindow.open(map);
   }
+  google.maps.event.trigger(map, 'resize');
 }
 
 // Initialize center marker container with null marker
@@ -182,13 +197,4 @@ function closeNav() { //On close, close the side navigator
 // Set Menu button transition time
 function setMenuTransition(transitionTime) {
   document.getElementById("menu").style.transition = `opacity ${transitionTime}s ease-out`;
-}
-
-// On sucessful sign in, retrieve and store user information
-function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 }
