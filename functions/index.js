@@ -1,5 +1,8 @@
 const functions = require('firebase-functions');
 const cors = require('cors')({origin: true,});
+const {OAuth2Client} = require('google-auth-library');
+const CLIENT_ID = '609530060923-6a276d3itljrb5986lq2tlrgiudduafc.apps.googleusercontent.com'
+const client = new OAuth2Client(CLIENT_ID);
 
 // firebase emulators:start
 // // Create and Deploy Your First Cloud Functions
@@ -14,7 +17,7 @@ const cors = require('cors')({origin: true,});
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-//addnewplace
+// Add New Place
 // Take the text parameter passed to this HTTP endpoint and insert it into 
 // Firestore under the path /messages/:documentId/original
 exports.addPlace = functions.https.onRequest(async (req, res) => {
@@ -58,7 +61,6 @@ exports.getPlace = functions.https.onRequest(async (req, res) => {
 //update rating using the function thing
 
 exports.updateRating = functions.https.onRequest(async (req, res) => {
-  
   // Grab the text parameter.
   const input = req.query.text;
   // input will come in as this form (placeid:ratingChange)
@@ -79,4 +81,24 @@ exports.updateRating = functions.https.onRequest(async (req, res) => {
   catch (err) {
     res.send({ message: err }, 404);
   }
+});
+
+
+// Verify google user upon login
+// reference documentation: https://developers.google.com/identity/sign-in/web/backend-auth
+exports.verifyUserIdToken = functions.https.onRequest(async (req, res) => {
+  const tokenIdString = req.body['idtoken'];
+  let status = 200;
+  async function verify() { // Verify google user id token is valid
+    const ticket = await client.verifyIdToken({
+      idToken: tokenIdString,
+      audience: CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const userid = payload['sub'];
+  }
+  verify().catch(console.error);
+  console.log("User Token is valid.")
+  res.set('Access-Control-Allow-Origin', '*');
+  res.sendStatus(status);
 });
