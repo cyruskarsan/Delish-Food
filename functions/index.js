@@ -1,8 +1,10 @@
+// Init requirements for firebase and sign in apis
 const functions = require('firebase-functions');
 const cors = require('cors')({origin: true,});
 const {OAuth2Client} = require('google-auth-library');
-const CLIENT_ID = '609530060923-6a276d3itljrb5986lq2tlrgiudduafc.apps.googleusercontent.com'
+const CLIENT_ID = '609530060923-6a276d3itljrb5986lq2tlrgiudduafc.apps.googleusercontent.com'; // Ideally retrieved through .env
 const client = new OAuth2Client(CLIENT_ID);
+var userID = ''; // Init global user id to keep in reference for ratings
 
 // firebase emulators:start
 // // Create and Deploy Your First Cloud Functions
@@ -108,7 +110,7 @@ exports.verifyUserIdToken = functions.https.onRequest(async (req, res) => {
 // User's information will be a collection hashed by their token. This collection contains their rating information and favorited restaurants.
 exports.setupUser = functions.https.onRequest(async (req, res) => {
   // Grab the userID parameter
-  const userID = req.body['userID'];
+  userID = req.body['userID'];
   const userRef = admin.firestore().collection('users').doc(userID);
   const user = await userRef.get();
 
@@ -126,3 +128,7 @@ exports.setupUser = functions.https.onRequest(async (req, res) => {
     res.json({result: 'User found.', ratings: user.data()['ratings'], favorites: user.data()['favorites']}, 200);
   }
 });
+
+// Format to use for removing place in ratings dict: delete ratings[placeid];
+// Format to use for adding place to rating for a specified user: dict[placeid] = vote_value;
+// After both of these update the respective objects dictionaries. (Might want to have users store collections instead of docs with maps in them...)
