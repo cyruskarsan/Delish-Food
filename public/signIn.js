@@ -6,7 +6,6 @@ function initSigninV2() {
     gapi.auth2.init({
       client_id: '609530060923-6a276d3itljrb5986lq2tlrgiudduafc.apps.googleusercontent.com'
     }).then(function (authInstance) {
-      console.log("Making auth instance");
       auth2 = authInstance;
       renderButton();
     });
@@ -29,16 +28,10 @@ function renderButton() {
 
 // Ensure the validity of user id token, returns true if valid, otherwise false
 function validUserIDToken(googleUser) {
+  // Retrieve user id token.
   var id_token = googleUser.getAuthResponse().id_token;
-  /*fetch(`http://localhost:5001/delish-2/us-central1/verifyUserIdToken?text=${id_token}`, {mode: 'cors', headers: {'Content-Type': 'application/json'}})   
-    .then((response) => {
-      if(response.status != 200) { // If token was not valid, log error
-        console.log('Invalid id_token for user, response:', response);
-      } else {
-        console.log('Successful id_token verification, response:', response);
-      }
-    });*/
 
+  // Make request to token verification on backend.
   var xhr = new XMLHttpRequest();
   xhr.open('POST', `http://localhost:5001/delish-2/us-central1/verifyUserIdToken`);
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -48,9 +41,39 @@ function validUserIDToken(googleUser) {
       signOut();
       return false;
     }
-    console.log('Signed in as: ' + xhr.responseText);
   };
   xhr.send('idtoken=' + id_token);
+
+  // After token has been verified, complete user setup, if successful, return true for valid token
+  let validSetup = userSetup(googleUser);
+  if (!validSetup) { // If set up fails due to internal error, inform user and request them to try again.
+    alert("Failure to set up or retrieve user information. We apologize for the inconvenience. Please try again.");
+    signOut();
+    return false;
+  }
+
+  return true;
+}
+
+// On valid user token, setup the user for site use (intialize user in database or return ratings and favorites)
+function userSetup(googleUser) {
+
+  // Now that the token is verfied, retreive id to set up the user in the database.
+  let profile = googleUser.getBasicProfile();
+  let userID = profile.getId();
+
+  // Make request to backend with specified user id.
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', `http://localhost:5001/delish-2/us-central1/setupUser`);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onload = function() {
+    if (xhr.status == 500) {
+      alert("User ID Token marked as Invalid. Try again or sign in to an alternate account.");
+      signOut();
+      return false;
+    }
+  };
+  xhr.send('userID=' + userID);
 
   return true;
 }
@@ -62,11 +85,14 @@ function onSuccess(googleUser) {
     return;
   }
 
+  // Log user and store pertinent profile features.
   var profile = googleUser.getBasicProfile();
-  console.log('User ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Logged in as: ' + profile.getName());
-  console.log('User Image URL: ' + profile.getImageUrl());
-  console.log('User email: ' + profile.getEmail()); // Will be null if email scope not set
+  let profileImage = profile.getImageUrl();
+  let userName = profile.getName();
+  let userEmail = profile.getEmail(); // Will be null if email scope not set
+  console.log('Logged in as: ' + userName);
+
+  // Make sign in button invisible and make sign out button visible.
   document.getElementById("my-signin2").style.display = 'none';
   document.getElementById("signout").style.display = 'block';
 }
@@ -78,7 +104,7 @@ function onFailure(error) {
 
 // Attempt to sign user out
 function signOut() {
-  console.log("Signing user out")
+  console.log("Signing user out.")
   if (auth2 != null) {
     auth2.signOut().then(function () {
       auth2.disconnect();
