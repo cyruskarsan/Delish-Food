@@ -1,4 +1,7 @@
+// Globals for signIn.js
 var auth2;
+var signedIn = false;
+var currentUserID = '';
 
 // Ensure auth2 object is initialized (important for signout), then load button
 function initSigninV2() {
@@ -74,7 +77,7 @@ function userSetup(googleUser) {
     }
   };
   xhr.send('userID=' + userID);
-
+  currentUserID = userID;
   return true;
 }
 
@@ -95,6 +98,9 @@ function onSuccess(googleUser) {
   // Make sign in button invisible and make sign out button visible.
   document.getElementById("my-signin2").style.display = 'none';
   document.getElementById("signout").style.display = 'block';
+
+  // Set user signedIn to true so guarded actions can take place (upvote/downvote)
+  signedIn = true;
 }
 
 // If sign in fails
@@ -113,4 +119,7 @@ function signOut() {
       document.getElementById("my-signin2").style.display = 'block';
     });
   }
+
+  // Set signedIn to false so guarded actions are protected (upvote/downvote)
+  signedIn = false;
 }
