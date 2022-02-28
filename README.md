@@ -26,4 +26,4 @@ We need your help! When you find a good place to eat, add an upvote to your favo
 To run locally: `firebase emulators: start`\
 Once everything has been initialized, you will see the domains and ports which the frontend and backend are run on.
 
-WEb app is viewable locally at: http://localhost:5000/#
+Web app is viewable locally at: http://localhost:5000/#
