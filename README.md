@@ -1,4 +1,6 @@
 # Delish-Food
+**Notice**: The API keys for the website are paused as the application is undergoing development for a final release. The current site is hosted with the main branch, one which does not yet incorporate sign-ins (as this branch does). One can still view the site, however, the API calls in place to retrieve restaurants and an unrestricted map view rely on the aforementioned keys, which are paused.
+
 [Delish Food](https://delish-2.web.app/#) is a crowdsourced website designed to be intuitive and visually appealing. Our goal is to help you find the best ethnic food in your area. 
 
 https://delish-2.web.app/# \
