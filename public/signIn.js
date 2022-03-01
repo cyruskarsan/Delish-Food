@@ -7,7 +7,7 @@ var currentUserID = '';
 function initSigninV2() {
   gapi.load('auth2', function() {
     gapi.auth2.init({
-      client_id: '609530060923-6a276d3itljrb5986lq2tlrgiudduafc.apps.googleusercontent.com'
+      client_id: '1004973629155-j40kd0cl0grnku1a3nihciidnvrhat1a.apps.googleusercontent.com'
     }).then(function (authInstance) {
       auth2 = authInstance;
       renderButton();

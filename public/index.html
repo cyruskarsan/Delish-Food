@@ -15,13 +15,12 @@
     <script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
     <!--Local JS-->
     <script src="./index.js"></script>
-
-    
+    <script src="./createCuisines.js" defer></script>
     <script src="./placeDetails.js"></script>
     <script src="./apiRequests.js"></script>
     <script src="./cuisineSearch.js"></script>
     <script src="./signIn.js"></script>
-    <script type="text/javascript" src="gmap.js"></script>
+    <script type="text/javascript" src="gmap.js" defer></script>
     <!--Imported Fonts--> 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;1,200;1,300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@509&display=swap" rel="stylesheet">
@@ -38,40 +37,12 @@
       </div>
     </div>
 
-    <!--SIDE NAV BAR DIVS-->
+    <!--SIDE NAV BAR DIVS, HOSTS CUISINE TYPES-->
     <div id="mySidenav" class="sidenav">
       <a class="closebtn" onclick="closeNav()">&times;</a>
       <div id="menuDescription" class="sidenav-header">
           Cuisine Type
       </div>
-      <div class="cuisine-type-check" id="Mexican" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Mexican</a>
-      <div class="cuisine-type-check" id="Vietnamese" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Vietnamese</a>
-      <div class="cuisine-type-check" id="Indian" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Indian</a>
-      <div class="cuisine-type-check" id="Italian" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Italian</a>
-      <div class="cuisine-type-check" id="Chinese" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Chinese</a>
-      <div class="cuisine-type-check" id="Thai" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Thai</a>
-      <div class="cuisine-type-check" id="Greek" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Greek</a>
-      <div class="cuisine-type-check" id="Middle Eastern" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Middle Eastern</a>
-      <div class="cuisine-type-check" id="Korean" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Korean</a>
-      <div class="cuisine-type-check" id="Japanese" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Japanese</a>
-      <div class="cuisine-type-check" id="African" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">African</a>
-      <div class="cuisine-type-check" id="Cajun" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Cajun</a>
-      <div class="cuisine-type-check" id="Latin" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">Latin</a>
-      <div class="cuisine-type-check" id="American" style="float: right; margin-top: 10px; margin-right: 15px;"></div>
-      <a class="cuisine-type">American</a>
     </div>
     
     <!-- ELEMENT TO OPEN SIDENAVBAR DIV -->

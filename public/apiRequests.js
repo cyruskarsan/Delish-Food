@@ -1,24 +1,19 @@
 // Get request to find if a place exists in Firestore using placeid as identifier, returns rating
 function findPlaceRating(place, cuisineType) {
-    // for local dev
-    // "http://localhost:5001/delish-2/us-central1/getPlace?text=" + place.place_id
-    // for cloud dev
-    // "https://us-central1-delish-2.cloudfunctions.net/getPlace?text=" + place.place_id
     const getPlaceURL = "http://localhost:5001/delish-2/us-central1/getPlace?text=" + place.place_id;
-    //console.log("This is findPlaceRating running with URL:", getPlaceURL);
     fetch(getPlaceURL)   
         .then((response) => {
             if(response.status != 200) { // If place not found, add it and create fresh marker
                 addPlace(place.place_id);
                 createMarker(place, cuisineType, 0);
                 throw new Error("Place not found");
-            } else { // Else create marker with found rating
+            } else { // Else convert response to retrieve rating data below
                 return response.json(); 
             }
         })    
         .then(
             data => {
-                console.log("Place found")
+                // Place has been seen, create marker with associated rating
                 createMarker(place, cuisineType, data.rating)
             })
         .catch((error) => {
@@ -28,10 +23,6 @@ function findPlaceRating(place, cuisineType) {
 
 // Add place with key being placeid value being a rating of 0 to the firestore, no return.
 function addPlace(placeid) {
-    // for local dev
-    // "http://localhost:5001/delish-2/us-central1/addPlace?text=" + placeid;
-    // for cloud dev
-    // "https://us-central1-delish-2.cloudfunctions.net/addPlace?text=" + placeid;
     const addPlaceURL = "http://localhost:5001/delish-2/us-central1/addPlace?text=" + placeid;
     console.log("This is addPlace running with URL:", addPlaceURL);
     fetch(addPlaceURL);
@@ -54,10 +45,7 @@ function updateRating(placeid, voteVal) {
     } else {
         voteValNum = '-1';
     }
-    // for local dev
-    // "http://localhost:5001/delish-2/us-central1/updateRating?text"  + placeid + ":" + voteValNum;
-    // for cloud dev
-    // "https://us-central1-delish-2.cloudfunctions.net/updateRating?text=" + placeid + ":" + voteValNum;
+    
     let placeIDVote = placeid+":"+voteValNum;
     const updateRatingURL = `http://localhost:5001/delish-2/us-central1/updateRating?text=${placeIDVote}&userID=${currentUserID}`;
     console.log("This is updateRating running with URL:", updateRatingURL);
