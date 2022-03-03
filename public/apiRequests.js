@@ -4,7 +4,6 @@ const serverDomain = 'http://localhost:5001/delish-2/us-central1';
 // Get request to retrieve restaurants from the server (either cached or from Places API)
 function retrieveRestaurants(cuisine, lat, lng, radius, createRestaurantMarkerCallback) {
     const retrieveRestaurantsURL = `${serverDomain}/retrieveRestaurants?cuisine=${cuisine}&lat=${lat}&lng=${lng}&radius=${radius}`;
-    console.log('Inside retrieveRestaurants:', retrieveRestaurantsURL, cuisine, lat, lng, radius)
     fetch(retrieveRestaurantsURL)
         .then((response) => {
             if(response.status != 200) { // Restaurants not found, server error
