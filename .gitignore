@@ -4,3 +4,4 @@ run_ff
 .gcloudignore
 *.log
 .firebase
+secrets.js

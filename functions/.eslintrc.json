@@ -1,4 +1,6 @@
 {
+  // Without parser specification, token errors on => and axios for server /index.js
+  "parser": "babel-eslint",
   "parserOptions": {
     // Required for certain syntax usages
     "ecmaVersion": 2017

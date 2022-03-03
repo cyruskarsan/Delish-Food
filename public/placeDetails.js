@@ -29,9 +29,10 @@ function setMarkerInfoBox (place, marker, websiteTag, placePhotoTag, rating) {
 
 // Retrieve place photo if it exists, return photo html tag for infobox
 function getPlacePhoto(place) {
+	// console.log("Retrieving photo for place\n", place.photos[0], place.photos.getUrl())
 	let placePhotoTag = "";
 	try {
-		placePhotoTag = (place.photos[0].getUrl()) ? `<img src='${place.photos[0].getUrl()}' height = "100">`:placePhotoTag;
+		placePhotoTag = (place.photos[0].getUrl()) ? `<img src='${place.photos[0].html_attributions}' height = "100">`:placePhotoTag;
 	}
 	catch(e){}
 

@@ -8,7 +8,7 @@ body {
 
 /* The side navigation menu */
 .sidenav {
-  height: 100%; /* 100% Full-height */
+  height: 98%; /* 100% Full-height */
   width: 0; /* 0 width - change this with JavaScript */
   position: absolute; /* absolute, fixed would make it placed fixed */
   z-index: 1; /* Stay on top */
@@ -16,7 +16,7 @@ body {
   left: 0;
   background-color: #111; /* Black*/
   overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 20px; /* Place content 60px from the top */
+  padding-top: 1%; /* Place content 60px from the top */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
@@ -57,6 +57,7 @@ body {
   right: 0px;
   font-size: 40px;
   margin-left: 50px;
+  z-index: 3;
 }
 
 .container {
@@ -97,17 +98,47 @@ body {
 
 .navigation-link-wrap { /* Style for the button "Menu" */ 
   position: absolute;
-  margin-left: 10px;
+  margin-left: 0.5%;
   font-size: 30px;
   height: 22px;
   font-family: 'Work Sans', sans-serif;
   justify-content: left;
   padding-top: 9px;
   color: black;
-  z-index: 1;
+  z-index: 4;
   border-bottom: 1px solid transparent;
   transition: opacity 1.5s ease-out;
 }
+
+.navigation-link-wrap-signin { /* Style and placement for the sign in button */ 
+  position: absolute;
+  font-family: 'Work Sans', sans-serif;
+  right: 0.5%;
+  padding-top: 10px;
+  z-index: 1;
+  border-bottom: 1px solid transparent;
+}
+
+.signout-box{ /* Style for the box behind "Sign Out" */ 
+  position: fixed;
+  background-color: #f1f1f1;
+  font-family: 'Work Sans', sans-serif;
+  margin-top: 0.5%;
+  right: 0.5%;
+  width: 130px;
+  height: 32px;
+  padding-right: 2px;
+  border-radius: 2px;
+  z-index: 1;
+  font-size: 30px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid transparent;
+  display: none;
+}
+.signout-box:hover { /* On hover, darken the Sign Out box */
+  background-color: #d2d2d2;
+}
+
 .menu-box{ /* Style for the box behind "Menu" */ 
   position: fixed;
   background-color: #f1f1f1;
@@ -116,7 +147,6 @@ body {
   padding-left: 2px;
   border-radius: 2px;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
-  z-index: 1;
 }
 .menu-box:hover { /* On hover, darken the menu box */
   background-color: #d2d2d2;
@@ -158,9 +188,10 @@ body {
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-
 #box {
   transition: margin-left .5s;
+  margin: 0;
+  padding: 0;
 }
 
 /* Always set the map height explicitly to define the size of the div
@@ -175,6 +206,7 @@ body {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
+
 .description{ /* Style for the text of the description box */ 
   position: fixed;
   top: 50%;
@@ -212,7 +244,7 @@ body {
   background: none;
   font-size: 1.25rem;
   font-weight: bold;
-
+  z-index: 2;
 }
 .description-body{
   padding: 10px 15px;
