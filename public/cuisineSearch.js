@@ -87,8 +87,8 @@ var cuisine_marker_dict = {};
 // Initialize onclick event listener for cuisine type options
 function cuisineTypeListener() {
 
-    let mysidenav = document.getElementById("mySidenav");
-    let cuisines = mysidenav.querySelectorAll('a.cuisine-type');
+    let mysideNav = document.getElementById("mySidenav");
+    let cuisines = mysideNav.querySelectorAll('a.cuisine-type');
 
     for (let i = 0; i < cuisines.length; i++) { 
         let cuisine = cuisines[i]; // Select individual cuisine type
@@ -97,35 +97,21 @@ function cuisineTypeListener() {
         cuisine_marker_dict[cuisineType] = [];
 
         cuisine.onclick = function () {
-            cuisine_check = document.getElementById(`${cuisine.innerText}`); // CSN-TYPE CHECK BOX DIV
+            cuisineCheck = document.getElementById(`${cuisine.innerText}`); // CSN-TYPE CHECK BOX DIV
 
             // IF CUISINE TYPE CLICKED ALREADY SELECTED, CLEAR SELECTION, ELSE, RUN REQUEST/CREATE MARKERS
-            if (cuisine_check.innerHTML != "") {
-                cuisine_check.innerHTML = "";
+            if (cuisineCheck.innerHTML != "") {
+                cuisineCheck.innerHTML = "";
                 clearMarkerSets(cuisineType);
             } else {
-                // Test retrieveRestaurants
-                // retrieveRestaurants(cuisineType,
-                //                     mapCenterPos["lat"],
-                //                     mapCenterPos["lng"],
-                //                     5);
+                // Run request for restaurants of cuisine type near search locale (lat lng)
                 cuisineTypeSearch(cuisineType,
                                     mapCenterPos["lat"],
                                     mapCenterPos["lng"],
                                     5);
-                document.getElementById(cuisine.innerHTML).innerHTML = `<img src="./MarkerIcons/${cuisineType}.png" width="25" height="25"/>`;
-                // Perform client side request for places api
-                // let request = { // Create the request for searching 
-                //     location: new google.maps.LatLng(mapCenterPos["lat"], mapCenterPos["lng"], true),
-                //     radius: "5",
-                //     type: "restaurant",
-                //     query: cuisineType,
-                // };
-                
-                // // Add default cuisine icon image next to listing in menu, then query search
-                // document.getElementById(cuisine.innerHTML).innerHTML = `<img src="./MarkerIcons/${cuisineType}.png" width="25" height="25"/>`;
-                // cuisineTypeSearch(request, cuisineType);
 
+                // Set cuisine menu check to show for cuisineType
+                cuisineCheck.innerHTML = `<img src="./MarkerIcons/${cuisineType}.png" width="25" height="25"/>`;
             }
         }
     }
