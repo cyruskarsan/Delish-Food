@@ -225,8 +225,9 @@ async function findRestaurantRatings(restaurants) {
     // For each restaurant, attempt to find local rating, else set to 0
     const mapRatingResults = await Promise.all(restaurants.results.map(async (result) => { 
       var place = await retrievePlace(result.place_id);
-    
-      if (!place.exists) { // Place does not exist, add place to database, set localRating to 0
+      
+      // If place does not exist, add place to database, set localRating to 0
+      if (!place.exists) { 
         console.log("place does not exist");
         result["localRating"] = 0;
         addNewPlace(result.place_id);
@@ -239,8 +240,6 @@ async function findRestaurantRatings(restaurants) {
       return result;
     }));
 
-    // console.log("This is mapRatingresults promise", mapRatingResults, mapRatingResults[0].localRating);
-    // console.log("localRating val:", JSON.stringify(mapRatingResults.results[0].localRating));
     // If localRatings have been set, resolve, else error
     if (mapRatingResults[0].localRating >= 0) { 
       resolve("Local rating set.");
@@ -272,6 +271,8 @@ exports.retrieveRestaurants = functions.https.onRequest(async (req, res) => {
     res.send();
   }
 
+  // Want to check our cache to see if we have served request previously
+
   // Utilize helper to retrieve restaurant results, process restaurants to see if they have previously stored rating data
   try {
     var restaurants = await retrieveRestaurantsHelper(cuisine, lat, lng, radius);
@@ -288,5 +289,4 @@ exports.retrieveRestaurants = functions.https.onRequest(async (req, res) => {
     res.json({message: "Error occurred when retrieving restaurants."});
     res.send();
   }
-  
 });
