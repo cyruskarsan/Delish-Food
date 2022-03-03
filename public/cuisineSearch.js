@@ -2,13 +2,8 @@
 function cuisineTypeSearch(cuisineType, lat, lng, radius) {
     // Request places from server via retrieveRestaurants
     retrieveRestaurants(cuisineType, lat, lng, radius, callback);
-    // console.log("In cuisineTypeSearch function with:", results);
 
-    // //hit the gmaps places API and do a text search
-    // var service = new google.maps.places.PlacesService(map);
-    // service.textSearch(request, callback);
-
-    // Parse returned restaurants from server
+    // Parse returned restaurants from server, callback function for retrieveRestaurants
     function callback(results, status) {
         // Error check validity of results, alert user if no results could be found
         console.log('Entered callback!')
@@ -17,12 +12,10 @@ function cuisineTypeSearch(cuisineType, lat, lng, radius) {
             return;
         }
         console.log(results);
-        
-        // if (status == google.maps.places.PlacesServiceStatus.OK) {
-        if (results) {
+
+        if (results) { // If results exist, create markers for each result (restaurant)
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-                //findPlaceRating(place, cuisineType);
                 createMarker(place, cuisineType, place.localRating);
             }
         }
