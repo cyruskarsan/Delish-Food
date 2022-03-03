@@ -23,7 +23,6 @@ var cuisineTypes = [
 // Create components for cuisine options inside Cuisine Type Menu
 cuisineTypes.map(function(cuisine) {
     // Build selected division associated with cuisine option
-    console.log(cuisine)
     var cuisineOption = document.createElement('div')
     cuisineOption.setAttribute('class', cuisineCheckClass);
     cuisineOption.setAttribute('id', cuisine);
@@ -38,5 +37,4 @@ cuisineTypes.map(function(cuisine) {
     var cuisineTypeMenu = document.getElementById('mySidenav');
     cuisineTypeMenu.appendChild(cuisineOption);
     cuisineTypeMenu.appendChild(cuisineButton);
-    console.log(cuisineTypeMenu)
-});
+}); // createCuisines.js is deferred, runs once index.html loaded

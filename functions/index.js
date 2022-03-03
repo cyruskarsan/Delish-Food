@@ -1,7 +1,12 @@
 // Init requirements for Firebase and OAuth functionality
 const functions = require('firebase-functions');
-const cors = require('cors')({origin: true,});
 const {OAuth2Client} = require('google-auth-library');
+const cors = require('cors')({origin: true,});
+const axios = require('axios');
+
+// Run secrets.js where process.env.GOOGLE_API_KEY, retrieve key
+require('./secrets');
+const placesAPIKey = process.env.GOOGLE_API_KEY;
 
 /*  Initialize sign in client_id and client attribute to handle google sign-ins.
     Note: would be better retrieved through .env, temporarily hardcoded for local development. */
@@ -23,11 +28,22 @@ well as the caching of API calls via (longitude, latitude) buckets.
 /*addPlace adds a new place to our database by google's returned place ID.
   Take the text parameter passed to this HTTP endpoint and insert it into 
   Firestore under the path /messages/:documentId/original */
+async function addNewPlace(newPlaceID) {
+  // Retrieve the text parameter for the unique place ID
+  console.log("Request to addPlace made with:", newPlaceID);
+  const data = {
+    rating: 0
+  };
+
+  // Push the new message into Firestore using the Firebase Admin SDK
+  const writeResult = await admin.firestore().collection('places').doc(newPlaceID).set(data);
+}
+
 exports.addPlace = functions.https.onRequest(async (req, res) => {
   // Retrieve the text parameter for the unique place ID
   const placeID = req.query.text;
   res.set("Access-Control-Allow-Origin", "*");
-  console.log("Request to addPlace made with:", req.query.text, placeID);
+  console.log("Request to addPlace made with:", placeID);
   const data = {
     rating: 0
   };
@@ -39,13 +55,18 @@ exports.addPlace = functions.https.onRequest(async (req, res) => {
   res.status(200).send(`Added place with ID: ${placeID} added.`);
 });
 
+// Attempts to retrieve a place from Firestore 'places' collection
+async function retrievePlace(placeID) {
+  const placeRef = admin.firestore().collection('places').doc(placeID);
+  const place = await placeRef.get();
+  return place;
+}
 
 // getPlace finds a place rating
 exports.getPlace = functions.https.onRequest(async (req, res) => {
   // Retrieve the text parameter for the unique place ID
   const placeID = req.query.text;
-  const placeRef = admin.firestore().collection('places').doc(placeID);
-  const place = await placeRef.get();
+  const place = await retrievePlace(placeID);
 
   res.set("Access-Control-Allow-Origin", "*");
   console.log("Request to getPlace made with:", req.query.text, placeID);
@@ -60,17 +81,20 @@ exports.getPlace = functions.https.onRequest(async (req, res) => {
 function getUserVote(ratingChange) {
   let userVote = 0;
 
-  if (ratingChange < 0) { // 1 -> -1 = -2 or 0 -> -1 = -1 (down vote)
+  // Determine if vote is a down vote, based on ratingChange (vote value - previous vote value)
+  if (ratingChange < 0) { 
+    // 1 -> -1 = -2 or 0 -> -1 = -1 (down vote)
     userVote = -1;
-  } else if (ratingChange > 0) { // -1 -> 1 = 2 or 0 -> 1 = 1 (up vote)
+  } else if (ratingChange > 0) { 
+    // -1 -> 1 = 2 or 0 -> 1 = 1 (up vote)
     userVote = 1;
-  } else { // 1 -> 1 = 0 or -1 -> -1 = 0 (vote is revoked)
+  } else {
+    // 1 -> 1 = 0 or -1 -> -1 = 0 (vote is revoked)
     userVote = 0;
   }
 
   return userVote;
 }
-
 
 // setUserVote is a helper function of updateRating to determine the change to total vote count for a place
 function getRatingChange(user, placeID, voteValue) {
@@ -86,7 +110,7 @@ function getRatingChange(user, placeID, voteValue) {
 
 // updateRating updates the rating for place specified in req with the specified voteValue value.
 exports.updateRating = functions.https.onRequest(async (req, res) => {
-  // Verify that user is logged in (eligible to rate places)
+  // Verify that user is logged in/exists in database (eligible to rate places)
   const userID = req.query.userID;
   const userRef = admin.firestore().collection('users').doc(userID);
   const user = await userRef.get();
@@ -97,14 +121,9 @@ exports.updateRating = functions.https.onRequest(async (req, res) => {
     return;
   }
 
-  // Retrieve the text parameter for placeID and voteValue
-  const input = req.query.text;
-
-  // placeID and voteValue should come packaged in the req.query.text as (placeID:voteValue)
-  // Note: attributes should and will be isolated to two separate query parameters going forward
-  const splitInput = input.split(':');
-  const placeID = splitInput[0];
-  const voteValue = splitInput[1];
+  // Retrieve place id and vote value
+  const placeID = req.query.place;
+  const voteValue = req.query.voteVal;
 
   // Call on getRatingChange and getUserVote to determine rating change for place total and user vote status
   let ratingChange = getRatingChange(user, placeID, voteValue);
@@ -122,7 +141,7 @@ exports.updateRating = functions.https.onRequest(async (req, res) => {
 
   // Dev note: Should likely return userVote in the response and updated total to dictate window display (e.g. show current vote status and 'realtime' up/downvote)
   res.set("Access-Control-Allow-Origin", "*");
-  console.log("Request to updateRating made with:", req.query.text, placeID, ratingChange, userVote);
+  console.log("Request to updateRating made with:", placeID, voteValue, ratingChange, userVote);
   // Use placeID to update rating in collection accordingly
   try {
     const placeRef = admin.firestore().collection('places').doc(placeID);
@@ -179,4 +198,93 @@ exports.setupUser = functions.https.onRequest(async (req, res) => {
   } else { // If user already in database, respond with the user's ratings and favorites.
     res.status(200).json({result: 'User found.', ratings: user.data()['ratings'], favorites: user.data()['favorites']});
   }
+});
+
+
+// Run request for restaurants close with lat, lng center for cuisine type
+async function retrieveRestaurantsHelper(cuisine, lat, lng, radius) {
+  // Set places search type to 'restaurant' and noClampNoWrap to true (bounds on latlng), places URL
+  const searchType = 'restaurant';
+  const noClampNoWrap = true;
+  const placesRoute = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+
+  console.log(`URL: ${placesRoute}latlng=${lat},${lng},${noClampNoWrap}&type=${searchType}&radius=${radius}&query=${cuisine}&key=${placesAPIKey}`);
+  try {
+    const {data} = await axios.get(
+      `${placesRoute}latlng=${lat},${lng},${noClampNoWrap}&type=${searchType}&radius=${radius}&query=${cuisine}&key=${placesAPIKey}`);
+    //console.log("Data retrieved from places:", data);
+    return data;
+  } catch (err) {
+    next(err) // Pass errors to express
+  }
+}
+
+// Find place ratings for restaurants by place ID, if none then initialize entry for place
+async function findRestaurantRatings(restaurants) {
+  return new Promise(async function(resolve, reject) {
+    // For each restaurant, attempt to find local rating, else set to 0
+    const mapRatingResults = await Promise.all(restaurants.results.map(async (result) => { 
+      var place = await retrievePlace(result.place_id);
+    
+      if (!place.exists) { // Place does not exist, add place to database, set localRating to 0
+        console.log("place does not exist");
+        result["localRating"] = 0;
+        addNewPlace(result.place_id);
+      } else { // Place exists, set localRating to it's stored rating value
+        console.log("place exists");
+        result["localRating"] = place.data()['rating'];
+      }
+
+      // Return updated result
+      return result;
+    }));
+
+    // console.log("This is mapRatingresults promise", mapRatingResults, mapRatingResults[0].localRating);
+    // console.log("localRating val:", JSON.stringify(mapRatingResults.results[0].localRating));
+    // If localRatings have been set, resolve, else error
+    if (mapRatingResults[0].localRating >= 0) { 
+      resolve("Local rating set.");
+    } else {
+      reject(Error("Local ratings not set."));
+    }
+  });
+}
+
+// Retrieve restaurants for cuisine type, check for stored ratings, soon to incorporate checks for cached results
+exports.retrieveRestaurants = functions.https.onRequest(async (req, res) => {
+  // Attempt to retrieve request query parameters
+  const cuisine = req.query.cuisine || null;
+  const lat = req.query.lat || null;
+  const lng = req.query.lng || null;
+  const radius = req.query.radius || null;
+
+  // Set Allow-Access-Origin
+  res.set('Access-Control-Allow-Origin', '*');
+  console.log(`Inside retrieve restaurants with ${cuisine}, ${lat}, ${lng}, ${radius}, ${placesAPIKey}, ${process.env.GOOGLE_API_KEY}`);
+  // If necessary paremeters are not specified, respond with error
+  if (!(cuisine && lat && lng && radius)) {
+    // Notify unsuccessful retrieval of restaurants
+    console.log("Bad request, at least one of the necessary parameters not provided: cuisine, lat, lng, radius.")
+    res.status(400);
+    res.json({message: "Bad request, at least one of the necessary parameters not provided: cuisine, lat, lng, radius."})
+    res.send();
+  }
+
+  // Utilize helper to retrieve restaurant results, process restaurants to see if they have previously stored rating data
+  try {
+    var restaurants = await retrieveRestaurantsHelper(cuisine, lat, lng, radius);
+    findRestaurantRatings(restaurants)
+    .then(_ => { // Once ratings have been retrieved, serve request
+      console.log("This is local rating retrieved:", restaurants.results[0].localRating);
+      res.status(200).json({message: "Successfully retrieved restaurants.", restaurants: restaurants});
+      res.send();
+    });
+  } catch (err) {
+    // Notify unsuccessful retrieval of restaurants
+    console.log(`Error occured in retrieve restaurants: ${err}`);
+    res.status(500);
+    res.json({message: "Error occurred when retrieving restaurants."});
+    res.send();
+  }
+  
 });

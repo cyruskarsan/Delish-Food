@@ -1,16 +1,29 @@
-//Run requests from cuisine type clicks
-function cuisineTypeSearch(request, cuisineType) {
+// Run requests for cuisine type search, retrieve restaurants or notify of error
+function cuisineTypeSearch(cuisineType, lat, lng, radius) {
+    // Request places from server via retrieveRestaurants
+    retrieveRestaurants(cuisineType, lat, lng, radius, callback);
+    // console.log("In cuisineTypeSearch function with:", results);
 
-    //hit the gmaps places API and do a text search
-    var service = new google.maps.places.PlacesService(map);
-    service.textSearch(request, callback);
+    // //hit the gmaps places API and do a text search
+    // var service = new google.maps.places.PlacesService(map);
+    // service.textSearch(request, callback);
 
-    //parse returned info from places and either add or find place
+    // Parse returned restaurants from server
     function callback(results, status) {
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
+        // Error check validity of results, alert user if no results could be found
+        console.log('Entered callback!')
+        if (status != 200 || results === null || results.length === 0) {
+            alert(`No restaurants were retrieved for search area due to a server error or a dropped request. Try again.`);
+            return;
+        }
+        console.log(results);
+        
+        // if (status == google.maps.places.PlacesServiceStatus.OK) {
+        if (results) {
             for (var i = 0; i < results.length; i++) {
                 var place = results[i];
-                findPlaceRating(place, cuisineType);
+                //findPlaceRating(place, cuisineType);
+                createMarker(place, cuisineType, place.localRating);
             }
         }
     }
@@ -25,7 +38,7 @@ var baseMarkerSize = 35;
 function createMarker(place, cuisineType, rating) {
     // Set size for marker based on rating/min or max val
     let candidateSize = baseMarkerSize+rating;
-    markerSize = Math.max(minimumMarkerSize, Math.min(candidateSize, maximumMarkerSize));
+    let markerSize = Math.max(minimumMarkerSize, Math.min(candidateSize, maximumMarkerSize));
 
     // Sets custom image attributes
     const image = {
@@ -45,7 +58,7 @@ function createMarker(place, cuisineType, rating) {
     // Set place information when marker is clicked
     setPlaceDetails(place, marker, rating);
 
-    // add generated marker to dictionary and clusterer set
+    // Add  generated marker to dictionary and clusterer set
     cuisine_marker_dict[cuisineType].push(marker);
     markerClusterer.addMarker(marker);
 }
@@ -91,16 +104,27 @@ function cuisineTypeListener() {
                 cuisine_check.innerHTML = "";
                 clearMarkerSets(cuisineType);
             } else {
-                let request = { //Create the request for searching 
-                    location: new google.maps.LatLng(mapCenterPos["lat"], mapCenterPos["lng"], 14),
-                    radius: "5",
-                    type: "restaurant",
-                    query: cuisine.innerText.toLowerCase(),
-                };
-                
-                // Add default cuisine icon image next to listing in menu, then query search
+                // Test retrieveRestaurants
+                // retrieveRestaurants(cuisineType,
+                //                     mapCenterPos["lat"],
+                //                     mapCenterPos["lng"],
+                //                     5);
+                cuisineTypeSearch(cuisineType,
+                                    mapCenterPos["lat"],
+                                    mapCenterPos["lng"],
+                                    5);
                 document.getElementById(cuisine.innerHTML).innerHTML = `<img src="./MarkerIcons/${cuisineType}.png" width="25" height="25"/>`;
-                cuisineTypeSearch(request, cuisineType);
+                // Perform client side request for places api
+                // let request = { // Create the request for searching 
+                //     location: new google.maps.LatLng(mapCenterPos["lat"], mapCenterPos["lng"], true),
+                //     radius: "5",
+                //     type: "restaurant",
+                //     query: cuisineType,
+                // };
+                
+                // // Add default cuisine icon image next to listing in menu, then query search
+                // document.getElementById(cuisine.innerHTML).innerHTML = `<img src="./MarkerIcons/${cuisineType}.png" width="25" height="25"/>`;
+                // cuisineTypeSearch(request, cuisineType);
 
             }
         }
