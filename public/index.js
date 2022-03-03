@@ -62,12 +62,7 @@ function initMap() {
   map.mapTypes.set('myCustomMap', styledMap);
   map.setMapTypeId('myCustomMap');
   
-  // When a new location on our map is clicked, set new center position
-  map.addListener("click", (e) => {
-    mapCenterPos["lat"] = e.latLng.lat();
-    mapCenterPos["lng"] = e.latLng.lng();
-    placeMarkerAndPanTo(mapCenterPos, map);
-  });
+  
 
   // Create the button to close greeting and description
   const closeDescriptionButton = document.querySelectorAll('[data-close-button]') 
@@ -144,6 +139,14 @@ function initMap() {
 
     infowindow.open(map);
   }
+
+  // When a new location on our map is clicked, set new center position
+  map.addListener("click", (e) => {
+    mapCenterPos.lat = e.latLng.lat();
+    mapCenterPos.lng = e.latLng.lng();
+    placeMarkerAndPanTo(mapCenterPos, map);
+  });
+
   google.maps.event.trigger(map, 'resize');
 }
 

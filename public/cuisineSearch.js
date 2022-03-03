@@ -6,12 +6,10 @@ function cuisineTypeSearch(cuisineType, lat, lng, radius) {
     // Parse returned restaurants from server, callback function for retrieveRestaurants
     function callback(results, status) {
         // Error check validity of results, alert user if no results could be found
-        console.log('Entered callback!')
         if (status != 200 || results === null || results.length === 0) {
             alert(`No restaurants were retrieved for search area due to a server error or a dropped request. Try again.`);
             return;
         }
-        console.log(results);
 
         if (results) { // If results exist, create markers for each result (restaurant)
             for (var i = 0; i < results.length; i++) {
@@ -99,8 +97,8 @@ function cuisineTypeListener() {
             } else {
                 // Run request for restaurants of cuisine type near search locale (lat lng)
                 cuisineTypeSearch(cuisineType,
-                                    mapCenterPos["lat"],
-                                    mapCenterPos["lng"],
+                                    mapCenterPos.lat,
+                                    mapCenterPos.lng,
                                     5);
 
                 // Set cuisine menu check to show for cuisineType

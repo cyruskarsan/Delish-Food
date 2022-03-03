@@ -205,13 +205,13 @@ exports.setupUser = functions.https.onRequest(async (req, res) => {
 async function retrieveRestaurantsHelper(cuisine, lat, lng, radius) {
   // Set places search type to 'restaurant' and noClampNoWrap to true (bounds on latlng), places URL
   const searchType = 'restaurant';
-  const noClampNoWrap = true;
+  const noClampNoWrap = 14;
   const placesRoute = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
 
-  console.log(`URL: ${placesRoute}latlng=${lat},${lng},${noClampNoWrap}&type=${searchType}&radius=${radius}&query=${cuisine}&key=${placesAPIKey}`);
+  //console.log(`URL: ${placesRoute}latlng=${lat},${lng},${noClampNoWrap}&type=${searchType}&radius=${radius}&query=${cuisine}&key=${placesAPIKey}`);
   try {
     const {data} = await axios.get(
-      `${placesRoute}latlng=${lat},${lng},${noClampNoWrap}&type=${searchType}&radius=${radius}&query=${cuisine}&key=${placesAPIKey}`);
+      `${placesRoute}location=${lat}%2C${lng}&type=${searchType}&radius=${radius}&query=${cuisine}&key=${placesAPIKey}`);
     //console.log("Data retrieved from places:", data);
     return data;
   } catch (err) {
@@ -257,6 +257,8 @@ exports.retrieveRestaurants = functions.https.onRequest(async (req, res) => {
   const lat = req.query.lat || null;
   const lng = req.query.lng || null;
   const radius = req.query.radius || null;
+
+  console.log("Lat lng inside retrieve restaurants:", lat, lng);
 
   // Set Allow-Access-Origin
   res.set('Access-Control-Allow-Origin', '*');
